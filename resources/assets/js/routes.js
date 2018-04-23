@@ -10,6 +10,13 @@ export const routes = [
 		}
 	},
 	{
+		path: '/clientes',
+		component: Home,
+		meta: {
+			requiresAuth: true
+		}
+	},
+	{
 		path: '/login',
 		component: Login
 	}

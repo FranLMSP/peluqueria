@@ -11355,7 +11355,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_MainApp_vue__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_MainApp_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_MainApp_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__helpers_general__ = __webpack_require__(66);
 __webpack_require__(12);
+
+
 
 
 
@@ -11370,32 +11373,19 @@ vue.use(__WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */]);
 var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store(__WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */]);
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
-	routes: __WEBPACK_IMPORTED_MODULE_3__routes__["a" /* routes */],
-	mode: 'history'
+    routes: __WEBPACK_IMPORTED_MODULE_3__routes__["a" /* routes */],
+    mode: 'history'
 });
 
-router.beforeEach(function (to, from, next) {
-	var requiresAuth = to.matched.some(function (record) {
-		return record.meta.requiresAuth;
-	});
-	var currentUser = store.state.currentUser;
-
-	if (requiresAuth && !currentUser) {
-		next('/login');
-	} else if (to.path == '/login' && currentUser) {
-		next('/');
-	} else {
-		next();
-	}
-});
+Object(__WEBPACK_IMPORTED_MODULE_6__helpers_general__["a" /* initialize */])(store, router);
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-	el: '#app',
-	router: router,
-	store: store,
-	components: {
-		MainApp: __WEBPACK_IMPORTED_MODULE_5__components_MainApp_vue___default.a
-	}
+    el: '#app',
+    router: router,
+    store: store,
+    components: {
+        MainApp: __WEBPACK_IMPORTED_MODULE_5__components_MainApp_vue___default.a
+    }
 });
 
 /***/ }),
@@ -50728,6 +50718,12 @@ var routes = [{
 		requiresAuth: true
 	}
 }, {
+	path: '/clientes',
+	component: __WEBPACK_IMPORTED_MODULE_0__components_Home_vue___default.a,
+	meta: {
+		requiresAuth: true
+	}
+}, {
 	path: '/login',
 	component: __WEBPACK_IMPORTED_MODULE_1__components_auth_Login_vue___default.a
 }];
@@ -51120,7 +51116,7 @@ if (false) {
 var disposed = false
 var normalizeComponent = __webpack_require__(43)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(65)
 /* template */
 var __vue_template__ = __webpack_require__(54)
 /* template functional */
@@ -51168,32 +51164,129 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("header", [
-      _c("nav", { staticClass: "navbar bg-dark navbar-dark" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-            _vm._v("Peluqueria")
-          ]),
+  return _c("header", [
+    _c("nav", { staticClass: "navbar bg-dark navbar-dark" }, [
+      _c(
+        "div",
+        { staticClass: "container" },
+        [
+          _c(
+            "router-link",
+            { staticClass: "navbar-brand", attrs: { to: "/" } },
+            [_vm._v("Peluqueria")]
+          ),
           _vm._v(" "),
-          _c("ul", { staticClass: "navbar-nav" }, [
-            _c("li", { staticClass: "nav-item" }, [
-              _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-                _vm._v("Login")
-              ])
-            ])
-          ])
-        ])
-      ])
+          _c(
+            "ul",
+            { staticClass: "navbar-nav" },
+            [
+              !_vm.currentUser
+                ? [
+                    _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          { staticClass: "nav-link", attrs: { to: "/login" } },
+                          [_vm._v("Iniciar sesión")]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "nav-link",
+                            attrs: { to: "/register" }
+                          },
+                          [_vm._v("Registrarse")]
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                : [
+                    _c(
+                      "li",
+                      { staticClass: "nav-item" },
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "nav-link",
+                            attrs: { to: "/clientes" }
+                          },
+                          [_vm._v("Clientes")]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("li", { staticClass: "nav-item dropdown" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "nav-link dropdown-toggle",
+                          attrs: {
+                            id: "navbarDropdown",
+                            href: "#",
+                            role: "button",
+                            "aria-expanded": "false",
+                            "data-toggle": "dropdown",
+                            "aria-haspopup": "true"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t" +
+                              _vm._s(_vm.currentUser.name) +
+                              " "
+                          ),
+                          _c("span", { staticClass: "caret" })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu",
+                          attrs: { "aria-labelledby": "navbarDropdown" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdpwn-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.logout($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Salir")]
+                          )
+                        ]
+                      )
+                    ])
+                  ]
+            ],
+            2
+          )
+        ],
+        1
+      )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -51411,7 +51504,7 @@ exports = module.exports = __webpack_require__(48)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.error {\n\ttext-align: center;\n\tcolor: red;\n}\n", ""]);
 
 // exports
 
@@ -51714,6 +51807,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -51741,6 +51840,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}).catch(function (err) {
 				_this.$store.commit('loginFailed', { err: err });
 			});
+		}
+	},
+	computed: {
+		authError: function authError() {
+			return this.$store.getters.authError;
 		}
 	}
 });
@@ -51822,7 +51926,19 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _vm._m(1)
+              _vm._m(1),
+              _vm._v(" "),
+              _vm.authError
+                ? _c("div", { staticClass: "row form-group" }, [
+                    _c("p", { staticClass: "error" }, [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t" +
+                          _vm._s(_vm.authError) +
+                          "\n\t\t\t\t\t\t"
+                      )
+                    ])
+                  ])
+                : _vm._e()
             ]
           )
         ])
@@ -51855,6 +51971,105 @@ if (false) {
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-dca5370e", module.exports)
   }
+}
+
+/***/ }),
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'app-header',
+	data: function data() {
+		return {};
+	},
+
+	methods: {
+		logout: function logout() {
+			this.$store.commit('logout');
+			this.$router.push('/login');
+		}
+	},
+	computed: {
+		currentUser: function currentUser() {
+			return this.$store.getters.currentUser;
+		}
+	}
+});
+
+/***/ }),
+/* 66 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = initialize;
+function initialize(store, router) {
+
+	router.beforeEach(function (to, from, next) {
+		var requiresAuth = to.matched.some(function (record) {
+			return record.meta.requiresAuth;
+		});
+		var currentUser = store.state.currentUser;
+
+		if (requiresAuth && !currentUser) {
+			next('/login');
+		} else if (to.path == '/login' && currentUser) {
+			next('/');
+		} else {
+			next();
+		}
+	});
+
+	axios.interceptors.response.use(null, function (error) {
+		if (error.response.status == 401) {
+			store.commit('logout');
+
+			router.push('/login');
+		}
+	});
 }
 
 /***/ })
