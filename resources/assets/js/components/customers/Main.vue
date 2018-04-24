@@ -1,10 +1,9 @@
 <template>
 	<div class="container">
 		<div class="row justify-content-center">
-			<div class="col-md-8">
+			<div class="col-md-12">
 				<div class="card card-default">
 					<p class="card-header">Clientes</p>
-
 					<div class="card-body">
 						<router-view></router-view>
 					</div>
@@ -16,6 +15,6 @@
 
 <script type="text/javascript">
 	export default {
-		name: 'costumers-main'
+		name: 'customers-main'
 	}
 </script>

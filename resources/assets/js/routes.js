@@ -1,11 +1,17 @@
 import Home from './components/Home.vue'
 
-import CostumersMain from './components/customers/Main.vue'
+import CustomersMain from './components/customers/Main.vue'
 import CustomersList from './components/customers/List.vue'
+import CustomersCreate from './components/customers/Create.vue'
+import Customer from './components/customers/Show.vue'
 
 import Login from './components/auth/Login.vue'
 
 export const routes = [
+	{
+		path: '/login',
+		component: Login
+	},
 	{
 		path: '/',
 		component: Home,
@@ -15,7 +21,7 @@ export const routes = [
 	},
 	{
 		path: '/clientes',
-		component: CostumersMain,
+		component: CustomersMain,
 		meta: {
 			requiresAuth: true
 		},
@@ -24,18 +30,15 @@ export const routes = [
 				path: '/',
 				component: CustomersList
 			},
-			/*{
-				path: '/crear',
-				component: CustomerCreate
+			{
+				path: 'crear',
+				component: CustomersCreate
 			},
 			{
-				path: '/:id',
+				path: ':id',
 				component: Customer
-			}*/
+			}
 		]
 	},
-	{
-		path: '/login',
-		component: Login
-	}
+
 ]

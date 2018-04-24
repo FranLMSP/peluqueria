@@ -19,6 +19,8 @@ export function initialize(store, router) {
 
 			router.push('/login')
 		}
+
+		return Promise.reject(error)
 	})
 
 }

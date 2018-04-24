@@ -37,7 +37,18 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'website' => 'required'
+        ]);
+
+        Customer::create($request->all());
+
+        return response()->json([
+            'message' => 'Creado correctamente'
+        ]);
     }
 
     /**
