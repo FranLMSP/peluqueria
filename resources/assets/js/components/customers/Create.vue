@@ -1,5 +1,5 @@
 <template>
-	<div class="costumer-new">
+	<div class="customer-new">
 		<form @submit.prevent="create">
 			<table class="table">
 				<tr>
@@ -84,11 +84,7 @@
 					return
 				}
 
-				axios.post('/api/customers/', this.customer, {
-					headers: {
-						"Authorization": `Bearer ${this.currentUser.token}`
-					}
-				})
+				axios.post('/api/customers/', this.customer)
 				.then( response => {
 					this.$router.push('/clientes')
 				})

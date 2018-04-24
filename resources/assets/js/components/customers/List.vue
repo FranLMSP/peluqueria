@@ -29,7 +29,7 @@
 						<td>{{ customer.phone }}</td>
 						<td>{{ customer.website }}</td>
 						<td>
-							<router-link to="`/clientes/${costumer.id}`">Detalles</router-link>
+							<router-link :to="`/clientes/${customer.id}`">Detalles</router-link>
 						</td>
 					</tr>
 				</template>
