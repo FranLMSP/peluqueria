@@ -38,10 +38,12 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'website' => 'required'
+            'names' => 'required',
+            'identity_number' => 'integer|required'
+        ], [
+            'names' => 'Debe especificar el nombre del cliente',
+            'identity_number.integer' => 'El número de identidad debe ser numérico',
+            'identity_number.required' => 'El número de identidad es obligatorio'
         ]);
 
         Customer::create($request->all());

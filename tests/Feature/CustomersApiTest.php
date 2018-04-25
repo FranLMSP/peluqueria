@@ -13,4 +13,9 @@ class CustomersApiTest extends TestCase
 {
 	use RefreshDatabase;
 
+	/** @test */
+	public function temp_test() {
+		$this->assertTrue(true);
+	}
+
 }

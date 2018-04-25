@@ -1,26 +1,36 @@
-import CustomersMain from '../components/customers/Main.vue'
-import CustomersList from '../components/customers/List.vue'
-import CustomersCreate from '../components/customers/Create.vue'
-import Customer from '../components/customers/Show.vue'
+import Main from '../components/customers/Main.vue'
+import List from '../components/customers/List.vue'
+import Form from '../components/customers/Form.vue'
+import Show from '../components/customers/Show.vue'
 
 export default {
 	path: '/clientes',
-	component: CustomersMain,
+	component: Main,
 	meta: {
 		requiresAuth: true
 	},
 	children: [
 		{
 			path: '/',
-			component: CustomersList
+			component: List
 		},
 		{
 			path: 'crear',
-			component: CustomersCreate
+			component: Form,
+			meta: {
+				mode: 'create'
+			}
+		},
+		{
+			path: ':id/editar',
+			component: Form,
+			meta: {
+				mode: 'edit'
+			}
 		},
 		{
 			path: ':id',
-			component: Customer
+			component: Show
 		}
 	]
 }
