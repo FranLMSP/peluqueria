@@ -51608,6 +51608,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51692,13 +51696,17 @@ var render = function() {
               ]
             : _vm._l(_vm.customers, function(customer) {
                 return _c("tr", { key: customer.id }, [
-                  _c("td", [_vm._v(_vm._s(customer.name))]),
+                  _c("td", [_vm._v(_vm._s(customer.names))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(customer.surnames))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(customer.identity_number))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(customer.email))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(customer.phone))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(customer.website))]),
+                  _c("td", [_vm._v(_vm._s(customer.birthdate))]),
                   _vm._v(" "),
                   _c(
                     "td",
@@ -51726,13 +51734,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Nombre")]),
+        _c("th", [_vm._v("Nombres")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Apellidos")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Identidad")]),
         _vm._v(" "),
         _c("th", [_vm._v("Email")]),
         _vm._v(" "),
         _c("th", [_vm._v("Teléfono")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Website")]),
+        _c("th", [_vm._v("Cumpleaños")]),
         _vm._v(" "),
         _c("th", [_vm._v("Acciones")])
       ])
@@ -53078,6 +53090,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'show',
@@ -53116,7 +53143,26 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "customer-show" }, [
-    _vm._m(0),
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "col-sm-12" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-primary",
+              staticStyle: { float: "right" },
+              attrs: { to: "/clientes/" + _vm.customer.id + "/editar" }
+            },
+            [_vm._v("Editar")]
+          )
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("br"),
     _vm._v(" "),
     _c(
       "div",
@@ -53130,9 +53176,21 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("tr", [
-            _c("th", [_vm._v("Nombre")]),
+            _c("th", [_vm._v("Nombres")]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.customer.name))])
+            _c("td", [_vm._v(_vm._s(_vm.customer.names))])
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("th", [_vm._v("Apellidos")]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.customer.surnames))])
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("th", [_vm._v("Número de identidad")]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.customer.identity_number))])
           ]),
           _vm._v(" "),
           _c("tr", [
@@ -53150,26 +53208,23 @@ var render = function() {
           _c("tr", [
             _c("th", [_vm._v("Website")]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.customer.website))])
+            _c("td", [_vm._v(_vm._s(_vm.customer.birthdate))])
           ])
         ]),
         _vm._v(" "),
-        _c("router-link", { attrs: { to: "/clientes" } }, [_vm._v("Regresar")])
+        _c(
+          "router-link",
+          { staticClass: "btn btn-primary", attrs: { to: "/clientes" } },
+          [_vm._v("Regresar")]
+        ),
+        _vm._v(" "),
+        _c("br")
       ],
       1
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "user-img" }, [
-      _c("img", { attrs: { src: "" } })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -53717,9 +53772,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'app-header',
@@ -53796,22 +53848,6 @@ var render = function() {
                     )
                   ]
                 : [
-                    _c(
-                      "li",
-                      { staticClass: "nav-item" },
-                      [
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "nav-link",
-                            attrs: { to: "/clientes" }
-                          },
-                          [_vm._v("Clientes")]
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
                     _c("li", { staticClass: "nav-item dropdown" }, [
                       _c(
                         "a",
@@ -54143,9 +54179,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {
 			form: {
 				id: 0,
-				name: '',
+				names: '',
+				surnames: '',
+				identity_number: '',
+				phone: '',
 				email: '',
-				website: ''
+				birthdate: ''
 			},
 			errors: null,
 			loading: false,
@@ -54218,7 +54257,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		if (this.$route.meta.mode == 'edit') {
 			this.loading = true;
 			this.message = 'Cargando...';
-			axios.get('/api/customers/' + this.$route.params).then(function (response) {
+			axios.get('/api/customers/' + this.$route.params.id + '/edit').then(function (response) {
 				_this2.form = response.data.customer;
 				_this2.loading = false;
 			}).catch(function (error) {
@@ -54296,8 +54335,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.form.surname,
-                          expression: "form.surname"
+                          value: _vm.form.surnames,
+                          expression: "form.surnames"
                         }
                       ],
                       staticClass: "form-control",
@@ -54305,13 +54344,13 @@ var render = function() {
                         type: "text",
                         placeholder: "Apellidos del cliente"
                       },
-                      domProps: { value: _vm.form.surname },
+                      domProps: { value: _vm.form.surnames },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.$set(_vm.form, "surname", $event.target.value)
+                          _vm.$set(_vm.form, "surnames", $event.target.value)
                         }
                       }
                     })
@@ -54421,19 +54460,19 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.form.birthday,
-                          expression: "form.birthday"
+                          value: _vm.form.birthdate,
+                          expression: "form.birthdate"
                         }
                       ],
                       staticClass: "form-control",
                       attrs: { type: "date", placeholder: "Website" },
-                      domProps: { value: _vm.form.birthday },
+                      domProps: { value: _vm.form.birthdate },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.$set(_vm.form, "birthday", $event.target.value)
+                          _vm.$set(_vm.form, "birthdate", $event.target.value)
                         }
                       }
                     })
@@ -54497,7 +54536,7 @@ var staticRenderFns = [
     return _c("td", { staticClass: "text-right" }, [
       _c("input", {
         staticClass: "btn btn-primary",
-        attrs: { type: "submit", value: "Crear" }
+        attrs: { type: "submit", value: "Guardar" }
       })
     ])
   }

@@ -16,7 +16,7 @@
 					<tr>
 						<th>Apellidos</th>
 						<td>
-							<input type="text" class="form-control" v-model="form.surname" placeholder="Apellidos del cliente">
+							<input type="text" class="form-control" v-model="form.surnames" placeholder="Apellidos del cliente">
 						</td>
 					</tr>
 
@@ -44,7 +44,7 @@
 					<tr>
 						<th>Cumpleaños</th>
 						<td>
-							<input type="date" class="form-control" v-model="form.birthday" placeholder="Website">
+							<input type="date" class="form-control" v-model="form.birthdate" placeholder="Website">
 						</td>
 					</tr>
 					<tr>
@@ -52,7 +52,7 @@
 							<router-link to="/clientes" class="btn btn-default">Regresar</router-link>
 						</td>
 						<td class="text-right">
-							<input type="submit" value="Crear" class="btn btn-primary">
+							<input type="submit" value="Guardar" class="btn btn-primary">
 						</td>
 					</tr>
 					<tr v-if="sending">
@@ -82,9 +82,12 @@
 			return {
 				form: {
 					id: 0,
-					name: '',
+					names: '',
+					surnames: '',
+					identity_number: '',
+					phone: '',
 					email: '',
-					website: ''
+					birthdate: ''
 				},
 				errors: null,
 				loading: false,
@@ -158,7 +161,7 @@
 			if(this.$route.meta.mode == 'edit') {
 				this.loading = true
 				this.message = 'Cargando...'
-				axios.get(`/api/customers/${this.$route.params}`)
+				axios.get(`/api/customers/${this.$route.params.id}/edit`)
 				.then( response => {
 					this.form = response.data.customer
 					this.loading = false
