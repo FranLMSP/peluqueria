@@ -18,7 +18,7 @@
 			<tbody>
 				<template v-if="!customers || customers.length <= 0">
 					<tr>
-						<td colspan="4" class="text-center">Sin clientes</td>
+						<td colspan="4" class="text-center">{{ tableMessage }}</td>
 					</tr>
 				</template>
 
@@ -42,13 +42,40 @@
 
 	export default {
 		name: 'list',
-		computed: {
-			customers() {
-				return this.$store.getters.customers
+		data() {
+			return {
+				customers: [],
+				loading: false
 			}
 		},
-		mounted() {
-			this.$store.dispatch('getCustomers')
+		methods: {
+			get() {
+				this.loading = true
+				this.customers = []
+				axios('/api/customers')
+				.then( response => {
+					this.customers = response.data.customers
+					this.loading = false
+				})
+				.catch( error => {
+					this.loading = false
+				})
+
+			}
+		},
+		computed: {
+			tableMessage() {
+				if (this.loading) {
+					return 'Cargando...'
+				}
+				if (!this.customers || this.customers.length <= 0) {
+					return 'Sin clientes'
+				}
+				return ''
+			}
+		},
+		created() {
+			this.get()
 		}
 	}
 </script>

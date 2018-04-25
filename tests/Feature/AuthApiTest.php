@@ -41,8 +41,24 @@ class AuthApiTest extends TestCase
         ]);
 
         $this->post('/api/auth/login', [
-        	'email' => 'foo',
-        	'password' => 'bar'
+            'email' => 'foo',
+            'password' => 'bar'
         ])->assertStatus(401);
+    }
+
+    /** @test */
+    public function a_user_can_logout()
+    {
+        factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $this->post('/api/auth/login', [
+        	'email' => 'admin@root.com',
+        	'password' => '123456'
+        ]);
+        $this->post('/api/auth/logout')->assertStatus(200);
+        $this->get('/api/customers')->assertStatus(401);
     }
 }

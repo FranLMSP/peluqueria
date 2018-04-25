@@ -13,6 +13,7 @@ export function initialize(store, router) {
 		}
 	})
 
+
 	axios.interceptors.response.use(null, error => {
 		if(error.response.status == 401) {
 			store.commit('logout')
@@ -23,6 +24,11 @@ export function initialize(store, router) {
 		return Promise.reject(error)
 	})
 
-	axios.defaults.headers.common["Authorization"] = `Bearer ${store.getters.currentUser.token}`
+	const user = store.getters.currentUser
+	console.log(user)
+
+	if(user) {
+		axios.defaults.headers.common["Authorization"] = `Bearer ${store.getters.currentUser.token}`
+	}
 
 }
