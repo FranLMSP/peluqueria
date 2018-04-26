@@ -106,6 +106,7 @@ class ProductsTest extends TestCase
 					'definition' => [
 						'id' => $product->definition->id,
 						'name' => $product->definition->name,
+						'image' => NULL,
 						'description' => $product->definition->description,
 						'created_at' => (string)$product->definition->created_at,
 						'updated_at' => (string)$product->definition->updated_at
@@ -149,6 +150,7 @@ class ProductsTest extends TestCase
 						'definition' => [
 							'id' => $product->definition->id,
 							'name' => $product->definition->name,
+							'image' => NULL,
 							'description' => $product->definition->description,
 							'created_at' => (string)$product->definition->created_at,
 							'updated_at' => (string)$product->definition->updated_at
