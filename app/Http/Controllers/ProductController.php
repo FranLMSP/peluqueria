@@ -72,7 +72,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response()->json([
+            'product' => $product->load('definition')
+        ]);
     }
 
     /**
@@ -99,6 +101,31 @@ class ProductController extends Controller
             'name' => 'required|max:200',
             'price' => 'required',
             'description' => ''
+        ]);
+
+        ProductHeader::where('id', $product->definition->id)
+            ->update([
+                'name' => $request->name,
+                'description' => $request->description
+            ]);
+
+        if ($product->price != $request->price) {
+            $product->active = false;
+            $product->save();
+
+            $newProduct = Product::create([
+                'price' => $request->price,
+                'product_header_id' => $product->definition->id
+            ]);
+
+            return response()->json([
+                'product' => $newProduct
+            ]);
+
+        }
+
+        return response()->json([
+            'product' => $newProduct
         ]);
     }
 

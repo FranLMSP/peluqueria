@@ -16,7 +16,7 @@ class CreateProductHeadersTable extends Migration
         Schema::create('product_headers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
