@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\ProductHeader;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,7 +15,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'products' => Product::all()->where('active', true)->with('definition')
+        ]);
     }
 
     /**
@@ -35,7 +38,30 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:200',
+            'price' => 'required',
+            'description' => ''
+        ]);
+
+        $productHeader = new ProductHeader([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+
+        $productHeader->save();
+
+        $product = new Product([
+            'price' => $request->price,
+            'product_header_id' => $productHeader->id
+        ]);
+
+        $product->save();
+        $product->definition = $productHeader;
+
+        return response()->json([
+            'product' => $product
+        ], 201);
     }
 
     /**
@@ -69,7 +95,11 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:200',
+            'price' => 'required',
+            'description' => ''
+        ]);
     }
 
     /**
