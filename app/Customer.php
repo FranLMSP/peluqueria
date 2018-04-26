@@ -14,4 +14,8 @@ class Customer extends Model
 	        'phone',
 	        'birthdate'
 	    ];
+
+	protected $casts = [
+		'identity_number' => 'integer'
+	];
 }

@@ -50,7 +50,7 @@ class CustomerController extends Controller
 
         return response()->json([
             'message' => 'Creado correctamente'
-        ]);
+        ], 201);
     }
 
     /**
