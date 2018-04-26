@@ -1,8 +1,13 @@
 <template>
 	<div class="customer-show">
-		<div class="user-img">
-			<img src="">
+		<div class="row">
+			<div class="col-sm-12">
+				
+				<router-link :to="`/clientes/${customer.id}/editar`" class="btn btn-primary" style="float: right;">Editar</router-link>
+			</div>		
 		</div>
+
+		<br>
 
 		<div class="user-info">
 			<table class="table">
@@ -11,8 +16,16 @@
 					<td>{{ customer.id }}</td>
 				</tr>
 				<tr>
-					<th>Nombre</th>
-					<td>{{ customer.name }}</td>
+					<th>Nombres</th>
+					<td>{{ customer.names }}</td>
+				</tr>
+				<tr>
+					<th>Apellidos</th>
+					<td>{{ customer.surnames }}</td>
+				</tr>
+				<tr>
+					<th>Número de identidad</th>
+					<td>{{ customer.identity_number }}</td>
 				</tr>
 				<tr>
 					<th>Email</th>
@@ -24,11 +37,13 @@
 				</tr>
 				<tr>
 					<th>Website</th>
-					<td>{{ customer.website }}</td>
+					<td>{{ customer.birthdate }}</td>
 				</tr>
 			</table>
 
-			<router-link to="/clientes">Regresar</router-link>
+			<router-link class="btn btn-primary" to="/clientes">Regresar</router-link>
+
+			<br>
 		</div>
 	</div>
 </template>

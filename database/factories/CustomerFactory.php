@@ -5,9 +5,11 @@ use App\Customer;
 
 $factory->define(Customer::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'names' => $faker->name,
+        'surnames' => $faker->name,
+        'identity_number' => $faker->randomNumber,
         'email' => $faker->unique()->safeEmail,
         'phone' => $faker->phoneNumber,
-        'website' => $faker->url
+        'birthdate' => $faker->date
     ];
 });

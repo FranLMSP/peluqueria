@@ -37,18 +37,20 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'website' => 'required'
+        $request->validate([
+            'names' => 'required',
+            'identity_number' => 'integer|required'
+        ], [
+            'names' => 'Debe especificar el nombre del cliente',
+            'identity_number.integer' => 'El número de identidad debe ser numérico',
+            'identity_number.required' => 'El número de identidad es obligatorio'
         ]);
 
         Customer::create($request->all());
 
         return response()->json([
             'message' => 'Creado correctamente'
-        ]);
+        ], 201);
     }
 
     /**
@@ -86,7 +88,20 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'names' => 'required',
+            'identity_number' => 'integer|required'
+        ], [
+            'names' => 'Debe especificar el nombre del cliente',
+            'identity_number.integer' => 'El número de identidad debe ser numérico',
+            'identity_number.required' => 'El número de identidad es obligatorio'
+        ]);
+
+        Customer::where('id', $id)->update($request->all());
+
+        return response()->json([
+            'message' => 'Actualizado correctamente'
+        ]);
     }
 
     /**

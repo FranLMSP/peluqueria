@@ -8,10 +8,12 @@
 		<table class="table" style="width: 100%">
 			<thead>
 				<tr>
-					<th>Nombre</th>
+					<th>Nombres</th>
+					<th>Apellidos</th>
+					<th>Identidad</th>
 					<th>Email</th>
 					<th>Teléfono</th>
-					<th>Website</th>
+					<th>Cumpleaños</th>
 					<th>Acciones</th>
 				</tr>
 			</thead>
@@ -24,10 +26,12 @@
 
 				<template v-else>
 					<tr v-for="customer in customers" :key="customer.id">
-						<td>{{ customer.name }}</td>
+						<td>{{ customer.names }}</td>
+						<td>{{ customer.surnames }}</td>
+						<td>{{ customer.identity_number }}</td>
 						<td>{{ customer.email }}</td>
 						<td>{{ customer.phone }}</td>
-						<td>{{ customer.website }}</td>
+						<td>{{ customer.birthdate }}</td>
 						<td>
 							<router-link :to="`/clientes/${customer.id}`">Detalles</router-link>
 						</td>
