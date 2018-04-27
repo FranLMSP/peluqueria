@@ -99,6 +99,7 @@ class CustomersApiTest extends TestCase
 						'phone' => $customer->phone,
 						'birthdate' => $customer->birthdate,
 						'created_at' => (string)$customer->created_at,
+						'deleted_at' => NULL,
 						'updated_at' => (string)$customer->updated_at
 					]
 				]
@@ -130,6 +131,7 @@ class CustomersApiTest extends TestCase
 					'phone' => $customer->phone,
 					'birthdate' => $customer->birthdate,
 					'created_at' => (string)$customer->created_at,
+					'deleted_at' => NULL,
 					'updated_at' => (string)$customer->updated_at
 				]
 			]);
@@ -160,6 +162,7 @@ class CustomersApiTest extends TestCase
 					'phone' => $customer->phone,
 					'birthdate' => $customer->birthdate,
 					'created_at' => (string)$customer->created_at,
+					'deleted_at' => NULL,
 					'updated_at' => (string)$customer->updated_at
 				]
 			]);

@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->boolean('active')->default(true);
             $table->unsignedInteger('product_header_id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('product_header_id')->references('id')->on('product_headers');
         });

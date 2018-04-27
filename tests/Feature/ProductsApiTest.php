@@ -103,13 +103,15 @@ class ProductsTest extends TestCase
 					'product_header_id' => $product->product_header_id,
 					'created_at' => (string)$product->created_at,
 					'updated_at' => (string)$product->updated_at,
+					'deleted_at' => NULL,
 					'definition' => [
 						'id' => $product->definition->id,
 						'name' => $product->definition->name,
 						'image' => NULL,
 						'description' => $product->definition->description,
 						'created_at' => (string)$product->definition->created_at,
-						'updated_at' => (string)$product->definition->updated_at
+						'updated_at' => (string)$product->definition->updated_at,
+						'deleted_at' => NULL
 					]
 				]
 		]);
@@ -147,13 +149,15 @@ class ProductsTest extends TestCase
 						'product_header_id' => $product->product_header_id,
 						'created_at' => (string)$product->created_at,
 						'updated_at' => (string)$product->updated_at,
+						'deleted_at' => NULL,
 						'definition' => [
 							'id' => $product->definition->id,
 							'name' => $product->definition->name,
 							'image' => NULL,
 							'description' => $product->definition->description,
 							'created_at' => (string)$product->definition->created_at,
-							'updated_at' => (string)$product->definition->updated_at
+							'updated_at' => (string)$product->definition->updated_at,
+							'deleted_at' => NULL
 						]
 					]
 				]
