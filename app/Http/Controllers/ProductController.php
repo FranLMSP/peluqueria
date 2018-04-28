@@ -38,16 +38,32 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required|max:200',
             'price' => 'required',
+            'image' => 'nullable|image',
             'description' => ''
+        ],[
+            'name.required' => 'El campo nombre es requerido',
+            'name.max' => 'El campo nombre tiene máximo 200 caracteres',
+            'price' => 'El precio es requerido',
+            'image' => 'El formato de la imagen no es válido'
         ]);
 
         $productHeader = new ProductHeader([
             'name' => $request->name,
             'description' => $request->description
         ]);
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $filename = $this->getFileName($request->image);
+            $request->image->move( base_path('public/storage/products'), $filename );
+            $productHeader->image = $filename;
+        } else {
+            $productHeader->image = NULL;
+        }
+
 
         $productHeader->save();
 

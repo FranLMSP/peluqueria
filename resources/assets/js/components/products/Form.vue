@@ -29,7 +29,19 @@
 									<tr>
 										<th>Descripción</th>
 										<td>
-											<textarea class="form-control" v-model="form.description" placeholder="Identidad"></textarea>
+											<textarea class="form-control" v-model="form.description" placeholder="Descripción del producto"></textarea>
+										</td>
+									</tr>
+									<tr>
+										<th>Imagen</th>
+										<td>
+											<input type="file" @change="onFileChange">
+										</td>
+									</tr>
+									<tr>
+										<th>Preview:</th>
+										<td>
+											<img :src="form.image" class="img-thumbnail">
 										</td>
 									</tr>
 									<tr>
@@ -64,6 +76,7 @@
 <script type="text/javascript">
 
 	import validate from 'validate.js'
+	import {toMultipartedForm} from '../../helpers/form'
 
 	export default {
 		name: 'create',
@@ -73,7 +86,8 @@
 					id: 0,
 					name: '',
 					price: '',
-					description: ''
+					description: '',
+					image: null
 				},
 				errors: null,
 				loading: false,
@@ -91,12 +105,15 @@
 				this.errors = validate(this.form, constraints)
 
 				if(this.errors) {
+					this.sending = false
 					return
 				}
 
+				const form = toMultipartedForm(this.form, this.$route.meta.mode)
+
 				if (this.$route.meta.mode == 'edit') {
 
-					axios.put(`/api/products/${this.form.id}`, this.form)
+					axios.put(`/api/products/${this.form.id}`, form)
 					.then( response => {
 						this.$router.push(`/productos/${this.form.id}`)
 					})
@@ -106,7 +123,7 @@
 					})
 					
 				} else {
-					axios.post(`/api/products/`, this.form)
+					axios.post(`/api/products/`, form)
 					.then( response => {
 						this.$router.push('/productos')
 					})
@@ -128,16 +145,30 @@
 					},
 					price: {
 						presence: {
-							message: 'El número de identidad es obligatorio'
+							message: 'El precio es obligatorio'
 						},
 						numericality: {
 							onlyInteger:false,
-							message: 'El número de identidad debe ser numérico'
+							message: 'El precio debe ser numérico'
 						}
 
 					}
 				}
-			}
+			},
+			onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                let reader = new FileReader();
+                let vm = this.form;
+                reader.onload = (e) => {
+                    vm.image = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
 		},
 		created() {
 			if(this.$route.meta.mode == 'edit') {
