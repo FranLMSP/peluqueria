@@ -2,6 +2,8 @@ export function initialize(store, router) {
 
 	const user = store.getters.currentUser
 
+	axios.defaults.headers.common['Content-Type'] = 'application/json';
+
 	if(user) {
 		axios.defaults.headers.common["Authorization"] = `Bearer ${store.getters.currentUser.token}`
 	}

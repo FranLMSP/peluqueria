@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\ProductHeader;
 use Illuminate\Http\Request;
+use File;
 
 class ProductController extends Controller
 {
@@ -78,6 +79,11 @@ class ProductController extends Controller
         return response()->json([
             'product' => $product
         ], 201);
+    }
+
+    protected function getFileName($file)
+    {
+        return uniqid('product_').'.'.$file->extension();
     }
 
     /**

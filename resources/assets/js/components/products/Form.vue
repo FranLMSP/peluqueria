@@ -15,7 +15,7 @@
 									<tr>
 										<th>Nombre</th>
 										<td>
-											<input type="text" class="form-control" v-model="form.name" placeholder="Nombres del producto">
+											<input type="text" class="form-control" v-model="form.name" placeholder="Nombre del producto">
 										</td>
 									</tr>
 
@@ -35,13 +35,7 @@
 									<tr>
 										<th>Imagen</th>
 										<td>
-											<input type="file" @change="onFileChange">
-										</td>
-									</tr>
-									<tr>
-										<th>Preview:</th>
-										<td>
-											<img :src="form.image" class="img-thumbnail">
+											<image-upload v-model="form.image"></image-upload>
 										</td>
 									</tr>
 									<tr>
@@ -77,9 +71,13 @@
 
 	import validate from 'validate.js'
 	import {toMultipartedForm} from '../../helpers/form'
+	import ImageUpload from '../form/ImageUpload.vue'
 
 	export default {
 		name: 'create',
+		components: {
+			ImageUpload
+		},
 		data() {
 			return {
 				form: {
@@ -154,21 +152,7 @@
 
 					}
 				}
-			},
-			onFileChange(e) {
-                let files = e.target.files || e.dataTransfer.files;
-                if (!files.length)
-                    return;
-                this.createImage(files[0]);
-            },
-            createImage(file) {
-                let reader = new FileReader();
-                let vm = this.form;
-                reader.onload = (e) => {
-                    vm.image = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            },
+			}
 		},
 		created() {
 			if(this.$route.meta.mode == 'edit') {
