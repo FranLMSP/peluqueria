@@ -42,18 +42,21 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'required|max:200',
+            'type' => 'required',
             'price' => 'required',
             'image' => 'nullable|image',
             'description' => ''
         ],[
             'name.required' => 'El campo nombre es requerido',
             'name.max' => 'El campo nombre tiene máximo 200 caracteres',
+            'type.required' => 'Debe especificar un tipo',
             'price.required' => 'El precio es requerido',
             'image.image' => 'El formato de la imagen no es válido'
         ]);
 
         $productHeader = new ProductHeader([
             'name' => $request->name,
+            'type' => strtoupper($request->type[0]) == 'P' ? 'P' : 'S',
             'description' => $request->description
         ]);
 
@@ -126,6 +129,7 @@ class ProductController extends Controller
             $validation = [
                 'name' => 'required|max:200',
                 'price' => 'required',
+                'type' => 'required',
                 'image' => '',
                 'description' => ''
             ];
@@ -134,6 +138,7 @@ class ProductController extends Controller
             $imageChange = true;
             $validation = [
                 'name' => 'required|max:200',
+                'type' => 'required',
                 'price' => 'required',
                 'image' => 'nullable|image',
                 'description' => ''
@@ -144,6 +149,7 @@ class ProductController extends Controller
             'name.required' => 'El campo nombre es requerido',
             'name.max' => 'El campo nombre tiene máximo 200 caracteres',
             'price.required' => 'El precio es requerido',
+            'type.required' => 'Debe especificar un tipo',
             'image.image' => 'El formato de la imagen no es válido'
         ]);
 
@@ -164,6 +170,7 @@ class ProductController extends Controller
         ProductHeader::where('id', $product->definition->id)
             ->update([
                 'name' => $request->name,
+                'type' => strtoupper($request->type[0]) == 'P' ? 'P' : 'S',
                 'description' => $request->description,
                 'image' => $productImage
             ]);

@@ -53998,6 +53998,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'list',
@@ -54105,6 +54106,16 @@ var render = function() {
                     [
                       _c("p", { staticClass: "text-right text-muted" }, [
                         _vm._v(_vm._s(product.price))
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-left text-muted" }, [
+                        _vm._v(
+                          _vm._s(
+                            product.definition.type == "P"
+                              ? "Producto"
+                              : "Servicio"
+                          )
+                        )
                       ]),
                       _vm._v(" "),
                       _c("h5", { staticClass: "card-title" }, [
@@ -54319,6 +54330,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -54337,6 +54367,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				name: '',
 				price: '',
 				description: '',
+				type: 'P',
 				image: null
 			},
 			errors: null,
@@ -54415,6 +54446,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					name: response.data.product.definition.name,
 					description: response.data.product.definition.description,
 					price: response.data.product.price,
+					type: response.data.product.definition.type,
 					image: response.data.product.definition.image
 				};
 
@@ -54859,6 +54891,78 @@ var render = function() {
                                 }
                               }
                             })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", [_vm._v("Tipo")]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("div", { staticClass: "row" }, [
+                              _c("div", { staticClass: "col-sm-6" }, [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "radio-inline",
+                                    staticStyle: { cursor: "pointer" }
+                                  },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.form.type,
+                                          expression: "form.type"
+                                        }
+                                      ],
+                                      attrs: { type: "radio", value: "P" },
+                                      domProps: {
+                                        checked: _vm._q(_vm.form.type, "P")
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          _vm.$set(_vm.form, "type", "P")
+                                        }
+                                      }
+                                    }),
+                                    _vm._v("Producto\n\t\t\t\t\t\t\t\t\t\t\t\t")
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "col-sm-6" }, [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "radio-inline",
+                                    staticStyle: { cursor: "pointer" }
+                                  },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.form.type,
+                                          expression: "form.type"
+                                        }
+                                      ],
+                                      attrs: { type: "radio", value: "S" },
+                                      domProps: {
+                                        checked: _vm._q(_vm.form.type, "S")
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          _vm.$set(_vm.form, "type", "S")
+                                        }
+                                      }
+                                    }),
+                                    _vm._v("Servicio\n\t\t\t\t\t\t\t\t\t\t\t\t")
+                                  ]
+                                )
+                              ])
+                            ])
                           ])
                         ]),
                         _vm._v(" "),

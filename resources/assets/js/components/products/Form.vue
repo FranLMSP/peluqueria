@@ -20,6 +20,25 @@
 									</tr>
 
 									<tr>
+										<th>Tipo</th>
+										<td>
+											<div class="row">
+												<div class="col-sm-6">
+													<label class="radio-inline" style="cursor:pointer">
+													<input type="radio" value="P" v-model="form.type">Producto
+													</label>
+												</div>
+
+												<div class="col-sm-6">												
+													<label class="radio-inline" style="cursor:pointer">
+													<input type="radio" value="S" v-model="form.type">Servicio
+													</label>
+												</div>
+											</div>
+										</td>
+									</tr>
+
+									<tr>
 										<th>Precio</th>
 										<td>
 											<input type="number" class="form-control" v-model="form.price" placeholder="10000.00">
@@ -85,6 +104,7 @@
 					name: '',
 					price: '',
 					description: '',
+					type: 'P',
 					image: null
 				},
 				errors: null,
@@ -167,6 +187,7 @@
 						name: response.data.product.definition.name,
 						description: response.data.product.definition.description,
 						price: response.data.product.price,
+						type: response.data.product.definition.type,
 						image: response.data.product.definition.image,
 					}
 

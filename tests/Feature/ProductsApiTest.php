@@ -27,12 +27,14 @@ class ProductsTest extends TestCase
 		$this->withHeaders(["Authorization" => 'Bearer '.$token])
 		->json('POST', '/api/products', [
 			'name' => 'Planchado',
+			'type' => 'S',
 			'description' => 'Planchado de pelo',
 			'price' => 20.5
 		])->assertStatus(201);
 
 		$this->assertDatabaseHas('product_headers', [
 			'name' => 'Planchado',
+			'type' => 'S',
 			'description' => 'Planchado de pelo'
 		]);
 
@@ -56,13 +58,14 @@ class ProductsTest extends TestCase
 
         $product = factory(Product::class)->create([
         	'price' => 10.5,
-        	'product_header_id' => factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo'])
+        	'product_header_id' => factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo', 'type' => 'S'])
         ]);
 
 
 		$this->withHeaders(["Authorization" => 'Bearer '.$token])
 		->json('PUT', '/api/products/'.$product->id, [
 			'name' => 'Planchado E',
+			'type' => 'P',
 			'description' => 'Planchado de pelo E',
 			'price' => 20.5
 		])->assertStatus(200);
@@ -72,6 +75,7 @@ class ProductsTest extends TestCase
 		$this->assertTrue((
 			$editedProduct->definition->name == 'Planchado E' && 
 			$editedProduct->definition->description == 'Planchado de pelo E' && 
+			$editedProduct->definition->type == 'P' && 
 			$editedProduct->price == 20.5
 		));
     }
@@ -86,7 +90,7 @@ class ProductsTest extends TestCase
 
         $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
 
-      	$productHeader = factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo']);
+      	$productHeader = factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo', 'type'=>'S']);
 
         $product = factory(Product::class)->create([
         	'price' => 10.5,
@@ -107,6 +111,7 @@ class ProductsTest extends TestCase
 					'definition' => [
 						'id' => $product->definition->id,
 						'name' => $product->definition->name,
+						'type' => $product->definition->type,
 						'image' => NULL,
 						'description' => $product->definition->description,
 						'created_at' => (string)$product->definition->created_at,
@@ -127,7 +132,7 @@ class ProductsTest extends TestCase
 
         $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
 
-      	$productHeader = factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo']);
+      	$productHeader = factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo', 'type' => 'S']);
 
         $product = factory(Product::class)->create([
         	'price' => 10.5,
@@ -148,6 +153,7 @@ class ProductsTest extends TestCase
 					'definition' => [
 						'id' => $product->definition->id,
 						'name' => $product->definition->name,
+						'type' => $product->definition->type,
 						'image' => NULL,
 						'description' => $product->definition->description,
 						'created_at' => (string)$product->definition->created_at,
@@ -171,7 +177,7 @@ class ProductsTest extends TestCase
 
         $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
 
-      	$productHeader = factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo']);
+      	$productHeader = factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo', 'type'=>'S']);
 
         $product = factory(Product::class)->create([
         	'price' => 10.5,
@@ -193,6 +199,7 @@ class ProductsTest extends TestCase
 						'definition' => [
 							'id' => $product->definition->id,
 							'name' => $product->definition->name,
+							'type' => $product->definition->type,
 							'image' => NULL,
 							'description' => $product->definition->description,
 							'created_at' => (string)$product->definition->created_at,

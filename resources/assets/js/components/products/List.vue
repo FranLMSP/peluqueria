@@ -15,6 +15,7 @@
 					<img class="card-img-top" :src="product.definition.image ? '/storage/products/'+product.definition.image : '/img/default/404.png'" alt="Card image cap">
 					<div class="card-body">
 						<p class="text-right text-muted">{{ product.price }}</p>
+						<p class="text-left text-muted">{{ product.definition.type == 'P' ? 'Producto' : 'Servicio' }}</p>
 						<h5 class="card-title">{{ product.definition.name }}</h5>
 						<p class="card-text">{{ product.definition.description }}</p>
 						<router-link :to="`/productos/${product.id}/editar`" class="btn btn-primary">Editar</router-link>

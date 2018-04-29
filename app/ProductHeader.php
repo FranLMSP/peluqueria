@@ -13,6 +13,6 @@ class ProductHeader extends Model
 	protected $dates = ['deleted_at'];
 
     protected $fillable = [
-    	'name', 'description', 'image'
+    	'name', 'description', 'image', 'type'
     ];
 }
