@@ -53999,6 +53999,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'list',
@@ -54006,8 +54019,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {
 			products: [],
 			loading: false,
-			error: false
-
+			error: false,
+			type: 'A'
 		};
 	},
 
@@ -54037,9 +54050,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				return 'Ocurrió un error al listar los productos';
 			}
 
-			if (!this.products || this.products.length <= 0) {
+			if (!this.productsList || this.productsList.length <= 0) {
 				return 'Sin productos disponibles';
 			}
+		},
+		productsList: function productsList() {
+			var _this2 = this;
+
+			if (this.type == 'A') {
+				return this.products;
+			}
+			return this.products.filter(function (product) {
+				return product.definition.type == _this2.type;
+			});
 		}
 	},
 	created: function created() {
@@ -54078,13 +54101,59 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-4 offset-8" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "type" } }, [_vm._v("Filtrar")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.type,
+                  expression: "type"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "type" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.type = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "A" } }, [_vm._v("Todos")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "P" } }, [_vm._v("Productos")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "S" } }, [_vm._v("Servicios")])
+            ]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
     _c("hr"),
     _vm._v(" "),
-    _vm.products && _vm.products.length > 0
+    _vm.productsList && _vm.productsList.length > 0
       ? _c(
           "div",
           { staticClass: "row" },
-          _vm._l(_vm.products, function(product) {
+          _vm._l(_vm.productsList, function(product) {
             return _c("div", { staticClass: "col-sm-4" }, [
               _c(
                 "div",
@@ -54875,7 +54944,11 @@ var render = function() {
                               staticClass: "form-control",
                               attrs: {
                                 type: "text",
-                                placeholder: "Nombre del producto"
+                                placeholder:
+                                  "Nombre del " +
+                                  (_vm.form.type == "P"
+                                    ? "producto"
+                                    : "servicio")
                               },
                               domProps: { value: _vm.form.name },
                               on: {
@@ -54980,10 +55053,7 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                placeholder: "10000.00"
-                              },
+                              attrs: { type: "text", placeholder: "10000.00" },
                               domProps: { value: _vm.form.price },
                               on: {
                                 input: function($event) {
@@ -55016,7 +55086,11 @@ var render = function() {
                               ],
                               staticClass: "form-control",
                               attrs: {
-                                placeholder: "Descripción del producto"
+                                placeholder:
+                                  "Descripción del " +
+                                  (_vm.form.type == "P"
+                                    ? "producto"
+                                    : "servicio")
                               },
                               domProps: { value: _vm.form.description },
                               on: {

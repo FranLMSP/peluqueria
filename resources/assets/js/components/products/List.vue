@@ -7,10 +7,23 @@
 			</div>
 		</div>
 
+		<div class="row">
+			<div class="col-sm-4 offset-8">
+				<div class="form-group">
+					<label for="type">Filtrar</label>
+					<select class="form-control" v-model="type" id="type">
+						<option value="A">Todos</option>
+						<option value="P">Productos</option>
+						<option value="S">Servicios</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
 		<hr>
 
-		<div class="row" v-if="products && products.length > 0">
-			<div class="col-sm-4" v-for="product in products">
+		<div class="row" v-if="productsList && productsList.length > 0">
+			<div class="col-sm-4" v-for="product in productsList">
 				<div class="card mb-4" style="width: 100%;">
 					<img class="card-img-top" :src="product.definition.image ? '/storage/products/'+product.definition.image : '/img/default/404.png'" alt="Card image cap">
 					<div class="card-body">
@@ -36,8 +49,8 @@
 			return {
 				products: [],
 				loading: false,
-				error: false
-
+				error: false,
+				type: 'A'
 			}
 		},
 		methods: {
@@ -66,9 +79,17 @@
 					return 'Ocurrió un error al listar los productos'
 				}
 
-				if(!this.products || this.products.length <= 0){
+				if(!this.productsList || this.productsList.length <= 0){
 					return 'Sin productos disponibles'
 				}
+			},
+			productsList() {
+				if(this.type == 'A') {
+					return this.products
+				}
+				return this.products.filter( product => {
+					return product.definition.type == this.type
+				})
 			}
 		},
 		created() {

@@ -15,7 +15,7 @@
 									<tr>
 										<th>Nombre</th>
 										<td>
-											<input type="text" class="form-control" v-model="form.name" placeholder="Nombre del producto">
+											<input type="text" class="form-control" v-model="form.name" :placeholder="`Nombre del ${form.type=='P' ? 'producto' : 'servicio'}`">
 										</td>
 									</tr>
 
@@ -41,14 +41,14 @@
 									<tr>
 										<th>Precio</th>
 										<td>
-											<input type="number" class="form-control" v-model="form.price" placeholder="10000.00">
+											<input type="text" class="form-control" v-model="form.price" placeholder="10000.00">
 										</td>
 									</tr>
 
 									<tr>
 										<th>Descripción</th>
 										<td>
-											<textarea class="form-control" v-model="form.description" placeholder="Descripción del producto"></textarea>
+											<textarea class="form-control" v-model="form.description" :placeholder="`Descripción del ${form.type=='P' ? 'producto' : 'servicio'}`"></textarea>
 										</td>
 									</tr>
 									<tr>
