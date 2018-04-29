@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCustomersTable extends Migration
+class CreateProductHeadersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('product_headers', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('identity_number');
-            $table->string('names');
-            $table->string('surnames')->nullable();
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-            $table->date('birthdate')->nullable();
+            $table->string('name');
+            $table->string('image')->nullable();
+            $table->char('type', 4)->default('P');
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +31,8 @@ class CreateCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        //Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('product_headers');
+        //Schema::enableForeignKeyConstraints();
     }
 }
