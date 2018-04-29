@@ -10,7 +10,7 @@
 					</div>
 					<div v-else>		
 						<div class="customer-new">
-							<form @submit.prevent="save">
+							<form @submit.prevent="save" enctype="multipart/form-data">
 								<table class="table">
 									<tr>
 										<th>Nombre</th>
@@ -22,7 +22,7 @@
 									<tr>
 										<th>Precio</th>
 										<td>
-											<input type="text" class="form-control" v-model="form.price" placeholder="10000.00">
+											<input type="number" class="form-control" v-model="form.price" placeholder="10000.00">
 										</td>
 									</tr>
 
@@ -107,13 +107,13 @@
 					return
 				}
 
-				const form = toMultipartedForm(this.form, this.$route.meta.mode)
 
 				if (this.$route.meta.mode == 'edit') {
-
-					axios.put(`/api/products/${this.form.id}`, form)
+					const form = toMultipartedForm(this.form, 'create')
+					form.append('_method', 'PATCH')
+					axios.post(`/api/products/${this.form.id}`, form)
 					.then( response => {
-						this.$router.push(`/productos/${this.form.id}`)
+						this.$router.push(`/productos/`)
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors
@@ -121,6 +121,7 @@
 					})
 					
 				} else {
+					const form = toMultipartedForm(this.form, 'create')
 					axios.post(`/api/products/`, form)
 					.then( response => {
 						this.$router.push('/productos')
@@ -162,12 +163,13 @@
 				axios.get(`/api/products/${this.$route.params.id}/edit`)
 				.then( response => {
 					this.form = {
-						id: response.data.product.id	,
+						id: response.data.product.id,
 						name: response.data.product.definition.name,
 						description: response.data.product.definition.description,
 						price: response.data.product.price,
 						image: response.data.product.definition.image,
 					}
+
 					this.loading = false
 				})
 				.catch( error => {

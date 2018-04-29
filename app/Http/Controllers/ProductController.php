@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
         return response()->json([
-            'products' => Product::where('active', true)->with('definition')->get()
+            'products' => Product::where('active', true)->orderBy('created_at', 'DESC')->with('definition')->get()
         ]);
     }
 
@@ -48,8 +48,8 @@ class ProductController extends Controller
         ],[
             'name.required' => 'El campo nombre es requerido',
             'name.max' => 'El campo nombre tiene máximo 200 caracteres',
-            'price' => 'El precio es requerido',
-            'image' => 'El formato de la imagen no es válido'
+            'price.required' => 'El precio es requerido',
+            'image.image' => 'El formato de la imagen no es válido'
         ]);
 
         $productHeader = new ProductHeader([
@@ -122,16 +122,29 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
 
-        $request->validate([
-            'name' => 'required|max:200',
-            'price' => 'required',
-            'image' => 'nullable|image',
-            'description' => ''
-        ],[
+        if(isset($request->image) && $request->image == $product->definition->image) {
+            $validation = [
+                'name' => 'required|max:200',
+                'price' => 'required',
+                'image' => '',
+                'description' => ''
+            ];
+            $imageChange = false;
+        } else  {
+            $imageChange = true;
+            $validation = [
+                'name' => 'required|max:200',
+                'price' => 'required',
+                'image' => 'nullable|image',
+                'description' => ''
+            ];
+        }
+
+        $request->validate($validation,[
             'name.required' => 'El campo nombre es requerido',
             'name.max' => 'El campo nombre tiene máximo 200 caracteres',
-            'price' => 'El precio es requerido',
-            'image' => 'El formato de la imagen no es válido'
+            'price.required' => 'El precio es requerido',
+            'image.image' => 'El formato de la imagen no es válido'
         ]);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -142,8 +155,10 @@ class ProductController extends Controller
             $filename = $this->getFileName($request->image);
             $request->image->move( base_path('public/storage/products'), $filename );
             $productImage = $filename;
-        } else {
+        } else if($imageChange) {
             $productImage = NULL;
+        } else {
+            $productImage = $product->definition->image;
         }
 
         ProductHeader::where('id', $product->definition->id)

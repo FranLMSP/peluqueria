@@ -12,7 +12,7 @@
 		<div class="row" v-if="products && products.length > 0">
 			<div class="col-sm-4" v-for="product in products">
 				<div class="card mb-4" style="width: 100%;">
-					<img class="card-img-top" :src="product.definition.image ? 'storage/products/'+product.definition.image : '/img/default/404.png'" alt="Card image cap">
+					<img class="card-img-top" :src="product.definition.image ? '/storage/products/'+product.definition.image : '/img/default/404.png'" alt="Card image cap">
 					<div class="card-body">
 						<p class="text-right text-muted">{{ product.price }}</p>
 						<h5 class="card-title">{{ product.definition.name }}</h5>

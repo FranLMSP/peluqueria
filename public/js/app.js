@@ -54093,7 +54093,7 @@ var render = function() {
                     staticClass: "card-img-top",
                     attrs: {
                       src: product.definition.image
-                        ? "storage/products/" + product.definition.image
+                        ? "/storage/products/" + product.definition.image
                         : "/img/default/404.png",
                       alt: "Card image cap"
                     }
@@ -54362,18 +54362,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				return;
 			}
 
-			var form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, this.$route.meta.mode);
-
 			if (this.$route.meta.mode == 'edit') {
-
-				axios.put('/api/products/' + this.form.id, form).then(function (response) {
-					_this.$router.push('/productos/' + _this.form.id);
+				var form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, 'create');
+				form.append('_method', 'PATCH');
+				axios.post('/api/products/' + this.form.id, form).then(function (response) {
+					_this.$router.push('/productos/');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
 					_this.sending = false;
 				});
 			} else {
-				axios.post('/api/products/', form).then(function (response) {
+				var _form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, 'create');
+				axios.post('/api/products/', _form).then(function (response) {
 					_this.$router.push('/productos');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
@@ -54417,6 +54417,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					price: response.data.product.price,
 					image: response.data.product.definition.image
 				};
+
 				_this2.loading = false;
 			}).catch(function (error) {
 				_this2.message = 'Ocurrió un error al cargar el producto';
@@ -54816,6 +54817,7 @@ var render = function() {
                   _c(
                     "form",
                     {
+                      attrs: { enctype: "multipart/form-data" },
                       on: {
                         submit: function($event) {
                           $event.preventDefault()
@@ -54874,7 +54876,10 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "text", placeholder: "10000.00" },
+                              attrs: {
+                                type: "number",
+                                placeholder: "10000.00"
+                              },
                               domProps: { value: _vm.form.price },
                               on: {
                                 input: function($event) {
