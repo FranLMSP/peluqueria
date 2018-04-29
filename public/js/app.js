@@ -54552,7 +54552,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.image-upload {\n\theight: 257px;\n\tbackground: #fafafa;\n\tborder: 1px dashed rgba(0, 0, 0, 0.1);\n\tdisplay: -webkit-box;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n\t-webkit-box-align: center;\n\t    -ms-flex-align: center;\n\t        align-items: center;\n}\n", ""]);
+exports.push([module.i, "\n.image-upload {\n\tmin-height: 257px;\n\tbackground: #fafafa;\n\tborder: 1px dashed rgba(0, 0, 0, 0.1);\n\tdisplay: -webkit-box;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n\t-webkit-box-align: center;\n\t    -ms-flex-align: center;\n\t        align-items: center;\n}\n", ""]);
 
 // exports
 
@@ -54718,10 +54718,11 @@ var render = function() {
         _c("img", { attrs: { src: _vm.image } }),
         _vm._v(" "),
         _c(
-          "button",
+          "a",
           {
             staticClass: "btn btn-danger",
             staticStyle: { position: "absolute", right: "0", top: "0" },
+            attrs: { href: "#" },
             on: {
               click: function($event) {
                 _vm.$emit("close")

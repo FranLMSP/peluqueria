@@ -1,9 +1,9 @@
 <template>
 	<div style="position: relative;" v-if="image">
 		<img :src="image">
-		<button class="btn btn-danger" style="position: absolute; right: 0; top: 0;" @click="$emit('close')">
+		<a href="#" class="btn btn-danger" style="position: absolute; right: 0; top: 0;" @click="$emit('close')">
 			&times;
-		</button>
+		</a>
 	</div>
 </template>
 

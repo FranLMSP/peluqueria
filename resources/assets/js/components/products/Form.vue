@@ -152,7 +152,8 @@
 
 					}
 				}
-			}
+			},
+
 		},
 		created() {
 			if(this.$route.meta.mode == 'edit') {
