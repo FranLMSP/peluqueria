@@ -107,7 +107,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return response()->json([
+            'product' => $product->load('definition')
+        ]);
     }
 
     /**
@@ -119,16 +121,36 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+
         $request->validate([
             'name' => 'required|max:200',
             'price' => 'required',
+            'image' => 'nullable|image',
             'description' => ''
+        ],[
+            'name.required' => 'El campo nombre es requerido',
+            'name.max' => 'El campo nombre tiene máximo 200 caracteres',
+            'price' => 'El precio es requerido',
+            'image' => 'El formato de la imagen no es válido'
         ]);
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+
+            if (file_exists('public/storage/products/'.$product->definition->image))
+                unlink('public/storage/products/'.$product->definition->image);
+
+            $filename = $this->getFileName($request->image);
+            $request->image->move( base_path('public/storage/products'), $filename );
+            $productImage = $filename;
+        } else {
+            $productImage = NULL;
+        }
 
         ProductHeader::where('id', $product->definition->id)
             ->update([
                 'name' => $request->name,
-                'description' => $request->description
+                'description' => $request->description,
+                'image' => $productImage
             ]);
 
         if ($product->price != $request->price) {
@@ -141,13 +163,13 @@ class ProductController extends Controller
             ]);
 
             return response()->json([
-                'product' => $newProduct
+                'product' => $newProduct->load('definition')
             ]);
 
         }
 
         return response()->json([
-            'product' => $newProduct
+            'product' => $product->load('definition')
         ]);
     }
 

@@ -54410,10 +54410,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.loading = true;
 			this.message = 'Cargando...';
 			axios.get('/api/products/' + this.$route.params.id + '/edit').then(function (response) {
-				_this2.form = response.data.customer;
+				_this2.form = {
+					id: response.data.product.id,
+					name: response.data.product.definition.name,
+					description: response.data.product.definition.description,
+					price: response.data.product.price,
+					image: response.data.product.definition.image
+				};
 				_this2.loading = false;
 			}).catch(function (error) {
-				_this2.message = 'Ocurrió un error al cargar el cliente';
+				_this2.message = 'Ocurrió un error al cargar el producto';
 			});
 		}
 	}
@@ -54552,7 +54558,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.image-upload {\n\tmin-height: 257px;\n\tbackground: #fafafa;\n\tborder: 1px dashed rgba(0, 0, 0, 0.1);\n\tdisplay: -webkit-box;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n\t-webkit-box-align: center;\n\t    -ms-flex-align: center;\n\t        align-items: center;\n}\n", ""]);
+exports.push([module.i, "\n.image-upload {\n\t/*min-height: 257px;*/\n\t/*width: 100%;*/\n\tbackground: #fafafa;\n\tborder: 1px dashed rgba(0, 0, 0, 0.1);\n\tdisplay: -webkit-box;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n\t-webkit-box-align: center;\n\t    -ms-flex-align: center;\n\t        align-items: center;\n}\n", ""]);
 
 // exports
 
@@ -54697,7 +54703,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				};
 				fileReader.readAsDataURL(this.preview);
 			} else if (typeof this.preview === 'string') {
-				this.image = '/images/' + this.preview;
+				this.image = '/storage/products/' + this.preview;
 			} else {
 				this.image = null;
 			}
@@ -54715,7 +54721,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _vm.image
     ? _c("div", { staticStyle: { position: "relative" } }, [
-        _c("img", { attrs: { src: _vm.image } }),
+        _c("img", { staticClass: "img-fluid", attrs: { src: _vm.image } }),
         _vm._v(" "),
         _c(
           "a",
@@ -54948,7 +54954,7 @@ var render = function() {
                                 "router-link",
                                 {
                                   staticClass: "btn btn-default",
-                                  attrs: { to: "/clientes" }
+                                  attrs: { to: "/productos" }
                                 },
                                 [_vm._v("Regresar")]
                               )

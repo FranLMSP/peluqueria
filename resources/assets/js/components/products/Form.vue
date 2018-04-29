@@ -1,4 +1,4 @@
-<template>
+	<template>
 	<div>
 		<div class="col-md-12">
 			<div class="card card-default">
@@ -40,7 +40,7 @@
 									</tr>
 									<tr>
 										<td>
-											<router-link to="/clientes" class="btn btn-default">Regresar</router-link>
+											<router-link to="/productos" class="btn btn-default">Regresar</router-link>
 										</td>
 										<td class="text-right">
 											<input type="submit" value="Guardar" class="btn btn-primary">
@@ -161,11 +161,17 @@
 				this.message = 'Cargando...'
 				axios.get(`/api/products/${this.$route.params.id}/edit`)
 				.then( response => {
-					this.form = response.data.customer
+					this.form = {
+						id: response.data.product.id	,
+						name: response.data.product.definition.name,
+						description: response.data.product.definition.description,
+						price: response.data.product.price,
+						image: response.data.product.definition.image,
+					}
 					this.loading = false
 				})
 				.catch( error => {
-					this.message = 'Ocurrió un error al cargar el cliente'
+					this.message = 'Ocurrió un error al cargar el producto'
 				})
 			}
 		}

@@ -41,7 +41,8 @@
 
 <style type="text/css">
 	.image-upload {
-		min-height: 257px;
+		/*min-height: 257px;*/
+		/*width: 100%;*/
 		background: #fafafa;
 		border: 1px dashed rgba(0, 0, 0, 0.1);
 		display: flex;

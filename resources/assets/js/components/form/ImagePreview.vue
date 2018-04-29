@@ -1,6 +1,6 @@
 <template>
 	<div style="position: relative;" v-if="image">
-		<img :src="image">
+		<img :src="image" class="img-fluid">
 		<a href="#" class="btn btn-danger" style="position: absolute; right: 0; top: 0;" @click="$emit('close')">
 			&times;
 		</a>
@@ -37,7 +37,7 @@
 					fileReader.readAsDataURL(this.preview)
 
 				} else if(typeof this.preview === 'string') {
-					this.image = `/images/${this.preview}`
+					this.image = `/storage/products/${this.preview}`
 				} else {
 					this.image = null
 				}

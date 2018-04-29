@@ -117,6 +117,46 @@ class ProductsTest extends TestCase
 		]);
     }
 
+    /** @test */
+    public function one_product_edit_data_can_be_finded()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+      	$productHeader = factory(ProductHeader::class)->create(['name'=>'Planchado', 'description'=> 'Planchado de pelo']);
+
+        $product = factory(Product::class)->create([
+        	'price' => 10.5,
+        	'product_header_id' => $productHeader->id
+        ]);
+
+		$this->withHeaders(["Authorization" => 'Bearer '.$token])
+			->json('GET', '/api/products/'.$product->id.'/edit')
+			->assertStatus(200)
+			->assertExactJson([
+				'product' => [
+					'id' => $product->id,
+					'price' => $product->price,
+					'product_header_id' => $product->product_header_id,
+					'created_at' => (string)$product->created_at,
+					'updated_at' => (string)$product->updated_at,
+					'deleted_at' => NULL,
+					'definition' => [
+						'id' => $product->definition->id,
+						'name' => $product->definition->name,
+						'image' => NULL,
+						'description' => $product->definition->description,
+						'created_at' => (string)$product->definition->created_at,
+						'updated_at' => (string)$product->definition->updated_at,
+						'deleted_at' => NULL
+					]
+				]
+		]);
+    }
 
    	/** @test */
    	public function products_can_be_listed()
