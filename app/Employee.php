@@ -23,6 +23,11 @@ class Employee extends Model
 		'birthdate'
 	];
 
+	protected $casts = [
+		'identity_number' => 'integer',
+		'occupation_id' => 'integer'
+	];
+
 	public function occupation()
 	{
 		return $this->hasOne(Occupation::class, 'id', 'occupation_id');
