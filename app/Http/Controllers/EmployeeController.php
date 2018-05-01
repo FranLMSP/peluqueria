@@ -70,6 +70,15 @@ class EmployeeController extends Controller
 
         $employee = new Employee($request->all());
 
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $filename = $this->getFileName($request->image);
+            $request->image->move( base_path('public/storage/employees'), $filename );
+            $employee->profile_pic = $filename;
+        } else {
+            $employee->profile_pic = NULL;
+        }
+
+
         $employee->save();
 
         return response()->json([
@@ -113,16 +122,33 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        $request->validate([
-            'names' => 'required|max:255',
-            'surnames' => 'nullable|max:255',
-            'identity_number' => 'required|integer|unique:employees,identity_number,'.$employee->identity_number,
-            'profile_pic' => 'nullable|image',
-            'email' => 'nullable|email',
-            'phone' => '',
-            'birthdate' => 'required|date',
-            'occupation' => 'required|integer|exists:occupations,id'
-        ], [
+        $validation = [];
+        if(isset($request->profile_pic) && $request->profile_pic == $employee->profile_pic) {
+            $validation = [
+                'names' => 'required|max:255',
+                'surnames' => 'nullable|max:255',
+                'identity_number' => 'required|integer|unique:employees,identity_number,'.$employee->id,
+                'profile_pic' => '',
+                'email' => 'nullable|email',
+                'phone' => '',
+                'birthdate' => 'required|date',
+                'occupation' => 'required|integer|exists:occupations,id'
+            ];
+            $imageChange = false;
+        } else {
+            $validation = [
+                'names' => 'required|max:255',
+                'surnames' => 'nullable|max:255',
+                'identity_number' => 'required|integer|unique:employees,identity_number,'.$employee->id,
+                'profile_pic' => 'nullable|image',
+                'email' => 'nullable|email',
+                'phone' => '',
+                'birthdate' => 'required|date',
+                'occupation' => 'required|integer|exists:occupations,id'
+            ];
+            $imageChange = true;
+        }
+        $request->validate($validation, [
             'names.required' => 'El campo nombre es obligatorio',
             'names.max' => 'El nombre no debe pasar de los 255 caracteres',
             'surnames.required' => 'El campo apellido es obligatorio',
@@ -139,9 +165,27 @@ class EmployeeController extends Controller
             'occupation.exists' => 'La ocupación no existe',
         ]);
 
-        $request->merge(['occupation_id' => $request->occupation]);
+        $data = $request->all();
 
-        $employee->update($request->all());
+        $data['occupation_id'] = $request->occupation;
+
+        if ($request->hasFile('profile_pic') && $request->file('profile_pic')->isValid()) {
+
+            if (file_exists('public/storage/employees/'.$employee->profile_pic))
+                unlink('public/storage/employees/'.$employee->definition->profile_pic);
+
+            $filename = $this->getFileName($request->profile_pic);
+            $request->profile_pic->move( base_path('public/storage/employees'), $filename );
+            $employeeImage = $filename;
+        } else if($imageChange) {
+            $employeeImage = NULL;
+        } else {
+            $employeeImage = $employee->profile_pic;
+        }
+
+        $data['profile_pic'] = $employeeImage;
+
+        $employee->update($data);
 
         return response()->json([
             'employee' => $employee
@@ -157,5 +201,10 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         //
+    }
+
+    protected function getFileName($file)
+    {
+        return uniqid('employee_').'.'.$file->extension();
     }
 }

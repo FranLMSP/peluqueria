@@ -12,6 +12,7 @@ class OccupationsTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Occupation::truncate();
 
         factory(Occupation::class)->create([
@@ -33,5 +34,6 @@ class OccupationsTableSeeder extends Seeder
         	'name' => 'Otro',
         	'description' => 'Ocupación sin especificar'
         ]);
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
