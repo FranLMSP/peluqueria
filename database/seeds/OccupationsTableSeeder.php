@@ -25,8 +25,13 @@ class OccupationsTableSeeder extends Seeder
         ]);
 
         factory(Occupation::class)->create([
-        	'name' => 'Cajero',
-        	'description' => 'Encargado de cobrarle a los clientes'
+            'name' => 'Cajero',
+            'description' => 'Encargado de cobrarle a los clientes'
+        ]);
+
+        factory(Occupation::class)->create([
+        	'name' => 'Otro',
+        	'description' => 'Ocupación sin especificar'
         ]);
     }
 }
