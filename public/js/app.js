@@ -57319,45 +57319,45 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "employee-show" }, [
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col-sm-12" },
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "btn btn-primary",
-              staticStyle: { float: "right" },
-              attrs: { to: "/empleados/" + _vm.employee.id + "/editar" }
-            },
-            [_vm._v("Editar")]
-          )
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("br"),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-6" }, [
-        _c("img", {
-          staticClass: "img-fluid",
-          attrs: {
-            src: _vm.employee.profile_pic
-              ? "/storage/employees/" + _vm.employee.profile_pic
-              : "/img/default/404.png"
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-sm-6" }, [
+  return _c(
+    "div",
+    { staticClass: "employee-show" },
+    [
+      _c("div", { staticClass: "row" }, [
         _c(
           "div",
-          { staticClass: "user-info" },
+          { staticClass: "col-sm-12" },
           [
+            _c(
+              "router-link",
+              {
+                staticClass: "btn btn-primary",
+                staticStyle: { float: "right" },
+                attrs: { to: "/empleados/" + _vm.employee.id + "/editar" }
+              },
+              [_vm._v("Editar")]
+            )
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-sm-6" }, [
+          _c("img", {
+            staticClass: "img-fluid",
+            attrs: {
+              src: _vm.employee.profile_pic
+                ? "/storage/employees/" + _vm.employee.profile_pic
+                : "/img/default/404.png"
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-sm-6" }, [
+          _c("div", { staticClass: "user-info" }, [
             _c("table", { staticClass: "table" }, [
               _c("tr", [
                 _c("th", [_vm._v("ID")]),
@@ -57411,21 +57411,21 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(_vm.employee.birthdate))])
               ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "router-link",
-              { staticClass: "btn btn-primary", attrs: { to: "/empleados" } },
-              [_vm._v("Regresar")]
-            ),
-            _vm._v(" "),
-            _c("br")
-          ],
-          1
-        )
-      ])
-    ])
-  ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "router-link",
+        { staticClass: "btn btn-primary", attrs: { to: "/empleados" } },
+        [_vm._v("Regresar")]
+      ),
+      _vm._v(" "),
+      _c("br")
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

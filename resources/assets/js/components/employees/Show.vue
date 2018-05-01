@@ -51,15 +51,15 @@
 						</tr>
 					</table>
 
-					<router-link class="btn btn-primary" to="/empleados">Regresar</router-link>
 
-					<br>
 				</div>
 			</div>
 
 		</div>
 
+		<router-link class="btn btn-primary" to="/empleados">Regresar</router-link>
 
+		<br>
 	</div>
 </template>
 
