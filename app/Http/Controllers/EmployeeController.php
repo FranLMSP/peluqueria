@@ -70,9 +70,9 @@ class EmployeeController extends Controller
 
         $employee = new Employee($request->all());
 
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $filename = $this->getFileName($request->image);
-            $request->image->move( base_path('public/storage/employees'), $filename );
+        if ($request->hasFile('profile_pic') && $request->file('profile_pic')->isValid()) {
+            $filename = $this->getFileName($request->profile_pic);
+            $request->profile_pic->move( base_path('public/storage/employees'), $filename );
             $employee->profile_pic = $filename;
         } else {
             $employee->profile_pic = NULL;
