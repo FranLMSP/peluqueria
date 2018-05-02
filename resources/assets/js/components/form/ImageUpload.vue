@@ -1,6 +1,6 @@
 <template>
 	<div class="image">
-		<image-preview :preview="value" @close="$emit('input', null)" v-if="value"></image-preview>
+		<image-preview :folder="folder" :preview="value" @close="$emit('input', null)" v-if="value"></image-preview>
 
 		<div class="image-upload" v-else>
 			<input type="file" accept="images/*" @change="upload">
@@ -20,6 +20,11 @@
 			value: {
 				type: [String, File],
 				default: null
+			},
+			folder: {
+				type: String,
+				required: true,
+				default: ''
 			}
 		},
 		methods: {

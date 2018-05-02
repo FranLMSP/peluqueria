@@ -53,8 +53,9 @@
 						<td>
 							<div class="form-group">
 
-								<select class="form-control" v-model="form.occupation">
-									<option :selected="occupation.id == form.occupation" v-for="occupation in occupations" :value="occupation.id">{{ occupation.name }}</option>
+								<select class="form-control" v-model="form.occupation" :data-selected="form.occupation">
+									<option>test</option>
+									<option v-bind:selected="occupation.id != form.occupation" v-for="occupation in occupations" :value="occupation.id">{{ occupation.name }}</option>
 								</select>
 							</div>
 						</td>
@@ -62,7 +63,7 @@
 					<tr>
 						<th>Foto</th>
 						<td>
-							<image-upload v-model="form.profile_pic"></image-upload>
+							<image-upload folder="/storage/employees/" v-model="form.profile_pic"></image-upload>
 						</td>
 					</tr>
 					<tr>
@@ -112,7 +113,7 @@
 					email: '',
 					birthdate: '',
 					profile_pic: '',
-					occupation: 0
+					occupation: 1
 				},
 				occupations: [],
 				errors: null,
@@ -193,6 +194,7 @@
 				this.message = 'Cargando...'
 				axios.get(`/api/employees/${this.$route.params.id}/edit`)
 				.then( response => {
+					response.data.employee.occupation = response.data.employee.occupation_id
 					this.form = response.data.employee
 					this.occupations = response.data.occupations
 					this.loading = false

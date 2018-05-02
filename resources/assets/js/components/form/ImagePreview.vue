@@ -13,6 +13,11 @@
 			preview: {
 				type: [String, File],
 				default: null
+			},
+			folder: {
+				type: String,
+				required:false,
+				default: ''
 			}
 		},
 		data() {
@@ -37,7 +42,7 @@
 					fileReader.readAsDataURL(this.preview)
 
 				} else if(typeof this.preview === 'string') {
-					this.image = `/storage/products/${this.preview}`
+					this.image = `${this.folder + this.preview}`
 				} else {
 					this.image = null
 				}

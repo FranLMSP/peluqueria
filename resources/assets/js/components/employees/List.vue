@@ -75,7 +75,7 @@
 					return 'Cargando...'
 				}
 				if (!this.employees || this.employees.length <= 0) {
-					return 'Sin clientes'
+					return 'Sin empleados'
 				}
 				return ''
 			}
