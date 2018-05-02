@@ -54,7 +54,7 @@
 									<tr>
 										<th>Imagen</th>
 										<td>
-											<image-upload v-model="form.image"></image-upload>
+											<image-upload :folder="'/storage/products/'" v-model="form.image"></image-upload>
 										</td>
 									</tr>
 									<tr>

@@ -34,7 +34,8 @@ Route::group([
 
 	Route::resources([
 		'/customers' => 'CustomerController',
-		'/products' => 'ProductController'
+		'/products' => 'ProductController',
+        '/employees' => 'EmployeeController'
 	]);
 
 });

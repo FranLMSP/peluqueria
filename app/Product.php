@@ -29,6 +29,6 @@ class Product extends Model
 
     public function definition()
     {
-    	return $this->belongsTo(ProductHeader::class, 'product_header_id', 'id');
+    	return $this->hasOne(ProductHeader::class, 'id', 'product_header_id');
     }
 }
