@@ -2,6 +2,7 @@ import Home from './components/Home.vue'
 
 
 import CustomersRoutes from './routes/customers'
+import ProvidersRoutes from './routes/providers'
 import ProductsRoutes from './routes/products'
 import EmployeesRoutes from './routes/employees'
 
@@ -20,6 +21,7 @@ export const routes = [
 		}
 	},
 	CustomersRoutes,
+	ProvidersRoutes,
 	ProductsRoutes,
 	EmployeesRoutes
 
