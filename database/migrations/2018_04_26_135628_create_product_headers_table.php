@@ -17,7 +17,7 @@ class CreateProductHeadersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('image')->nullable();
-            $table->char('type', 4)->default('P');
+            $table->char('type', 1)->default('P');
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
