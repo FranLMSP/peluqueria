@@ -14,7 +14,9 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'providers' => Provider::get()
+        ]);
     }
 
     /**
@@ -35,7 +37,20 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => ''
+        ],[
+            'name.required' => 'Debe especificar el nombre del proveedor'
+        ]);
+
+        $provider = new Provider($request->all());
+
+        $provider->save();
+
+        return response()->json([
+            'provider' => $provider
+        ], 201);
     }
 
     /**
@@ -46,7 +61,9 @@ class ProviderController extends Controller
      */
     public function show(Provider $provider)
     {
-        //
+        return response()->json([
+            'provider' => $provider
+        ]);
     }
 
     /**
@@ -57,7 +74,9 @@ class ProviderController extends Controller
      */
     public function edit(Provider $provider)
     {
-        //
+        return response()->json([
+            'provider' => $provider
+        ]);
     }
 
     /**
@@ -69,7 +88,18 @@ class ProviderController extends Controller
      */
     public function update(Request $request, Provider $provider)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => ''
+        ],[
+            'name.required' => 'Debe especificar el nombre del proveedor'
+        ]);
+
+        $provider->update($request->all());
+
+        return response()->json([
+            'provider' => $provider
+        ]);
     }
 
     /**
