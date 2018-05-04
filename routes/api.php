@@ -37,6 +37,7 @@ Route::group([
 		'/products' => 'ProductController',
         '/employees' => 'EmployeeController',
         '/providers' => 'ProviderController',
+        '/transactions' => 'TransactionController'
 	]);
 
 });

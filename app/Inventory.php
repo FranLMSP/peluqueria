@@ -13,7 +13,9 @@ class Inventory extends Model
     ];
 
     protected $casts = [
-    	'qty' => 'integer'
+    	'qty' => 'integer',
+        'product_id' => 'integer',
+        'transaction_id' => 'integer'
     ];
 
     public function product()
