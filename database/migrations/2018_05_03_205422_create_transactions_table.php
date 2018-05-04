@@ -15,7 +15,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('description')->nullable();
+            $table->unsignedInteger('customer_id')->nullable();
+            $table->unsignedInteger('provider_id')->nullable();
+            $table->unsignedInteger('transaction_type_id');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('provider_id')->references('id')->on('providers');
+            $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
         });
     }
 

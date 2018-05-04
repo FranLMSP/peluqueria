@@ -14,7 +14,16 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        //EXAMPLE!
+        $transactions = Transaction::with([
+            'customer',
+            'provider',
+            'type',
+            'products',
+            'products.product'
+        ])->get();
+
+        dd($transactions);
     }
 
     /**
@@ -46,7 +55,7 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        //
+        
     }
 
     /**

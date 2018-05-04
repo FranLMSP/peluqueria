@@ -15,7 +15,14 @@ class CreateInventoriesTable extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('qty');
+            $table->unsignedInteger('transaction_id');
+            $table->unsignedInteger('product_id');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('transaction_id')->references('id')->on('transactions');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

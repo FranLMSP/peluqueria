@@ -16,7 +16,7 @@ class CreateTransactionTypesTable extends Migration
         Schema::create('transaction_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->char('io', 1)->default('I');
         });
     }
