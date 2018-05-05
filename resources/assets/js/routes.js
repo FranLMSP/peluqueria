@@ -5,14 +5,11 @@ import CustomersRoutes from './routes/customers'
 import ProvidersRoutes from './routes/providers'
 import ProductsRoutes from './routes/products'
 import EmployeesRoutes from './routes/employees'
+import InventoryRoutes from './routes/inventory'
 
 import Login from './components/auth/Login.vue'
 
 export const routes = [
-	{
-		path: '/login',
-		component: Login
-	},
 	{
 		path: '/',
 		component: Home,
@@ -20,9 +17,14 @@ export const routes = [
 			requiresAuth: true
 		}
 	},
+	{
+		path: '/login',
+		component: Login
+	},
 	CustomersRoutes,
 	ProvidersRoutes,
 	ProductsRoutes,
-	EmployeesRoutes
+	EmployeesRoutes,
+	InventoryRoutes
 
 ]

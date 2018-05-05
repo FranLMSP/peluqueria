@@ -9,6 +9,7 @@ use App\TransactionType;
 use App\Transaction;
 use App\Inventory;
 use App\Product;
+use App\ProductHeader;
 use App\Provider;
 use App\Customer;
 
@@ -221,7 +222,7 @@ class InventoryTest extends TestCase
     /** @test */
     public function inventory_can_be_listed()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $type = factory(TransactionType::class)->create([
             'name' => 'Recepción',
@@ -307,6 +308,115 @@ class InventoryTest extends TestCase
                             'description' => $otherProduct->definition->description 
                         ],
                         'existence' => 2
+                    ]
+                ]
+            ]);
+
+    }
+
+
+    /** @test */
+    public function ingress_stock_create_data_can_be_listed()
+    {
+        $this->withoutExceptionHandling();
+
+        $type = factory(TransactionType::class)->create([
+            'name' => 'Recepción',
+            'description' => 'Entrada de productos',
+            'io' => 'I'
+        ]);
+
+        $otherType = factory(TransactionType::class)->create([
+            'name' => 'Despacho',
+            'description' => 'Salida de productos',
+            'io' => 'O'
+        ]);
+
+        $product = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'P'])->id
+        ]);
+
+        $otherProduct = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'P'])->id
+        ]);
+
+        $notProduct = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'S'])->id
+        ]);
+
+        $provider = factory(Provider::class)->create();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        $this->withHeaders(["Authorization" => 'Bearer '.$token])
+            ->json('GET', '/api/transactions/create')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'providers' => [
+                    [
+                        'id' => $provider->id,
+                        'name' => $provider->name,
+                        'description' => $provider->description,
+                        'created_at' => (string)$provider->created_at,
+                        'deleted_at' => NULL,
+                        'updated_at' => (string)$provider->updated_at
+                    ]
+                ],
+                'types' => [
+                    [
+                        'id' => $type->id,
+                        'name' => $type->name,
+                        'description' => $type->description,
+                        'io' => $type->io
+                    ],
+                    [
+                        'id' => $otherType->id,
+                        'name' => $otherType->name,
+                        'description' => $otherType->description,
+                        'io' => $otherType->io
+                    ]
+                ],
+                'products' => [
+                    [
+                        'id' => $product->id,
+                        'price' => $product->price,
+                        'product_header_id' => $product->product_header_id,
+                        'created_at' => (string)$product->created_at,
+                        'updated_at' => (string)$product->updated_at,
+                        'deleted_at' => NULL,
+                        'definition' => [
+                            'id' => $product->definition->id,
+                            'name' => $product->definition->name,
+                            'description' => $product->definition->description,
+                            'type' => $product->definition->type,
+                            'image' => NULL,
+                            'created_at' => (string)$product->definition->created_at,
+                            'updated_at' => (string)$product->definition->updated_at,
+                            'deleted_at' => NULL
+                        ]
+                    ],
+                    [
+                        'id' => $otherProduct->id,
+                        'price' => $otherProduct->price,
+                        'product_header_id' => $otherProduct->product_header_id,
+                        'created_at' => (string)$otherProduct->created_at,
+                        'updated_at' => (string)$otherProduct->updated_at,
+                        'deleted_at' => NULL,
+                        'definition' => [
+                            'id' => $otherProduct->definition->id,
+                            'name' => $otherProduct->definition->name,
+                            'description' => $otherProduct->definition->description,
+                            'type' => $otherProduct->definition->type,
+                            'image' => NULL,
+                            'created_at' => (string)$otherProduct->definition->created_at,
+                            'updated_at' => (string)$otherProduct->definition->updated_at,
+                            'deleted_at' => NULL
+                        ]
                     ]
                 ]
             ]);
