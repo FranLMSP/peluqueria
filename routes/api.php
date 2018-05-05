@@ -40,4 +40,6 @@ Route::group([
         '/transactions' => 'TransactionController'
 	]);
 
+    Route::get('/inventory', 'TransactionController@inventory');
+
 });

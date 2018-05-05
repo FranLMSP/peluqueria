@@ -139,4 +139,46 @@ class TransactionController extends Controller
     {
         //
     }
+
+
+
+    public function inventory(Request $request)
+    {
+        $transactions = Transaction::with([
+            'type',
+            'products',
+            'products.product',
+            'products.product.definition'
+        ])->get();
+
+        $inventory = [];
+        foreach($transactions as $keyTransaction => $transaction) {
+            foreach($transaction->products as $keyProduct => $product) {
+                $inventory[$product->product->definition->id]['product']['id'] = $product->product->definition->id;
+                $inventory[$product->product->definition->id]['product']['name'] = $product->product->definition->name;
+                $inventory[$product->product->definition->id]['product']['description'] = $product->product->definition->description;
+
+                if(!isset($inventory[$product->product->definition->id]['existence'])) {
+                    if($transaction->type->io == 'I') {
+                        $inventory[$product->product->definition->id]['existence'] = $product->qty;
+                    } else if( $transaction->type->io == 'O') {
+                        $inventory[$product->product->definition->id]['existence'] = -$product->qty;
+                    }
+                } else {
+                    if($transaction->type->io == 'I') {
+                        $inventory[$product->product->definition->id]['existence']+= $product->qty;
+                    } else if( $transaction->type->io == 'O') {
+                        $inventory[$product->product->definition->id]['existence']-= $product->qty;
+                    }
+                }
+
+            }
+        }
+
+        $inventory = array_values($inventory);
+
+        return response()->json([
+            'inventory' => $inventory
+        ]);
+    }
 }

@@ -85,7 +85,7 @@ class InventoryTest extends TestCase
     /** @test */
     public function transactions_can_be_listed()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $type = factory(TransactionType::class)->create([
             'name' => 'Recepción',
@@ -216,5 +216,100 @@ class InventoryTest extends TestCase
                     ]
                 ]
             ]);
+    }
+
+    /** @test */
+    public function inventory_can_be_listed()
+    {
+        $this->withoutExceptionHandling();
+
+        $type = factory(TransactionType::class)->create([
+            'name' => 'Recepción',
+            'description' => 'Entrada de productos',
+            'io' => 'I'
+        ]);
+
+        $product = factory(Product::class)->create();
+
+        $otherProduct = factory(Product::class)->create();
+
+        $provider = factory(Provider::class)->create();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        $transaction = new Transaction([
+            'description' => 'Description',
+            'customer_id' => NULL,
+            'provider_id' => $provider->id,
+            'transaction_type_id' => $type->id,
+        ]);
+
+        $transaction->save();
+
+        $transaction->products()->saveMany([
+            new Inventory([
+                'product_id' => $product->id,
+                'transaction_id' => $transaction->id,
+                'qty' => 5
+            ]),
+            new Inventory([
+                'product_id' => $otherProduct->id,
+                'transaction_id' => $transaction->id,
+                'qty' => 2
+            ]),
+        ]);
+
+        $secondType = factory(TransactionType::class)->create([
+            'name' => 'Descpacho',
+            'description' => 'Salida de productos',
+            'io' => 'O'
+        ]);
+
+        $secondTransaction = new Transaction([
+            'description' => 'Description',
+            'customer_id' => NULL,
+            'provider_id' => $provider->id,
+            'transaction_type_id' => $secondType->id,
+        ]);
+
+        $secondTransaction->save();
+
+        $secondTransaction->products()->saveMany([
+            new Inventory([
+                'product_id' => $product->id,
+                'transaction_id' => $transaction->id,
+                'qty' => 2
+            ])
+        ]);
+
+        $this->withHeaders(["Authorization" => 'Bearer '.$token])
+            ->json('GET', '/api/inventory')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'inventory' => [
+                    [
+                        'product' => [
+                            'id' => $product->definition->id,
+                            'name' => $product->definition->name,
+                            'description' => $product->definition->description
+                        ],
+                        'existence' => 3
+                    ],
+                    [
+                        'product' => [
+                            'id' => $otherProduct->definition->id,
+                            'name' => $otherProduct->definition->name,
+                            'description' => $otherProduct->definition->description 
+                        ],
+                        'existence' => 2
+                    ]
+                ]
+            ]);
+
     }
 }
