@@ -17,6 +17,7 @@ class CreateTransactionTypesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->boolean('sell')->default(false)->nullable();
             $table->char('io', 1)->default('I');
         });
     }

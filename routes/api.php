@@ -41,5 +41,6 @@ Route::group([
 	]);
 
     Route::get('/inventory', 'TransactionController@inventory');
+    Route::post('/transactions/sell', 'TransactionController@sell');
 
 });

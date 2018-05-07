@@ -198,4 +198,51 @@ class TransactionController extends Controller
             'inventory' => $inventory
         ]);
     }
+
+    public function sell(Request $request)
+    {
+        $request->validate([
+            'customer' => 'nullable|exists:customers,id',
+            'description' => '',
+            'products' => 'required|array|min:1',
+            'products.*.id' => 'required|exists:products,id',
+            'products.*.qty' => 'required|integer'
+        ], [
+            'customer.exists' => 'El cliente no existe',
+            'type.exists' => 'El tipo de transacción no existe',
+            'products.required' => 'Debe especificar al menos un producto',
+            'products.min' => 'Debe especificar al menos un producto',
+            'products.array' => 'El formato de los productos no es válido',
+            'products.*.required' => 'Debe especificar un producto',
+            'products.*.id.exists' => 'El producto no existe',
+            'products.*.qty.required' => 'Debe especificar la cantidad',
+            'products.*.qty.integer' => 'El formato de la cantidad no es válido',
+        ]);
+
+        $type = TransactionType::where('sell', true)->first();
+
+        $transaction = new Transaction([
+            'description' => $request->description,
+            'customer_id' => $request->customer,
+            'provider_id' => NULL,
+            'transaction_type_id' => $type->id,
+        ]);
+
+        $transaction->save();
+
+        $products = [];
+        foreach($request->products as $product) {
+            $products[] = new Inventory([
+                'product_id' => $product['id'],
+                'transaction_id' => $transaction->id,
+                'qty' => $product['qty']
+            ]);
+        }
+
+        $transaction->products()->saveMany($products);
+
+        return response()->json([
+            'transaction' => $transaction
+        ], 201);
+    }
 }

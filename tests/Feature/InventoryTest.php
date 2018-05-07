@@ -318,7 +318,7 @@ class InventoryTest extends TestCase
     /** @test */
     public function ingress_stock_create_data_can_be_listed()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $type = factory(TransactionType::class)->create([
             'name' => 'Recepción',
@@ -420,6 +420,88 @@ class InventoryTest extends TestCase
                     ]
                 ]
             ]);
+
+    }
+
+    /** @test */
+    public function sell_can_be_maded()
+    {
+        $this->withoutExceptionHandling();
+
+        $type = factory(TransactionType::class)->create([
+            'name' => 'Recepción',
+            'description' => 'Entrada de productos',
+            'io' => 'I'
+        ]);
+
+        $otherType = factory(TransactionType::class)->create([
+            'name' => 'Despacho',
+            'description' => 'Salida de productos',
+            'io' => 'O'
+        ]);
+
+        $sellType = factory(TransactionType::class)->create([
+            'name' => 'Venta',
+            'description' => 'Venta a un cliente',
+            'io' => 'O',
+            'sell' => true
+        ]);
+
+        $product = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'P'])->id
+        ]);
+
+        $otherProduct = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'P'])->id
+        ]);
+
+        $notProduct = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'S'])->id
+        ]);
+
+        $customer = factory(Customer::class)->create();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        $this->withHeaders(["Authorization" => 'Bearer '.$token])
+            ->json('POST', '/api/transactions/sell', [
+                'customer' => $customer->id,
+                'products' => [
+                    [
+                        'id' => $product->id,
+                        'qty' => 5
+                    ],
+                    [
+                        'id' => $otherProduct->id,
+                        'qty' => 2
+                    ]
+                ],
+                'description' => 'Sell transaction',
+            ])->assertStatus(201);
+
+        $this->assertDatabaseHas('transactions', [
+            'customer_id' => $customer->id,
+            'provider_id' => NULL,
+            'description' => 'Sell transaction',
+            'transaction_type_id' => $sellType->id
+        ]);
+
+        $this->assertDatabaseHas('inventories', [
+            'transaction_id' => 1,
+            'product_id' => $product->id,
+            'qty' => 5,
+        ]);
+
+        $this->assertDatabaseHas('inventories', [
+            'transaction_id' => 1,
+            'product_id' => $otherProduct->id,
+            'qty' => 2,
+        ]);
 
     }
 }
