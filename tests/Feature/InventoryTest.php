@@ -426,7 +426,7 @@ class InventoryTest extends TestCase
     /** @test */
     public function sell_can_be_maded()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $type = factory(TransactionType::class)->create([
             'name' => 'Recepción',
@@ -469,7 +469,7 @@ class InventoryTest extends TestCase
         $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
 
         $this->withHeaders(["Authorization" => 'Bearer '.$token])
-            ->json('POST', '/api/transactions/sell', [
+            ->json('POST', '/api/transactions/sales', [
                 'customer' => $customer->id,
                 'products' => [
                     [
@@ -503,5 +503,160 @@ class InventoryTest extends TestCase
             'qty' => 2,
         ]);
 
+    }
+
+    /** @test */
+    public function sales_can_be_listed()
+    {
+        //$this->withoutExceptionHandling();
+
+        $type = factory(TransactionType::class)->create([
+            'name' => 'Recepción',
+            'description' => 'Entrada de productos',
+            'io' => 'I'
+        ]);
+
+        $otherType = factory(TransactionType::class)->create([
+            'name' => 'Despacho',
+            'description' => 'Salida de productos',
+            'io' => 'O'
+        ]);
+
+        $sellType = factory(TransactionType::class)->create([
+            'name' => 'Venta',
+            'description' => 'Venta a un cliente',
+            'io' => 'O',
+            'sell' => true
+        ]);
+
+        $product = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'P'])->id
+        ]);
+
+        $otherProduct = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'P'])->id
+        ]);
+
+        $notProduct = factory(Product::class)->create([
+            'product_header_id' => factory(ProductHeader::class)->create(['type'=>'S'])->id
+        ]);
+
+        $customer = factory(Customer::class)->create();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+
+        $transaction = new Transaction([
+            'customer_id' => $customer->id,
+            'description' => 'Sell transaction',
+            'transaction_type_id' => $sellType->id
+        ]);
+
+        $transaction->save();
+
+        $transaction->products()->saveMany([
+            new Inventory([
+                'product_id' => $product->id,
+                'transaction_id' => $transaction->id,
+                'qty' => 5
+            ]),
+            new Inventory([
+                'product_id' => $otherProduct->id,
+                'transaction_id' => $transaction->id,
+                'qty' => 2
+            ]),
+        ]);
+
+        $this->withHeaders(["Authorization" => 'Bearer '.$token])
+            ->json('GET', '/api/transactions/sales')
+            ->assertStatus(200)
+            ->assertExactJson([
+                'sales' => [
+                    [
+                        'id' => $transaction->id,
+                        'description' => $transaction->description,
+                        'customer_id' => $customer->id,
+                        'provider_id' => NULL,
+                        'customer' => [
+                            'id' => $transaction->customer->id,
+                            'names' => $transaction->customer->names,
+                            'surnames' => $transaction->customer->surnames,
+                            'identity_number' => $transaction->customer->identity_number,
+                            'phone' => $transaction->customer->phone,
+                            'email' => $transaction->customer->email,
+                            'birthdate' => $transaction->customer->birthdate,
+                            'created_at' => (string)$transaction->customer->created_at,
+                            'updated_at' => (string)$transaction->customer->updated_at,
+                            'deleted_at' => NULL
+                        ],
+                        'products' => [
+                            [
+                                'id' => $transaction->products[0]->id,
+                                'product_id' => $transaction->products[0]->product_id,
+                                'transaction_id' => $transaction->products[0]->transaction_id,
+                                'qty' => $transaction->products[0]->qty,
+                                'product' => [
+                                    'id' => $transaction->products[0]->product->id,
+                                    'price' => $transaction->products[0]->product->price,
+                                    'product_header_id' => $transaction->products[0]->product->product_header_id,
+                                    'definition' => [
+                                        'id' => $transaction->products[0]->product->definition->id,
+                                        'name' => $transaction->products[0]->product->definition->name,
+                                        'description' => $transaction->products[0]->product->definition->description,
+                                        'image' => NULL,
+                                        'type' => 'P',
+                                        'created_at' => (string)$transaction->products[0]->product->definition->created_at,
+                                        'updated_at' => (string)$transaction->products[0]->product->definition->updated_at,
+                                        'deleted_at' => NULL,
+                                    ],
+                                    'created_at' => (string)$transaction->products[0]->product->created_at,
+                                    'updated_at' => (string)$transaction->products[0]->product->updated_at,
+                                    'deleted_at' => NULL,
+                                ],
+                                'created_at' => (string)$transaction->products[0]->created_at,
+                                'updated_at' => (string)$transaction->products[0]->updated_at,
+                                'deleted_at' => NULL,
+                            ],
+                            [
+                                'id' => $transaction->products[1]->id,
+                                'product_id' => $transaction->products[1]->product_id,
+                                'transaction_id' => $transaction->products[1]->transaction_id,
+                                'qty' => $transaction->products[1]->qty,
+                                'product' => [
+                                    'id' => $transaction->products[1]->product->id,
+                                    'price' => $transaction->products[1]->product->price,
+                                    'product_header_id' => $transaction->products[1]->product->product_header_id,
+                                    'definition' => [
+                                        'id' => $transaction->products[1]->product->definition->id,
+                                        'name' => $transaction->products[1]->product->definition->name,
+                                        'description' => $transaction->products[1]->product->definition->description,
+                                        'image' => NULL,
+                                        'type' => 'P',
+                                        'created_at' => (string)$transaction->products[1]->product->definition->created_at,
+                                        'updated_at' => (string)$transaction->products[1]->product->definition->updated_at,
+                                        'deleted_at' => NULL,
+                                    ],
+                                    'created_at' => (string)$transaction->products[1]->product->created_at,
+                                    'updated_at' => (string)$transaction->products[1]->product->updated_at,
+                                    'deleted_at' => NULL,
+                                ],
+                                'created_at' => (string)$transaction->products[1]->created_at,
+                                'updated_at' => (string)$transaction->products[1]->updated_at,
+                                'deleted_at' => NULL,
+                            ]
+
+                        ],
+                        'transaction_type_id' => $sellType->id,
+                        'created_at' => (string)$transaction->created_at,
+                        'updated_at' => (string)$transaction->updated_at,
+                        'deleted_at' => NULL,
+                    ]
+                ]
+            ]);
     }
 }

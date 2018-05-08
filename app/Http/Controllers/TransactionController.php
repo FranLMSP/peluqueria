@@ -245,4 +245,21 @@ class TransactionController extends Controller
             'transaction' => $transaction
         ], 201);
     }
+
+    public function sales(Request $request)
+    {
+        $transactions = Transaction::with([
+            'customer',
+            'products',
+            'products.product',
+            'products.product.definition'
+        ])->whereHas('type', function($query){
+            $query->whereSell(true);
+        })
+        ->get();
+
+        return response()->json([
+            'sales' => $transactions
+        ]);
+    }
 }
