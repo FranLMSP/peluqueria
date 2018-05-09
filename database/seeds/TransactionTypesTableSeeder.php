@@ -22,8 +22,15 @@ class TransactionTypesTableSeeder extends Seeder
         ]);
 
         factory(TransactionType::class)->create([
-        	'name' => 'Despacho',
-        	'description' => 'Cuando un producto es vendido',
+            'name' => 'Despacho',
+            'description' => 'Cuando un producto es vendido',
+            'io' => 'O'
+        ]);
+
+        factory(TransactionType::class)->create([
+        	'name' => 'Venta',
+        	'description' => 'Cuando se realiza una venta a un cliente',
+            'sell' => true,
         	'io' => 'O'
         ]);
 

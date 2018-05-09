@@ -7,21 +7,11 @@
 			<form @submit.prevent="save">
 				<table class="table">
 					<tr>
-						<th>Tipo</th>
+						<th>Cliente</th>
 						<td>
 							<div class="form-group">
-								<select class="form-control" v-model="form.type" :data-selected="form.type">
-									<option :selected="type.id == form.type ? 'selected':''" v-for="type in types" :value="type.id">{{ type.name }}</option>
-								</select>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>Proveedor</th>
-						<td>
-							<div class="form-group">
-								<select class="form-control" v-model="form.provider" :data-selected="form.provider">
-									<option :selected="provider.id == form.provider ? 'selected' : ''" v-for="provider in providers" :value="provider.id">{{ provider.name }}</option>
+								<select class="form-control" v-model="form.customer" :data-selected="form.customer">
+									<option :selected="customer.id == form.customer ? 'selected' : ''" v-for="customer in customers" :value="customer.id">{{ customer.names + ' ' + customer.surnames }}</option>
 								</select>
 							</div>
 						</td>
@@ -58,7 +48,7 @@
 					</tr>
 					<tr>
 						<td>
-							<router-link to="/inventario" class="btn btn-default">Regresar</router-link>
+							<router-link to="/inventario/ventas" class="btn btn-default">Regresar</router-link>
 						</td>
 						<td class="text-right">
 							<input type="submit" value="Guardar" class="btn btn-primary">
@@ -84,11 +74,11 @@
 <script type="text/javascript">
 
 	import validate from 'validate.js'
-	import {toMultipartedForm} from '../../helpers/form'
-	import ImageUpload from '../form/ImageUpload.vue'
+	import {toMultipartedForm} from '../../../helpers/form'
+	import ImageUpload from '../../form/ImageUpload.vue'
 
 	export default {
-		name: 'create',
+		name: 'sell',
 		components: {
 			ImageUpload
 		},
@@ -96,9 +86,7 @@
 			return {
 				form: {
 					id: 0,
-					customer: '',
-					provider: 0,
-					type: 0,
+					customer: 0,
 					description: '',
 					products: [
 						{
@@ -108,8 +96,7 @@
 					],
 				},
 				products: [],
-				types: [],
-				providers: [],
+				customers: [],
 				errors: null,
 				loading: false,
 				message: 'Cargando...',
@@ -150,7 +137,7 @@
 					const form = toMultipartedForm(this.form, 'create')
 					axios.put(`/api/transactions/${this.form.id}`, form)
 					.then( response => {
-						this.$router.push(`/inventario/${this.form.id}`)
+						this.$router.push(`/inventario/ventas/${this.form.id}`)
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors
@@ -159,9 +146,9 @@
 					
 				} else {
 					const form = toMultipartedForm(this.form, 'create')
-					axios.post(`/api/transactions/`, form)
+					axios.post(`/api/transactions/sales`, form)
 					.then( response => {
-						this.$router.push('/inventario')
+						this.$router.push('/inventario/ventas')
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors
@@ -172,14 +159,9 @@
 			},
 			getConstraints() {
 				return {
-					type: {
+					customer: {
 						presence: {
-							message: 'El tipo de transacción es obligatorio'
-						},
-					},
-					provider: {
-						presence: {
-							message: 'El proveedor es obligatorio'
+							message: 'El cliente es obligatorio'
 						},
 					}
 				}
@@ -189,7 +171,7 @@
 			if(this.$route.meta.mode == 'edit') {
 				this.loading = true
 				this.message = 'Cargando...'
-				axios.get(`/api/transactions/${this.$route.params.id}/edit`)
+				axios.get(`/api/transactions/sales/${this.$route.params.id}/edit`)
 				.then( response => {
 					this.form = response.data.transaction
 					this.products = response.data.products
@@ -203,25 +185,22 @@
 			} else {
 				this.loading = true
 				this.message = 'Cargando...'
-				axios.get(`/api/transactions/create`)
+				axios.get(`/api/transactions/sales/create`)
 				.then( response => {
+					console.log(response.data)
 					this.products = response.data.products
-					this.types = response.data.types
-					this.providers = response.data.providers
+					this.customers = response.data.customers
 
 					if(this.products.length > 0)
 						this.form.products[0].id = this.products[0].id
 
-					if(this.types.length > 0)
-						this.form.type = this.types[0].id
 
-					if(this.providers.length > 0)
-						this.form.provider = this.providers[0].id
+					if(this.customers.length > 0)
+						this.form.customer = this.customers[0].id
 
 					this.loading = false
 				})
 				.catch( error => {
-					console.log(error)
 					this.message = 'Ocurrió un error al cargar los datos'
 				})
 

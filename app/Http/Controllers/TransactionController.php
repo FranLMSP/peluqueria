@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Transaction;
 use App\TransactionType;
 use App\Provider;
+use App\Customer;
 use App\Product;
 use App\Inventory;
 use Illuminate\Http\Request;
@@ -244,6 +245,24 @@ class TransactionController extends Controller
         return response()->json([
             'transaction' => $transaction
         ], 201);
+    }
+
+    public function salesCreate(Request $request)
+    {
+        $products = Product::where('active', true)
+            ->whereHas('definition', function($query){
+                $query->whereType('P');
+            })
+            ->orderBy('created_at', 'DESC')->with('definition')->get();
+
+        $types = TransactionType::get();
+
+        $customers = Customer::get();
+
+        return response()->json([
+            'customers' => $customers,
+            'products' => $products
+        ]);
     }
 
     public function sales(Request $request)

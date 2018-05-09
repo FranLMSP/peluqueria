@@ -1,34 +1,33 @@
 <template>
 	<div>
 		<div class="btn-wrapper">
-			<router-link style="float:left;" to="/">Regresar</router-link>
+			<router-link style="float: left;" to="/inventario">Regresar</router-link>			
 
-			<router-link class="btn btn-primary btn-sm" to="/inventario/ingresar">Ingresar stock</router-link>
-			<router-link class="btn btn-success btn-sm" to="/inventario/ventas">Ventas</router-link>
+			<router-link class="btn btn-primary btn-sm" to="/inventario/ventas/nueva">Nueva Venta</router-link>
 		</div>
 		
 		<table class="table" style="width: 100%">
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>Nombre</th>
-					<th>Descripción</th>
-					<th>Existencia</th>
+					<th>Cliente</th>
+					<th>Fecha</th>
+					<th>Detalles</th>
 				</tr>
 			</thead>
 			<tbody>
-				<template v-if="!inventory || inventory.length <= 0">
+				<template v-if="!sales || sales.length <= 0">
 					<tr>
 						<td colspan="4" class="text-center">{{ tableMessage }}</td>
 					</tr>
 				</template>
 
 				<template v-else>
-					<tr v-for="inv in inventory" :key="inv.id">
-						<td>{{ inv.product.id }}</td>
-						<td>{{ inv.product.name }}</td>
-						<td>{{ inv.product.description }}</td>
-						<td>{{ inv.existence }}</td>
+					<tr v-for="sale in sales" :key="sale.id">
+						<td>{{ sale.id }}</td>
+						<td>{{ sale.customer.names + ' ' + sale.customer.surnames }}</td>
+						<td>{{ sale.created_at }}</td>
+						<td><router-link :to="`inventario/ventas/${sale.id}`">Ver</router-link></td>
 					</tr>
 				</template>
 			</tbody>
@@ -42,17 +41,18 @@
 		name: 'list',
 		data() {
 			return {
-				inventory: [],
+				sales: [],
 				loading: false
 			}
 		},
 		methods: {
 			get() {
 				this.loading = true
-				this.inventory = []
-				axios('/api/inventory')
+				this.sales = []
+				axios('/api/transactions/sales')
 				.then( response => {
-					this.inventory = response.data.inventory
+					console.log(response.data)
+					this.sales = response.data.sales
 					this.loading = false
 				})
 				.catch( error => {
@@ -66,8 +66,8 @@
 				if (this.loading) {
 					return 'Cargando...'
 				}
-				if (!this.inventory || this.inventory.length <= 0) {
-					return 'Sin stock'
+				if (!this.sales || this.sales.length <= 0) {
+					return 'Sin ventas'
 				}
 				return ''
 			}
