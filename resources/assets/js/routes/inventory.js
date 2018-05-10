@@ -25,6 +25,9 @@ export default {
 		{
 			path: 'ventas',
 			component: SalesMain,
+			meta: {
+				requiresAuth: true
+			},
 			children: [
 				{
 					path: '/',

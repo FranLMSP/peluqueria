@@ -35,6 +35,7 @@ Route::group([
     Route::post('/transactions/sales', 'TransactionController@sell');
     Route::get('/transactions/sales', 'TransactionController@sales');
     Route::get('/transactions/sales/create', 'TransactionController@salesCreate');
+    Route::get('/transactions/sales/{id}', 'TransactionController@salesShow');
 
     Route::resources([
         '/customers' => 'CustomerController',

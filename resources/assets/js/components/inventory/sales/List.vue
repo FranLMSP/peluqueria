@@ -27,7 +27,7 @@
 						<td>{{ sale.id }}</td>
 						<td>{{ sale.customer.names + ' ' + sale.customer.surnames }}</td>
 						<td>{{ sale.created_at }}</td>
-						<td><router-link :to="`inventario/ventas/${sale.id}`">Ver</router-link></td>
+						<td><router-link :to="`/inventario/ventas/${sale.id}`">Ver</router-link></td>
 					</tr>
 				</template>
 			</tbody>
@@ -51,7 +51,6 @@
 				this.sales = []
 				axios('/api/transactions/sales')
 				.then( response => {
-					console.log(response.data)
 					this.sales = response.data.sales
 					this.loading = false
 				})

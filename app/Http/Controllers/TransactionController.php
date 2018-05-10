@@ -255,8 +255,6 @@ class TransactionController extends Controller
             })
             ->orderBy('created_at', 'DESC')->with('definition')->get();
 
-        $types = TransactionType::get();
-
         $customers = Customer::get();
 
         return response()->json([
@@ -281,4 +279,29 @@ class TransactionController extends Controller
             'sales' => $transactions
         ]);
     }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Transaction  $transaction
+     * @return \Illuminate\Http\Response
+     */
+    public function salesShow(Request $request, $id)
+    {
+
+        $transaction = Transaction::find($id)->with([
+            'customer',
+            'products',
+            'products.product',
+            'products.product.definition'
+        ])->whereHas('type', function($query){
+            $query->whereSell(true);
+        })->first();
+
+        return response()->json([
+            'sell' => $transaction
+        ]);
+    }
 }
+
