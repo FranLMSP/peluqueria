@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductHeadersTable extends Migration
+class CreateTransactionTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateProductHeadersTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_headers', function (Blueprint $table) {
+        Schema::create('transaction_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('image')->nullable();
-            $table->char('type', 1)->default('P');
             $table->text('description')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->boolean('sell')->default(false)->nullable();
+            $table->char('io', 1)->default('I');
         });
     }
 
@@ -31,8 +29,6 @@ class CreateProductHeadersTable extends Migration
      */
     public function down()
     {
-        //Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('product_headers');
-        //Schema::enableForeignKeyConstraints();
+        Schema::dropIfExists('transaction_types');
     }
 }

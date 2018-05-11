@@ -2,7 +2,7 @@
 	<div>
 		<div class="row">
 			<div class="col-sm-12">
-				<router-link to="/productos">Regresar</router-link>
+				<router-link to="/">Regresar</router-link>
 				<router-link to="/productos/crear" class="btn btn-primary float-right">Crear</router-link>
 			</div>
 		</div>

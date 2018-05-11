@@ -32,11 +32,19 @@ Route::group([
 
 ], function ($router) {
 
-	Route::resources([
-		'/customers' => 'CustomerController',
-		'/products' => 'ProductController',
+    Route::post('/transactions/sales', 'TransactionController@sell');
+    Route::get('/transactions/sales', 'TransactionController@sales');
+    Route::get('/transactions/sales/create', 'TransactionController@salesCreate');
+    Route::get('/transactions/sales/{id}', 'TransactionController@salesShow');
+
+    Route::resources([
+        '/customers' => 'CustomerController',
+        '/products' => 'ProductController',
         '/employees' => 'EmployeeController',
         '/providers' => 'ProviderController',
-	]);
+        '/transactions' => 'TransactionController'
+    ]);
+
+    Route::get('/inventory', 'TransactionController@inventory');
 
 });

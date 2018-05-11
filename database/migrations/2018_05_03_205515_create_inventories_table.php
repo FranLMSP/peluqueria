@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductHeadersTable extends Migration
+class CreateInventoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateProductHeadersTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_headers', function (Blueprint $table) {
+        Schema::create('inventories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->char('type', 1)->default('P');
-            $table->text('description')->nullable();
+            $table->unsignedInteger('qty');
+            $table->unsignedInteger('transaction_id');
+            $table->unsignedInteger('product_id');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('transaction_id')->references('id')->on('transactions');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
@@ -31,8 +33,6 @@ class CreateProductHeadersTable extends Migration
      */
     public function down()
     {
-        //Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('product_headers');
-        //Schema::enableForeignKeyConstraints();
+        Schema::dropIfExists('inventories');
     }
 }

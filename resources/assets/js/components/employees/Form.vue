@@ -53,9 +53,8 @@
 						<td>
 							<div class="form-group">
 
-								<select class="form-control" v-model="form.occupation" :data-selected="form.occupation">
-									<option>test</option>
-									<option v-bind:selected="occupation.id != form.occupation" v-for="occupation in occupations" :value="occupation.id">{{ occupation.name }}</option>
+								<select class="form-control" v-model="form.occupation">
+									<option :selected="occupation.id == form.occupation ? 'selected' : ''" v-for="occupation in occupations" :value="occupation.id">{{ occupation.name }}</option>
 								</select>
 							</div>
 						</td>
@@ -113,7 +112,7 @@
 					email: '',
 					birthdate: '',
 					profile_pic: '',
-					occupation: 1
+					occupation: 0
 				},
 				occupations: [],
 				errors: null,
@@ -198,6 +197,7 @@
 					this.form = response.data.employee
 					this.occupations = response.data.occupations
 					this.loading = false
+
 				})
 				.catch( error => {
 					this.message = 'Ocurrió un error al cargar el empleado'
@@ -208,6 +208,7 @@
 				axios.get(`/api/employees/create`)
 				.then( response => {
 					this.occupations = response.data.occupations
+					this.form.occupation = this.occupations[0].id
 					this.loading = false
 				})
 				.catch( error => {
