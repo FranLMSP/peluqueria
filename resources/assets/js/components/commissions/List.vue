@@ -3,6 +3,7 @@
 		<div class="btn-wrapper">
 			
 			<router-link class="btn btn-primary btn-sm" to="/comisiones/crear">Crear</router-link>		
+			<a class="btn btn-warning btn-sm" href="#">Editar seleccionados</a>		
 		</div>
 		
 		<div class="row">

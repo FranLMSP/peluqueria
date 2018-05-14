@@ -5,40 +5,42 @@
 	<div v-else>		
 		<div class="provider-new">
 			<form @submit.prevent="save">
-				<table class="table">
-					<tr>
-						<th>Nombre</th>
-						<td>
-							<input type="text" class="form-control" v-model="form.name" placeholder="Nombres del proveedor">
-						</td>
-					</tr>
+			
+			<div class="row" v-for="commissions in commissionsForm">
+				<div class="col-sm-4">
+					<label>Servicios</label>
+					<select v-model="commissions.services" multiple>
+						<option :disabled="isServiceSelected(service)" :value="service.id" v-for="service in services">
+							{{ service.name }}
+						</option>
+					</select>
+				</div>
+				<div class="col-sm-4">
+					<label>Empleados</label>
+					<select v-model="commissions.employees" multiple>
+						<option :disabled="isEmployeeSelected(employee)" :value="employee.id" v-for="employee in employees">
+							{{ employee.names }} {{ employee.surnames }}
+						</option>
+					</select>
+				</div>
+				<div class="col-sm-4">
+					<label>Porcentaje</label>
+					<input class="form-control" type="text" name="percentage" v-model="commissions.percentage">
+				</div>
+			</div>
 
-					<tr>
-						<th>Descripción</th>
-						<td>
-							<textarea class="form-control" v-model="form.description" placeholder="Apellidos del proveedor"></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<router-link to="/proveedores" class="btn btn-default">Regresar</router-link>
-						</td>
-						<td class="text-right">
-							<input type="submit" value="Guardar" class="btn btn-primary">
-						</td>
-					</tr>
-					<tr v-if="sending">
-						<td colspan="text-right">Cargando...</td>
-					</tr>
-				</table>
 			</form>
 
-			<div class="errors" v-if="errors">
-				<ul>
-					<li v-for="message in errors">
-						{{ message.join("\n") }}
-					</li>
-				</ul>
+			<div class="row">
+				<div class="col-sm-12">				
+					<div class="errors" v-if="errors">
+						<ul>
+							<li v-for="message in errors">
+								{{ message.join("\n") }}
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -52,11 +54,15 @@
 		name: 'create',
 		data() {
 			return {
-				form: {
-					id: 0,
-					name: '',
-					description: ''
-				},
+				commissionsForm: [
+					{
+						employees: [],
+						services: [],
+						percentage: 0
+					}
+				],
+				services: [],
+				employees: [],
 				errors: null,
 				loading: false,
 				message: 'Cargando...',
@@ -66,6 +72,12 @@
 		computed: {
 			currentUser() {
 				return this.$store.getters.currentUser
+			},
+			isServiceSelected() {
+				return false
+			},
+			isEmployeeSelected() {
+				return false
 			}
 		},
 		methods: {

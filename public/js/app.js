@@ -61293,6 +61293,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -61412,6 +61413,12 @@ var render = function() {
             attrs: { to: "/comisiones/crear" }
           },
           [_vm._v("Crear")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-warning btn-sm", attrs: { href: "#" } },
+          [_vm._v("Editar seleccionados")]
         )
       ],
       1
@@ -61773,6 +61780,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -61781,11 +61790,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	name: 'create',
 	data: function data() {
 		return {
-			form: {
-				id: 0,
-				name: '',
-				description: ''
-			},
+			commissionsForm: [{
+				employees: [],
+				services: [],
+				percentage: 0
+			}],
+			services: [],
+			employees: [],
 			errors: null,
 			loading: false,
 			message: 'Cargando...',
@@ -61796,6 +61807,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	computed: {
 		currentUser: function currentUser() {
 			return this.$store.getters.currentUser;
+		},
+		isServiceSelected: function isServiceSelected() {
+			return false;
+		},
+		isEmployeeSelected: function isEmployeeSelected() {
+			return false;
 		}
 	},
 	methods: {
@@ -61884,129 +61901,171 @@ var render = function() {
                 }
               }
             },
-            [
-              _c("table", { staticClass: "table" }, [
-                _c("tr", [
-                  _c("th", [_vm._v("Nombre")]),
+            _vm._l(_vm.commissionsForm, function(commissions) {
+              return _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-sm-4" }, [
+                  _c("label", [_vm._v("Servicios")]),
                   _vm._v(" "),
-                  _c("td", [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.name,
-                          expression: "form.name"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        placeholder: "Nombres del proveedor"
-                      },
-                      domProps: { value: _vm.form.name },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "name", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("tr", [
-                  _c("th", [_vm._v("Descripción")]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.description,
-                          expression: "form.description"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { placeholder: "Apellidos del proveedor" },
-                      domProps: { value: _vm.form.description },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "description", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("tr", [
                   _c(
-                    "td",
-                    [
-                      _c(
-                        "router-link",
+                    "select",
+                    {
+                      directives: [
                         {
-                          staticClass: "btn btn-default",
-                          attrs: { to: "/proveedores" }
+                          name: "model",
+                          rawName: "v-model",
+                          value: commissions.services,
+                          expression: "commissions.services"
+                        }
+                      ],
+                      attrs: { multiple: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            commissions,
+                            "services",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.services, function(service) {
+                      return _c(
+                        "option",
+                        {
+                          attrs: { disabled: _vm.isServiceSelected(service) },
+                          domProps: { value: service.id }
                         },
-                        [_vm._v("Regresar")]
+                        [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t" +
+                              _vm._s(service.name) +
+                              "\n\t\t\t\t\t"
+                          )
+                        ]
                       )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm._m(0)
+                    })
+                  )
                 ]),
                 _vm._v(" "),
-                _vm.sending
-                  ? _c("tr", [
-                      _c("td", { attrs: { colspan: "text-right" } }, [
-                        _vm._v("Cargando...")
-                      ])
-                    ])
-                  : _vm._e()
+                _c("div", { staticClass: "col-sm-4" }, [
+                  _c("label", [_vm._v("Empleados")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: commissions.employees,
+                          expression: "commissions.employees"
+                        }
+                      ],
+                      attrs: { multiple: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            commissions,
+                            "employees",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.employees, function(employee) {
+                      return _c(
+                        "option",
+                        {
+                          attrs: { disabled: _vm.isEmployeeSelected(employee) },
+                          domProps: { value: employee.id }
+                        },
+                        [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t" +
+                              _vm._s(employee.names) +
+                              " " +
+                              _vm._s(employee.surnames) +
+                              "\n\t\t\t\t\t"
+                          )
+                        ]
+                      )
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-sm-4" }, [
+                  _c("label", [_vm._v("Porcentaje")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: commissions.percentage,
+                        expression: "commissions.percentage"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "percentage" },
+                    domProps: { value: commissions.percentage },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(commissions, "percentage", $event.target.value)
+                      }
+                    }
+                  })
+                ])
               ])
-            ]
+            })
           ),
           _vm._v(" "),
-          _vm.errors
-            ? _c("div", { staticClass: "errors" }, [
-                _c(
-                  "ul",
-                  _vm._l(_vm.errors, function(message) {
-                    return _c("li", [
-                      _vm._v(
-                        "\n\t\t\t\t\t" +
-                          _vm._s(message.join("\n")) +
-                          "\n\t\t\t\t"
-                      )
-                    ])
-                  })
-                )
-              ])
-            : _vm._e()
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-sm-12" }, [
+              _vm.errors
+                ? _c("div", { staticClass: "errors" }, [
+                    _c(
+                      "ul",
+                      _vm._l(_vm.errors, function(message) {
+                        return _c("li", [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t" +
+                              _vm._s(message.join("\n")) +
+                              "\n\t\t\t\t\t\t"
+                          )
+                        ])
+                      })
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ])
         ])
       ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-right" }, [
-      _c("input", {
-        staticClass: "btn btn-primary",
-        attrs: { type: "submit", value: "Guardar" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
