@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Commission;
+use App\Product;
+use App\Employee;
 use Illuminate\Http\Request;
 
 class CommissionController extends Controller
@@ -33,7 +35,13 @@ class CommissionController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'services' => Product::where('active', true)
+                ->whereHas('definition', function($query){
+                    $query->whereType('S');
+                })->with('definition')->get(),
+            'employees' => Employee::with('occupation')->get()
+        ]);
     }
 
     /**

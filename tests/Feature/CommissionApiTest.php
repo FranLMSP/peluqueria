@@ -16,6 +16,74 @@ class CommissionApiTest extends TestCase
 	use RefreshDatabase;
 
     /** @test */
+	public function commission_create_data_can_be_listed() {
+
+		//$this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        $employee = factory(Employee::class)->create();
+
+        $service = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'S'
+        	])->id
+        ]);
+
+		$this->withHeaders(["Authorization" => 'Bearer '.$token])
+		->json('GET', '/api/commissions/create')
+		->assertStatus(200)
+		->assertExactJson([
+			'services' => [
+				[
+					'id' => $service->id,
+					'price' => $service->price,
+					'product_header_id' => $service->definition->id,
+					'created_at' => (string)$service->created_at,
+					'updated_at' => (string)$service->updated_at,
+					'deleted_at' => NULL,
+					'definition' => [
+						'id' => $service->definition->id,
+						'name' => $service->definition->name,
+						'description' => $service->definition->description,
+						'type' => 'S',
+						'image' => NULL,
+						'created_at' => (string)$service->definition->created_at,
+						'updated_at' => (string)$service->definition->updated_at,
+						'deleted_at' => NULL
+					]
+				]
+			],
+			'employees' => [
+				[
+					'id' => $employee->id,
+					'names'=> $employee->names,
+					'surnames'=> $employee->surnames,
+					'identity_number'=> $employee->identity_number,
+					'email'=> $employee->email,
+					'phone'=> $employee->phone,
+					'birthdate'=> $employee->birthdate,
+					'profile_pic'=> $employee->profile_pic,
+					'occupation_id'=> $employee->occupation_id,
+					'occupation'=> [
+						'id' => $employee->occupation->id,
+						'name' => $employee->occupation->name,
+						'description' => $employee->occupation->description
+					],
+					'created_at' => (string)$employee->created_at,
+					'updated_at' => (string)$employee->updated_at,
+					'deleted_at' => NULL
+				]
+			]
+		]);
+	}
+
+    /** @test */
 	public function one_commission_can_be_assigned_to_employee() {
 
 		//$this->withoutExceptionHandling();
