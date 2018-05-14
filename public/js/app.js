@@ -61268,13 +61268,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'list',
 	data: function data() {
 		return {
-			commissions: [],
+			commissionsList: [],
+			service: 'A',
+			employee: 'A',
+			selected: [],
 			loading: false
 		};
 	},
@@ -61284,14 +61312,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			this.loading = true;
-			this.commissions = [];
+			this.commissionsList = [];
 			axios('/api/commissions').then(function (response) {
 				console.log(response.data);
-				_this.commissions = response.data.commissions;
+				_this.commissionsList = response.data.commissions;
 				_this.loading = false;
 			}).catch(function (error) {
 				_this.loading = false;
 			});
+		},
+		selectAll: function selectAll() {
+			this.selected = [];
+			for (var i = 0; i < this.commissions.length; i++) {
+				this.selected[i] = this.commissions.id;
+			}
+		},
+		exists: function exists(id, array) {
+			for (var i = 0; i < array.length; i++) {
+				if (array[i].id == id) return true;
+			}
+
+			return false;
 		}
 	},
 	computed: {
@@ -61299,10 +61340,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (this.loading) {
 				return 'Cargando...';
 			}
-			if (!this.commissions || this.commissions.length <= 0) {
+			if (!this.commissionsList || this.commissionsList.length <= 0) {
 				return 'Sin comisiones';
 			}
 			return '';
+		},
+		services: function services() {
+			var services = [];
+			for (var i = 0; i < this.commissionsList.length; i++) {
+				if (!this.exists(this.commissionsList[i].service.definition.id, services)) {
+
+					services.push({
+						id: this.commissionsList[i].service.definition.id,
+						name: this.commissionsList[i].service.definition.name
+					});
+				}
+			}
+
+			return services;
+		},
+		employees: function employees() {
+			var employees = [];
+			for (var i = 0; i < this.commissionsList.length; i++) {
+				if (!this.exists(this.commissionsList[i].employee.id, employees)) {
+
+					employees.push({
+						id: this.commissionsList[i].employee.id,
+						names: this.commissionsList[i].employee.names,
+						surnames: this.commissionsList[i].employee.surnames
+					});
+				}
+			}
+
+			return employees;
+		},
+		commissions: function commissions() {
+
+			var commissions = [];
+
+			for (var i = 0; i < this.commissionsList.length; i++) {
+				if ((this.service === 'A' || this.service == this.commissionsList[i].service.definition.id) && (this.employee === 'A' || this.employee == this.commissionsList[i].employee.id)) {
+					commissions.push(this.commissionsList[i]);
+				}
+			}
+
+			return commissions;
 		}
 	},
 	created: function created() {
@@ -61335,8 +61417,124 @@ var render = function() {
       1
     ),
     _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-4 offset-sm-4" }, [
+        _c("label", [_vm._v("Servicios")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.service,
+                expression: "service"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.service = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "A", selected: "" } }, [
+              _vm._v("Todos")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.services, function(service) {
+              return _c("option", { domProps: { value: service.id } }, [
+                _vm._v("\n\t\t\t\t\t" + _vm._s(service.name) + "\n\t\t\t\t")
+              ])
+            })
+          ],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-4" }, [
+        _c("label", [_vm._v("Empleados")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.employee,
+                expression: "employee"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.employee = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "A", selected: "" } }, [
+              _vm._v("Todos")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.employees, function(employee) {
+              return _c("option", { domProps: { value: employee.id } }, [
+                _vm._v(
+                  "\n\t\t\t\t\t" +
+                    _vm._s(employee.names + " " + employee.surnames) +
+                    "\n\t\t\t\t"
+                )
+              ])
+            })
+          ],
+          2
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
     _c("table", { staticClass: "table", staticStyle: { width: "100%" } }, [
-      _vm._m(0),
+      _c("thead", [
+        _c("tr", [
+          _c("th", [
+            _c("input", {
+              attrs: { type: "checkbox" },
+              on: { change: _vm.selectAll }
+            }),
+            _vm._v("Seleccionar")
+          ]),
+          _vm._v(" "),
+          _c("th", [_vm._v("Servicio")]),
+          _vm._v(" "),
+          _c("th", [_vm._v("Empleado")]),
+          _vm._v(" "),
+          _c("th", [_vm._v("Comisión")])
+        ])
+      ]),
       _vm._v(" "),
       _c(
         "tbody",
@@ -61351,8 +61549,52 @@ var render = function() {
                   )
                 ])
               ]
-            : _vm._l(_vm.commissions, function(commission) {
+            : _vm._l(_vm.commissions, function(commission, index) {
                 return _c("tr", { key: commission.id }, [
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selected[index],
+                          expression: "selected[index]"
+                        }
+                      ],
+                      attrs: { type: "checkbox" },
+                      domProps: {
+                        value: commission.id,
+                        checked: Array.isArray(_vm.selected[index])
+                          ? _vm._i(_vm.selected[index], commission.id) > -1
+                          : _vm.selected[index]
+                      },
+                      on: {
+                        change: function($event) {
+                          var $$a = _vm.selected[index],
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = commission.id,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(_vm.selected, index, $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  _vm.selected,
+                                  index,
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
+                          } else {
+                            _vm.$set(_vm.selected, index, $$c)
+                          }
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
                   _c("td", [
                     _vm._v(_vm._s(commission.service.definition.name))
                   ]),
@@ -61376,22 +61618,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Servicio")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Empleado")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Comisión")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
