@@ -42,7 +42,8 @@ Route::group([
         '/products' => 'ProductController',
         '/employees' => 'EmployeeController',
         '/providers' => 'ProviderController',
-        '/transactions' => 'TransactionController'
+        '/transactions' => 'TransactionController',
+        '/commissions' => 'CommissionController'
     ]);
 
     Route::get('/inventory', 'TransactionController@inventory');
