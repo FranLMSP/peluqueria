@@ -5,27 +5,35 @@
 	<div v-else>		
 		<div class="provider-new">
 			<form @submit.prevent="save">
-			
-			<div class="row" v-for="commissions in commissionsForm">
+			<div class="row">
+				<div class="col-sm-4 offset-8">
+					Nueva comisión <button class="btn btn-success" @click.prevent="addCommission">&plus;</button>
+				</div>
+			</div>
+			<hr>
+			<div class="row" v-for="(commissions, index) in commissionsForm">
 				<div class="col-sm-4">
 					<label>Servicios</label>
-					<select v-model="commissions.services" multiple>
+					<select class="form-control" v-model="commissions.services" multiple>
 						<option :disabled="isServiceSelected(service)" :value="service.id" v-for="service in services">
-							{{ service.name }}
+							{{ service.definition.name }}
 						</option>
 					</select>
 				</div>
 				<div class="col-sm-4">
 					<label>Empleados</label>
-					<select v-model="commissions.employees" multiple>
+					<select class="form-control" v-model="commissions.employees" multiple>
 						<option :disabled="isEmployeeSelected(employee)" :value="employee.id" v-for="employee in employees">
 							{{ employee.names }} {{ employee.surnames }}
 						</option>
 					</select>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-2">
 					<label>Porcentaje</label>
 					<input class="form-control" type="text" name="percentage" v-model="commissions.percentage">
+				</div>
+				<div class="col-sm-2">
+					<button class="btn" :class="commissionsForm.length <= 1 ? '' : 'btn-danger'" @click.prevent="removeCommission(index)">&times;</button>
 				</div>
 			</div>
 
@@ -72,12 +80,6 @@
 		computed: {
 			currentUser() {
 				return this.$store.getters.currentUser
-			},
-			isServiceSelected() {
-				return false
-			},
-			isEmployeeSelected() {
-				return false
 			}
 		},
 		methods: {
@@ -126,7 +128,25 @@
 						}
 					}
 				}
+			},
+			isServiceSelected(service) {
+				return false
+			},
+			isEmployeeSelected(employee) {
+				return false
+			},
+			addCommission() {
+				this.commissionsForm.push({
+					employees: [],
+					services: [],
+					percentage: 0
+				})
+			},
+			removeCommission(index) {
+				if(this.commissionsForm.length > 1)
+					this.commissionsForm.splice(index, 1)
 			}
+
 		},
 		created() {
 			if(this.$route.meta.mode == 'edit') {
@@ -139,6 +159,19 @@
 				})
 				.catch( error => {
 					this.message = 'Ocurrió un error al cargar el proveedor'
+				})
+			} else {
+				this.loading = true
+				this.message = 'Cargando...'
+				axios.get('/api/commissions/create')
+				.then( response => {
+					this.employees = response.data.employees
+					this.services = response.data.services
+
+					this.loading = false
+				})
+				.catch( error => {
+					this.message = 'Ocurrió un error al cargar la información necesaria'
 				})
 			}
 		}

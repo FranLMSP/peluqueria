@@ -61782,6 +61782,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -61807,12 +61815,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	computed: {
 		currentUser: function currentUser() {
 			return this.$store.getters.currentUser;
-		},
-		isServiceSelected: function isServiceSelected() {
-			return false;
-		},
-		isEmployeeSelected: function isEmployeeSelected() {
-			return false;
 		}
 	},
 	methods: {
@@ -61857,6 +61859,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					}
 				}
 			};
+		},
+		isServiceSelected: function isServiceSelected(service) {
+			return false;
+		},
+		isEmployeeSelected: function isEmployeeSelected(employee) {
+			return false;
+		},
+		addCommission: function addCommission() {
+			this.commissionsForm.push({
+				employees: [],
+				services: [],
+				percentage: 0
+			});
+		},
+		removeCommission: function removeCommission(index) {
+			if (this.commissionsForm.length > 1) this.commissionsForm.splice(index, 1);
 		}
 	},
 	created: function created() {
@@ -61870,6 +61888,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this2.loading = false;
 			}).catch(function (error) {
 				_this2.message = 'Ocurrió un error al cargar el proveedor';
+			});
+		} else {
+			this.loading = true;
+			this.message = 'Cargando...';
+			axios.get('/api/commissions/create').then(function (response) {
+				_this2.employees = response.data.employees;
+				_this2.services = response.data.services;
+
+				_this2.loading = false;
+			}).catch(function (error) {
+				_this2.message = 'Ocurrió un error al cargar la información necesaria';
 			});
 		}
 	}
@@ -61901,145 +61930,195 @@ var render = function() {
                 }
               }
             },
-            _vm._l(_vm.commissionsForm, function(commissions) {
-              return _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-sm-4" }, [
-                  _c("label", [_vm._v("Servicios")]),
-                  _vm._v(" "),
+            [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-sm-4 offset-8" }, [
+                  _vm._v("\n\t\t\t\tNueva comisión "),
                   _c(
-                    "select",
+                    "button",
                     {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: commissions.services,
-                          expression: "commissions.services"
-                        }
-                      ],
-                      attrs: { multiple: "" },
+                      staticClass: "btn btn-success",
                       on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            commissions,
-                            "services",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.addCommission($event)
                         }
                       }
                     },
-                    _vm._l(_vm.services, function(service) {
-                      return _c(
-                        "option",
-                        {
-                          attrs: { disabled: _vm.isServiceSelected(service) },
-                          domProps: { value: service.id }
-                        },
-                        [
-                          _vm._v(
-                            "\n\t\t\t\t\t\t" +
-                              _vm._s(service.name) +
-                              "\n\t\t\t\t\t"
-                          )
-                        ]
-                      )
-                    })
+                    [_vm._v("+")]
                   )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-sm-4" }, [
-                  _c("label", [_vm._v("Empleados")]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: commissions.employees,
-                          expression: "commissions.employees"
-                        }
-                      ],
-                      attrs: { multiple: "" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            commissions,
-                            "employees",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    _vm._l(_vm.employees, function(employee) {
-                      return _c(
-                        "option",
-                        {
-                          attrs: { disabled: _vm.isEmployeeSelected(employee) },
-                          domProps: { value: employee.id }
-                        },
-                        [
-                          _vm._v(
-                            "\n\t\t\t\t\t\t" +
-                              _vm._s(employee.names) +
-                              " " +
-                              _vm._s(employee.surnames) +
-                              "\n\t\t\t\t\t"
-                          )
-                        ]
-                      )
-                    })
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-sm-4" }, [
-                  _c("label", [_vm._v("Porcentaje")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: commissions.percentage,
-                        expression: "commissions.percentage"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", name: "percentage" },
-                    domProps: { value: commissions.percentage },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(commissions, "percentage", $event.target.value)
-                      }
-                    }
-                  })
                 ])
-              ])
-            })
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _vm._l(_vm.commissionsForm, function(commissions, index) {
+                return _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-sm-4" }, [
+                    _c("label", [_vm._v("Servicios")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: commissions.services,
+                            expression: "commissions.services"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              commissions,
+                              "services",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      _vm._l(_vm.services, function(service) {
+                        return _c(
+                          "option",
+                          {
+                            attrs: { disabled: _vm.isServiceSelected(service) },
+                            domProps: { value: service.id }
+                          },
+                          [
+                            _vm._v(
+                              "\n\t\t\t\t\t\t" +
+                                _vm._s(service.definition.name) +
+                                "\n\t\t\t\t\t"
+                            )
+                          ]
+                        )
+                      })
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-4" }, [
+                    _c("label", [_vm._v("Empleados")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: commissions.employees,
+                            expression: "commissions.employees"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              commissions,
+                              "employees",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      _vm._l(_vm.employees, function(employee) {
+                        return _c(
+                          "option",
+                          {
+                            attrs: {
+                              disabled: _vm.isEmployeeSelected(employee)
+                            },
+                            domProps: { value: employee.id }
+                          },
+                          [
+                            _vm._v(
+                              "\n\t\t\t\t\t\t" +
+                                _vm._s(employee.names) +
+                                " " +
+                                _vm._s(employee.surnames) +
+                                "\n\t\t\t\t\t"
+                            )
+                          ]
+                        )
+                      })
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-2" }, [
+                    _c("label", [_vm._v("Porcentaje")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: commissions.percentage,
+                          expression: "commissions.percentage"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", name: "percentage" },
+                      domProps: { value: commissions.percentage },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            commissions,
+                            "percentage",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-2" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn",
+                        class:
+                          _vm.commissionsForm.length <= 1 ? "" : "btn-danger",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.removeCommission(index)
+                          }
+                        }
+                      },
+                      [_vm._v("×")]
+                    )
+                  ])
+                ])
+              })
+            ],
+            2
           ),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [

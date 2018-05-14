@@ -35,6 +35,12 @@ class CommissionApiTest extends TestCase
         	])->id
         ]);
 
+        $notService = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'P'
+        	])->id
+        ]);
+
 		$this->withHeaders(["Authorization" => 'Bearer '.$token])
 		->json('GET', '/api/commissions/create')
 		->assertStatus(200)
