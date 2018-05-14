@@ -11,6 +11,7 @@
                         <li><router-link to="/proveedores">Proveedores</router-link></li>
                         <li><router-link to="/productos">Productos</router-link></li>
                         <li><router-link to="/inventario">Inventario</router-link></li>
+                        <li><router-link to="/comisiones">Comisiones</router-link></li>
                     </ul>
                 </div>
             </div>
