@@ -3,7 +3,7 @@
 		<div class="btn-wrapper">
 			
 			<router-link class="btn btn-primary btn-sm" to="/comisiones/crear">Crear</router-link>		
-			<a class="btn btn-warning btn-sm" href="#">Editar seleccionados</a>		
+			<router-link class="btn btn-warning btn-sm" :to="`/comisiones/${ selected.join() ? selected.join() + '/editar' : '' }`">Editar seleccionados</router-link>		
 		</div>
 		
 		<div class="row">

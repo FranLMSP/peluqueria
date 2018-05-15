@@ -20,6 +20,13 @@ export default {
 			meta: {
 				mode: 'create'
 			}
+		},
+		{
+			path: ':ids/editar',
+			component: Form,
+			meta: {
+				mode: 'edit'
+			}			
 		}
 	]
 }

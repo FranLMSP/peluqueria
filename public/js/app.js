@@ -60268,6 +60268,12 @@ if (false) {
 		meta: {
 			mode: 'create'
 		}
+	}, {
+		path: ':ids/editar',
+		component: __WEBPACK_IMPORTED_MODULE_2__components_commissions_Form_vue___default.a,
+		meta: {
+			mode: 'edit'
+		}
 	}]
 });
 
@@ -60656,8 +60662,15 @@ var render = function() {
         ),
         _vm._v(" "),
         _c(
-          "a",
-          { staticClass: "btn btn-warning btn-sm", attrs: { href: "#" } },
+          "router-link",
+          {
+            staticClass: "btn btn-warning btn-sm",
+            attrs: {
+              to:
+                "/comisiones/" +
+                (_vm.selected.join() ? _vm.selected.join() + "/editar" : "")
+            }
+          },
           [_vm._v("Editar seleccionados")]
         )
       ],
