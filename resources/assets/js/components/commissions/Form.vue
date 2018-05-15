@@ -30,10 +30,18 @@
 				</div>
 				<div class="col-sm-2">
 					<label>Porcentaje</label>
-					<input class="form-control" type="text" name="percentage" v-model="commissions.percentage">
+					<input class="form-control" type="number" name="percentage" v-model="commissions.percentage">
 				</div>
 				<div class="col-sm-2">
 					<button class="btn" :class="commissionsForm.length <= 1 ? '' : 'btn-danger'" @click.prevent="removeCommission(index)">&times;</button>
+				</div>
+			</div>
+
+			<br>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<button style="float: right" class="btn btn-primary">Guardar</button>
 				</div>
 			</div>
 
@@ -87,14 +95,6 @@
 				this.errors = null
 				this.sending = true
 
-				const constraints = this.getConstraints()
-
-				this.errors = validate(this.form, constraints)
-
-				if(this.errors) {
-					return
-				}
-
 				if (this.$route.meta.mode == 'edit') {
 
 					axios.put(`/api/providers/${this.form.id}`, this.form)
@@ -107,9 +107,9 @@
 					})
 					
 				} else {
-					axios.post(`/api/providers/`, this.form)
+					axios.post(`/api/commissions/`, this.formParsed())
 					.then( response => {
-						this.$router.push('/proveedores')
+						this.$router.push('/comisiones')
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors
@@ -120,13 +120,7 @@
 			},
 			getConstraints() {
 				return {
-					name: {
-						presence: true,
-						length: {
-							minimum: 3,
-							message: 'El nombre debe tener al menos 3 caracteres'
-						}
-					}
+
 				}
 			},
 			isServiceSelected(service) {
@@ -145,6 +139,26 @@
 			removeCommission(index) {
 				if(this.commissionsForm.length > 1)
 					this.commissionsForm.splice(index, 1)
+			},
+			formParsed() {
+				let form = []
+				for(let i=0; i<this.commissionsForm.length; i++) {
+					
+					for(let j=0; j<this.commissionsForm[i].employees.length; j++) {
+						
+						for(let k=0; k<this.commissionsForm[i].services.length; k++) {
+							form.push({
+								employee: this.commissionsForm[i].employees[j],
+								service: this.commissionsForm[i].services[k],
+								percentage: this.commissionsForm[i].percentage
+							})
+						}
+					}
+				}
+
+				return {
+					commissions: form
+				}
 			}
 
 		},
