@@ -60541,6 +60541,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			service: 'A',
 			employee: 'A',
 			selected: [],
+			allSelected: false,
 			loading: false
 		};
 	},
@@ -60561,8 +60562,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		selectAll: function selectAll() {
 			this.selected = [];
-			for (var i = 0; i < this.commissions.length; i++) {
-				this.selected[i] = this.commissions.id;
+			if (this.allSelected) {
+				for (var i = 0; i < this.commissions.length; i++) {
+					this.selected.push(this.commissions[i].id);
+				}
 			}
 		},
 		exists: function exists(id, array) {
@@ -60766,8 +60769,44 @@ var render = function() {
         _c("tr", [
           _c("th", [
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.allSelected,
+                  expression: "allSelected"
+                }
+              ],
               attrs: { type: "checkbox" },
-              on: { change: _vm.selectAll }
+              domProps: {
+                checked: Array.isArray(_vm.allSelected)
+                  ? _vm._i(_vm.allSelected, null) > -1
+                  : _vm.allSelected
+              },
+              on: {
+                change: [
+                  function($event) {
+                    var $$a = _vm.allSelected,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.allSelected = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.allSelected = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.allSelected = $$c
+                    }
+                  },
+                  _vm.selectAll
+                ]
+              }
             }),
             _vm._v("Seleccionar")
           ]),
@@ -60801,38 +60840,35 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.selected[index],
-                          expression: "selected[index]"
+                          value: _vm.selected,
+                          expression: "selected"
                         }
                       ],
                       attrs: { type: "checkbox" },
                       domProps: {
                         value: commission.id,
-                        checked: Array.isArray(_vm.selected[index])
-                          ? _vm._i(_vm.selected[index], commission.id) > -1
-                          : _vm.selected[index]
+                        checked: Array.isArray(_vm.selected)
+                          ? _vm._i(_vm.selected, commission.id) > -1
+                          : _vm.selected
                       },
                       on: {
                         change: function($event) {
-                          var $$a = _vm.selected[index],
+                          var $$a = _vm.selected,
                             $$el = $event.target,
                             $$c = $$el.checked ? true : false
                           if (Array.isArray($$a)) {
                             var $$v = commission.id,
                               $$i = _vm._i($$a, $$v)
                             if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(_vm.selected, index, $$a.concat([$$v]))
+                              $$i < 0 && (_vm.selected = $$a.concat([$$v]))
                             } else {
                               $$i > -1 &&
-                                _vm.$set(
-                                  _vm.selected,
-                                  index,
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
+                                (_vm.selected = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
                             }
                           } else {
-                            _vm.$set(_vm.selected, index, $$c)
+                            _vm.selected = $$c
                           }
                         }
                       }

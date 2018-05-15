@@ -32,7 +32,7 @@
 		<table class="table" style="width: 100%">
 			<thead>
 				<tr>
-					<th><input type="checkbox" @change="selectAll">Seleccionar</th>
+					<th><input type="checkbox" @change="selectAll" v-model="allSelected">Seleccionar</th>
 					<th>Servicio</th>
 					<th>Empleado</th>
 					<th>Comisión</th>
@@ -47,7 +47,7 @@
 
 				<template v-else>
 					<tr v-for="(commission,index) in commissions" :key="commission.id">
-						<td><input type="checkbox" v-model="selected[index]" :value="commission.id"></td>
+						<td><input type="checkbox" v-model="selected" :value="commission.id"></td>
 						<td>{{ commission.service.definition.name }}</td>
 						<td>{{ commission.employee.names + ' ' + commission.employee.surnames }}</td>
 						<td>{{ commission.percentage + '%' }}</td>
@@ -68,6 +68,7 @@
 				service: 'A',
 				employee: 'A',
 				selected: [],
+				allSelected: false,
 				loading: false
 			}
 		},
@@ -88,8 +89,10 @@
 			},
 			selectAll() {
 				this.selected = []
-				for (let i = 0; i<this.commissions.length; i++) {
-					this.selected[i] = this.commissions.id
+				if(this.allSelected) {
+					for (let i = 0; i<this.commissions.length; i++) {
+						this.selected.push(this.commissions[i].id)
+					}
 				}
 			},
 			exists(id, array) {
