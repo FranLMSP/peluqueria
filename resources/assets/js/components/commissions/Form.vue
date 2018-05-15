@@ -11,10 +11,10 @@
 				</div>
 			</div>
 			<hr>
-			<div class="row" v-for="(commissions, index) in commissionsForm">
+			<div class="row listing" v-for="(commissions, index) in commissionsForm">
 				<div class="col-sm-4">
 					<label>Servicios</label>
-					<select class="form-control" v-model="commissions.services" multiple>
+					<select class="form-control" v-model="commissions.services" data-placeholder="Seleccione los servicios" multiple>
 						<option :disabled="isServiceSelected(service)" :value="service.id" v-for="service in services">
 							{{ service.definition.name }}
 						</option>
@@ -22,7 +22,7 @@
 				</div>
 				<div class="col-sm-4">
 					<label>Empleados</label>
-					<select class="form-control" v-model="commissions.employees" multiple>
+					<select class="form-control" v-model="commissions.employees" data-placeholder="Seleccione los empleados" multiple>
 						<option :disabled="isEmployeeSelected(employee)" :value="employee.id" v-for="employee in employees">
 							{{ employee.names }} {{ employee.surnames }}
 						</option>
@@ -170,6 +170,7 @@
 				.then( response => {
 					this.form = response.data.provider
 					this.loading = false
+				
 				})
 				.catch( error => {
 					this.message = 'Ocurrió un error al cargar el proveedor'
@@ -183,6 +184,7 @@
 					this.services = response.data.services
 
 					this.loading = false
+
 				})
 				.catch( error => {
 					this.message = 'Ocurrió un error al cargar la información necesaria'
