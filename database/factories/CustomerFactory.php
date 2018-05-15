@@ -7,7 +7,7 @@ $factory->define(Customer::class, function (Faker $faker) {
     return [
         'names' => $faker->name,
         'surnames' => $faker->name,
-        'identity_number' => $faker->randomNumber,
+        'identity_number' => $faker->unique()->randomNumber,
         'email' => $faker->unique()->safeEmail,
         'phone' => $faker->phoneNumber,
         'birthdate' => $faker->date
