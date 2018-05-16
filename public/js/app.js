@@ -60583,6 +60583,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		}
 	},
 	computed: {
+		editUrl: function editUrl() {
+			var imploded = this.selected.join();
+
+			return imploded ? imploded + '/editar' : '';
+		},
 		tableMessage: function tableMessage() {
 			if (this.loading) {
 				return 'Cargando...';
@@ -60665,11 +60670,7 @@ var render = function() {
           "router-link",
           {
             staticClass: "btn btn-warning btn-sm",
-            attrs: {
-              to:
-                "/comisiones/" +
-                (_vm.selected.join() ? _vm.selected.join() + "/editar" : "")
-            }
+            attrs: { to: "/comisiones/" + _vm.editUrl }
           },
           [_vm._v("Editar seleccionados")]
         )
