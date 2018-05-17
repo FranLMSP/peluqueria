@@ -111,9 +111,36 @@ class CommissionController extends Controller
      * @param  \App\Commission  $commission
      * @return \Illuminate\Http\Response
      */
-    public function edit(Commission $commission)
+    public function edit($ids)
     {
-        //
+        if(strpos($ids, ',') === false) {
+            $commissions = [Commission::with([
+                'service',
+                'employee',
+                'service.definition',
+                'employee.occupation'
+            ])->find($ids)];
+        } else {
+            $commissions = Commission::with([
+                'service',
+                'employee',
+                'service.definition',
+                'employee.occupation'
+            ])->find( explode(',', $ids) ); 
+        }
+
+        $services = Product::where('active', true)
+                ->whereHas('definition', function($query){
+                    $query->whereType('S');
+                })->with('definition')->get();
+
+        $employees = Employee::with('occupation')->get();
+
+        return response()->json([
+            'services' => $services,
+            'employees' => $employees,
+            'commissions' => $commissions
+        ]);
     }
 
     /**
@@ -125,7 +152,40 @@ class CommissionController extends Controller
      */
     public function update(Request $request, Commission $commission)
     {
-        //
+        $request->validate([
+            'commissions' => 'required|array|min:1',
+            'commissions.*.id' => 'required|exists:commissions,id',
+            'commissions.*.employee' => 'required|exists:employees,id',
+            'commissions.*.service' => 'required|exists:products,id',
+            'commissions.*.percentage' => 'required|integer|min:0|max:100'
+        ], [
+            'commissions.required' => 'Debe especificar al menos una comisión',
+            'commissions.min' => 'Debe especificar al menos una comisión',
+            'commissions.*.id.required' => 'Falta el ID de la comisión',
+            'commissions.*.id.exists' => 'La comisión no existe',
+            'commissions.*.employee.required' => 'Debe especificar el empleado',
+            'commissions.*.employee.exists' => 'El empleado no existe',
+            'commissions.*.service.required' => 'Debe especificar el servicio',
+            'commissions.*.service.exists' => 'El servicio no existe',
+            'commissions.*.percentage.required' => 'debe especificar el porcentaje',
+            'commissions.*.percentage.min' => 'Debe ser mínimo 0%',
+            'commissions.*.percentage.max' => 'Debe ser máximo 100%'
+        ]);
+
+        $commissions = [];
+        foreach($request->all()['commissions'] as $commission) {
+            $commissions[] = Commission::where('id', $commission['id'])
+                ->update([
+                    'employee_id' => $commission['employee'],
+                    'service_id' => $commission['service'],
+                    'percentage' => $commission['percentage'],
+                ]);
+        }
+
+        return response()->json([
+            'commissions' => [$commission]
+        ]);
+
     }
 
     /**
