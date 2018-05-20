@@ -15,7 +15,7 @@
 				<div class="col-sm-4">
 					<label>Servicios</label>
 					<select class="form-control" v-model="commissions.services" data-placeholder="Seleccione los servicios" multiple>
-						<option :disabled="isServiceSelected(service)" :value="service.id" v-for="service in services">
+						<option :selected="isServiceSelected(service, commissions.services)" :value="service.id" v-for="service in services">
 							{{ service.definition.name }}
 						</option>
 					</select>
@@ -23,7 +23,7 @@
 				<div class="col-sm-4">
 					<label>Empleados</label>
 					<select class="form-control" v-model="commissions.employees" data-placeholder="Seleccione los empleados" multiple>
-						<option :disabled="isEmployeeSelected(employee)" :value="employee.id" v-for="employee in employees">
+						<option :selected="isEmployeeSelected(employee, commissions.employees)" :value="employee.id" v-for="employee in employees">
 							{{ employee.names }} {{ employee.surnames }}
 						</option>
 					</select>
@@ -97,9 +97,9 @@
 
 				if (this.$route.meta.mode == 'edit') {
 
-					axios.put(`/api/providers/${this.form.id}`, this.form)
+					axios.put(`/api/commissions/`, this.formParsed())
 					.then( response => {
-						this.$router.push(`/proveedores/${this.form.id}`)
+						this.$router.push('/comisiones')
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors
@@ -123,10 +123,18 @@
 
 				}
 			},
-			isServiceSelected(service) {
+			isServiceSelected(service, options) {
+				for(let i = 0; i<options.length; i++) {
+					if(options[i] == service)
+						return true
+				}
 				return false
 			},
-			isEmployeeSelected(employee) {
+			isEmployeeSelected(employee, options) {
+				for(let i = 0; i<options.length; i++) {
+					if(options[i] == employee)
+						return true
+				}
 				return false
 			},
 			addCommission() {
@@ -140,6 +148,49 @@
 				if(this.commissionsForm.length > 1)
 					this.commissionsForm.splice(index, 1)
 			},
+			findPercentage(form, per) {
+				for (let i = 0; i<form.length; i++) {
+					if (form[i].percentage == per) {
+						return i
+					}
+				}
+
+				return false
+			},
+			findEmployeeService(form, employee, service) {
+				for(let i = 0; i<form.length; i++) {
+					if(form[i].service.id == service && form[i].employee.id == employee) {
+						return true
+					}
+				}
+
+				return false
+			},
+			prepareForm(commissions) {
+				let form = []
+
+				for (let i = 0; i<commissions.length; i++) {
+					let findedPercentage = this.findPercentage(form, commissions[i].percentage)
+					if ( findedPercentage === false) {
+						form.push({
+							employees: [
+								commissions[i].employee.id
+							],
+							services: [
+								commissions[i].service.id
+							],
+							percentage: commissions[i].percentage,
+							id: commissions[i].id
+						})
+					} else {
+						form[findedPercentage].employees.push(commissions[i].employee.id)
+						form[findedPercentage].employees.push(commissions[i].service.id)
+					}
+				}
+
+				return form
+
+			},
 			formParsed() {
 				let form = []
 				for(let i=0; i<this.commissionsForm.length; i++) {
@@ -148,6 +199,7 @@
 						
 						for(let k=0; k<this.commissionsForm[i].services.length; k++) {
 							form.push({
+								id: this.commissionsForm[i].id,
 								employee: this.commissionsForm[i].employees[j],
 								service: this.commissionsForm[i].services[k],
 								percentage: this.commissionsForm[i].percentage
@@ -166,9 +218,13 @@
 			if(this.$route.meta.mode == 'edit') {
 				this.loading = true
 				this.message = 'Cargando...'
-				axios.get(`/api/providers/${this.$route.params.id}/edit`)
+				axios.get(`/api/commissions/${this.$route.params.ids}/edit`)
 				.then( response => {
-					this.form = response.data.provider
+					this.employees = response.data.employees
+					this.services = response.data.services
+
+					this.commissionsForm = this.prepareForm(response.data.commissions)
+
 					this.loading = false
 				
 				})
