@@ -37,12 +37,19 @@ Route::group([
     Route::get('/transactions/sales/create', 'TransactionController@salesCreate');
     Route::get('/transactions/sales/{id}', 'TransactionController@salesShow');
 
+    Route::get('/commissions/{ids}/edit', 'CommissionController@edit')
+        ->where('ids', '[0-9]+(,[0-9]+)*');
+
+    Route::put('/commissions', 'CommissionController@update');
+
+    Route::resource('/commissions', 'CommissionController', ['except' => ['edit', 'update']]);
+
     Route::resources([
         '/customers' => 'CustomerController',
         '/products' => 'ProductController',
         '/employees' => 'EmployeeController',
         '/providers' => 'ProviderController',
-        '/transactions' => 'TransactionController'
+        '/transactions' => 'TransactionController',
     ]);
 
     Route::get('/inventory', 'TransactionController@inventory');

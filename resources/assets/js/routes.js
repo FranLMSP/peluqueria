@@ -6,6 +6,7 @@ import ProvidersRoutes from './routes/providers'
 import ProductsRoutes from './routes/products'
 import EmployeesRoutes from './routes/employees'
 import InventoryRoutes from './routes/inventory'
+import CommissionsRoutes from './routes/commissions'
 
 import Login from './components/auth/Login.vue'
 
@@ -25,6 +26,7 @@ export const routes = [
 	ProvidersRoutes,
 	ProductsRoutes,
 	EmployeesRoutes,
-	InventoryRoutes
+	InventoryRoutes,
+	CommissionsRoutes
 
 ]
