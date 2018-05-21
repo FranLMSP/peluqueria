@@ -52458,8 +52458,10 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__routes_employees__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__routes_inventory__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__routes_commissions__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_auth_Login_vue__ = __webpack_require__(182);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_auth_Login_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_auth_Login_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__routes_birthdays__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_auth_Login_vue__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_auth_Login_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_auth_Login_vue__);
+
 
 
 
@@ -52479,8 +52481,8 @@ var routes = [{
 	}
 }, {
 	path: '/login',
-	component: __WEBPACK_IMPORTED_MODULE_7__components_auth_Login_vue___default.a
-}, __WEBPACK_IMPORTED_MODULE_1__routes_customers__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__routes_providers__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__routes_products__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__routes_employees__["a" /* default */], __WEBPACK_IMPORTED_MODULE_5__routes_inventory__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__routes_commissions__["a" /* default */]];
+	component: __WEBPACK_IMPORTED_MODULE_8__components_auth_Login_vue___default.a
+}, __WEBPACK_IMPORTED_MODULE_1__routes_customers__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__routes_providers__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__routes_products__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__routes_employees__["a" /* default */], __WEBPACK_IMPORTED_MODULE_5__routes_inventory__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__routes_commissions__["a" /* default */], __WEBPACK_IMPORTED_MODULE_7__routes_birthdays__["a" /* default */]];
 
 /***/ }),
 /* 50 */
@@ -52556,9 +52558,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'home'
+    name: 'home',
+    data: function data() {
+        return {
+            customerBirthdates: '',
+            employeeBirthdates: ''
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        axios.get('/api/customers/birthdays').then(function (response) {
+            _this.customerBirthdates = response.data.customers.length;
+        }).catch(function (error) {
+            console.log(error.status);
+            if (error.status != 401) alert('Ocurrió un error al obtener los cumpleañeros de la semana');
+        });
+
+        axios.get('/api/employees/birthdays').then(function (response) {
+            _this.employeeBirthdates = response.data.employees.length;
+        }).catch(function (error) {
+            console.log(error.status);
+            if (error.status != 401) alert('Ocurrió un error al obtener los cumpleañeros de la semana');
+        });
+    }
 });
 
 /***/ }),
@@ -52575,66 +52613,117 @@ var render = function() {
         _c("div", { staticClass: "card-header" }, [_vm._v("Bienvenido")]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
-          _c("ul", [
+          _c("div", { staticClass: "row" }, [
             _c(
-              "li",
+              "div",
+              { staticClass: "col-sm-12" },
               [
-                _c("router-link", { attrs: { to: "/empleados" } }, [
-                  _vm._v("Empleados")
-                ])
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              [
-                _c("router-link", { attrs: { to: "/clientes" } }, [
-                  _vm._v("Clientes")
-                ])
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              [
-                _c("router-link", { attrs: { to: "/proveedores" } }, [
-                  _vm._v("Proveedores")
-                ])
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              [
-                _c("router-link", { attrs: { to: "/productos" } }, [
-                  _vm._v("Productos")
-                ])
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              [
-                _c("router-link", { attrs: { to: "/inventario" } }, [
-                  _vm._v("Inventario")
-                ])
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              [
-                _c("router-link", { attrs: { to: "/comisiones" } }, [
-                  _vm._v("Comisiones")
-                ])
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { to: "/celebraciones" }
+                  },
+                  [
+                    _vm._v("Cumpleañeros "),
+                    _c(
+                      "span",
+                      {
+                        staticClass: "badge",
+                        staticStyle: { "background-color": "white" },
+                        style:
+                          _vm.customerBirthdates > 0
+                            ? "color: red"
+                            : "color: black"
+                      },
+                      [_vm._v("Clientes: " + _vm._s(_vm.customerBirthdates))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        staticClass: "badge",
+                        staticStyle: { "background-color": "white" },
+                        style:
+                          _vm.employeeBirthdates > 0
+                            ? "color: red"
+                            : "color: black"
+                      },
+                      [_vm._v("Empleados " + _vm._s(_vm.employeeBirthdates))]
+                    )
+                  ]
+                )
               ],
               1
             )
+          ]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-sm-12" }, [
+              _c("ul", [
+                _c(
+                  "li",
+                  [
+                    _c("router-link", { attrs: { to: "/empleados" } }, [
+                      _vm._v("Empleados")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  [
+                    _c("router-link", { attrs: { to: "/clientes" } }, [
+                      _vm._v("Clientes")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  [
+                    _c("router-link", { attrs: { to: "/proveedores" } }, [
+                      _vm._v("Proveedores")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  [
+                    _c("router-link", { attrs: { to: "/productos" } }, [
+                      _vm._v("Productos")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  [
+                    _c("router-link", { attrs: { to: "/inventario" } }, [
+                      _vm._v("Inventario")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  [
+                    _c("router-link", { attrs: { to: "/comisiones" } }, [
+                      _vm._v("Comisiones")
+                    ])
+                  ],
+                  1
+                )
+              ])
+            ])
           ])
         ])
       ])
@@ -53365,11 +53454,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					}
 				},
 				identity_number: {
-					onlyInteger: true,
 					presence: {
 						message: 'El número de identidad es obligatorio'
 					},
 					numericality: {
+						onlyInteger: true,
 						message: 'El número de identidad debe ser numérico'
 					}
 
@@ -62528,6 +62617,491 @@ function initialize(store, router) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_birthdays_List_vue__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_birthdays_List_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_birthdays_List_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_birthdays_Main_vue__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_birthdays_Main_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_birthdays_Main_vue__);
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+	path: '/celebraciones',
+	component: __WEBPACK_IMPORTED_MODULE_1__components_birthdays_Main_vue___default.a,
+	meta: {
+		requiresAuth: true
+	},
+	children: [{
+		path: '/',
+		component: __WEBPACK_IMPORTED_MODULE_0__components_birthdays_List_vue___default.a
+	}]
+});
+
+/***/ }),
+/* 200 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(201)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(203)
+/* template */
+var __vue_template__ = __webpack_require__(204)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/birthdays/List.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2606fbee", Component.options)
+  } else {
+    hotAPI.reload("data-v-2606fbee", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(202);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("3896a456", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2606fbee\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./List.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2606fbee\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./List.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.btn-wrapper {\n\ttext-align: right;\n\tmargin-bottom: 20px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 203 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'list',
+	data: function data() {
+		return {
+			customers: [],
+			employees: [],
+			loadingCustomers: false,
+			loadingEmployees: false
+		};
+	},
+
+	methods: {
+		get: function get() {
+			var _this = this;
+
+			this.loadingCustomers = true;
+			this.customers = [];
+			axios('/api/customers/birthdays').then(function (response) {
+				_this.customers = response.data.customers;
+				_this.loadingCustomers = false;
+			}).catch(function (error) {
+				alert('Ocurrió un error al listar los clientes');
+			}).then(function () {
+				_this.loadingCustomers = false;
+			});
+
+			this.loadingEmployees = true;
+			this.employees = [];
+			axios('/api/employees/birthdays').then(function (response) {
+				_this.employees = response.data.employees;
+				_this.loadingEmployees = false;
+			}).catch(function (error) {
+				alert('Ocurrió un error al listar los empleados');
+			}).then(function () {
+				_this.loadingEmployees = false;
+			});
+		}
+	},
+	filters: {
+		dateFormatText: function dateFormatText(date) {
+			var dateText = new Date(date).toLocaleDateString("es-ES", {
+				weekday: 'long',
+				month: 'long',
+				day: 'numeric'
+			});
+			/*let dayOfWeek = new Date(date).getDay()    
+   let weekDay = isNaN(dayOfWeek) ? null : [
+   	'Lunes',
+   	'Martes',
+   	'Miercoles',
+   	'Jueves',
+   	'Viernes',
+   	'Sábado',
+   	'Domingo']
+   	[dayOfWeek]*/
+
+			return dateText;
+		}
+	},
+	computed: {
+		customersMessage: function customersMessage() {
+			if (this.loadingCustomers) {
+				return 'Cargando...';
+			}
+			if (!this.customers || this.customers.length <= 0) {
+				return 'Ningún cliente cumple año esta semana';
+			}
+			return '';
+		},
+		employeesMessage: function employeesMessage() {
+			if (this.loadingEmployees) {
+				return 'Cargando...';
+			}
+			if (!this.employees || this.employees.length <= 0) {
+				return 'Ningún empleado cumple año esta semana';
+			}
+			return '';
+		}
+	},
+	created: function created() {
+		this.get();
+	}
+});
+
+/***/ }),
+/* 204 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-6" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-12" }, [
+            _vm.customers && _vm.customers.length > 0
+              ? _c(
+                  "table",
+                  { staticClass: "table" },
+                  _vm._l(_vm.customers, function(customer) {
+                    return _c("tr", [
+                      _c("p", [
+                        _c("strong", [
+                          _vm._v(
+                            _vm._s(customer.names) +
+                              " " +
+                              _vm._s(customer.surnames)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [_vm._v(_vm._s(customer.identity_number))]),
+                      _vm._v(" "),
+                      _c("p", { staticStyle: { color: "red" } }, [
+                        _c("strong", [
+                          _vm._v(
+                            _vm._s(_vm._f("dateFormatText")(customer.birthdate))
+                          )
+                        ])
+                      ])
+                    ])
+                  })
+                )
+              : _c("p", [_vm._v(" " + _vm._s(_vm.customersMessage))])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-6" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-12" }, [
+            _vm.employees && _vm.employees.length > 0
+              ? _c(
+                  "table",
+                  { staticClass: "table" },
+                  _vm._l(_vm.employees, function(employee) {
+                    return _c("tr", [
+                      _c("p", [
+                        _c("strong", [
+                          _vm._v(
+                            _vm._s(employee.names) +
+                              " " +
+                              _vm._s(employee.surnames)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [_vm._v(_vm._s(employee.identity_number))]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _c("strong", [
+                          _vm._v(
+                            _vm._s(_vm._f("dateFormatText")(employee.birthdate))
+                          )
+                        ])
+                      ])
+                    ])
+                  })
+                )
+              : _c("p", [_vm._v(" " + _vm._s(_vm.employeesMessage))])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("h3", [_vm._v("Cumpleaños de los clientes")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12" }, [
+        _c("h3", [_vm._v("Cumpleaños de los empleados")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2606fbee", module.exports)
+  }
+}
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(206)
+/* template */
+var __vue_template__ = __webpack_require__(207)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/birthdays/Main.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-555d68ee", Component.options)
+  } else {
+    hotAPI.reload("data-v-555d68ee", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 206 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'birthdays-main'
+});
+
+/***/ }),
+/* 207 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "card card-default" }, [
+          _c("p", { staticClass: "card-header" }, [
+            _vm._v("Cumpleañeros de esta semana")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [_c("router-view")], 1)
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-555d68ee", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
