@@ -44,6 +44,8 @@ Route::group([
 
     Route::resource('/commissions', 'CommissionController', ['except' => ['edit', 'update']]);
 
+    Route::get('/customers/birthdays', 'CustomerController@birthdays');
+
     Route::resources([
         '/customers' => 'CustomerController',
         '/products' => 'ProductController',
