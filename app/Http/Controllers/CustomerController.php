@@ -104,6 +104,42 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function birthdays(Request $request)
+    {
+        $result = Customer::select([
+            'id',
+            'identity_number',
+            'names',
+            'surnames',
+            'birthdate'
+        ])->get();
+
+        $customers = [];
+
+        foreach($result as $row) {
+            $birthdate = '2000-'.date('m-d', strtotime($row->birthdate));
+
+            $now = '2000-'.date('m-d');
+            $finish = '2000-'.date('m-d', strtotime('+7 days'));
+
+            if(strtotime($birthdate) >= strtotime($now) && strtotime($birthdate) <= strtotime($finish)) {
+                $customers[] = $row;
+            }
+
+        }
+
+        usort($customers, function ($item1, $item2) {
+            $date1 = date('m-d', strtotime($item1['birthdate']));
+            $date2 = date('m-d', strtotime($item2['birthdate']));
+
+            return strtotime('2000-'.$date1) <=> strtotime('2000-'.$date2);
+        });
+
+        return response()->json([
+            'customers' => $customers
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

@@ -146,11 +146,11 @@
 						}
 					},
 					identity_number: {
-						onlyInteger: true,
 						presence: {
 							message: 'El número de identidad es obligatorio'
 						},
 						numericality: {
+							onlyInteger: true,
 							message: 'El número de identidad debe ser numérico'
 						}
 
