@@ -14,6 +14,6 @@ $factory->define(App\Company::class, function (Faker $faker) {
 		'website' => $faker->email,
 		'shortname' => $faker->name,
 		'color' => '#FFFFFF',
-		'boxes' => $faker->randomNumber(1, 30)
+		'boxes' => $faker->numberBetween(1, 30)
     ];
 });

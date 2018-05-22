@@ -14,7 +14,14 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        $companies = Company::with([
+            'commune',
+            'commune.region'
+        ])->get();
+
+        return response()->json([
+            'companies' => $companies
+        ]);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Region;
 
 class Commune extends Model
 {
@@ -10,6 +11,6 @@ class Commune extends Model
 
     public function region()
     {
-    	return $this->hasOne(Customer::class, 'id', 'region_id');
+    	return $this->hasOne(Region::class, 'id', 'region_id');
     }
 }
