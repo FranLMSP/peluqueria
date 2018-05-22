@@ -17,7 +17,9 @@ class DatabaseSeeder extends Seeder
         	UsersTableSeeder::class,
             OccupationsTableSeeder::class,
             TransactionTypesTableSeeder::class,
-            RegionsTableSeeder::class
+            RegionsTableSeeder::class,
+            CommunesTableSeeder::class,
+            CompanyTableSeeder::class,
         ]);
     }
 

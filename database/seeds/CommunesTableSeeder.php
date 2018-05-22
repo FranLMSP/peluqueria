@@ -55,78 +55,78 @@ class CommunesTableSeeder extends Seeder
 
 
 		//2
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Antofagasta',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Calama',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'María Elena',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Mejillones',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Ollagüe',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'San Pedro de Atacama',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Sierra Gorda',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Taltal',
 			'region_id' => 2,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Tocopilla',
 			'region_id' => 2,
 		]);
 
 
 		//3
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Alto del Carmen',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Caldera',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Chañaral',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Copiapó',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Diego de Almagro',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Freirina',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Huasco',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Tierra Amarilla',
 			'region_id' => 3,
 		]);
-		factory(Commune::class)->([
+		factory(Commune::class)->create([
 			'name' => 'Vallenar',
 			'region_id' => 3,
 		]);

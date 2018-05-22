@@ -8,6 +8,7 @@ import EmployeesRoutes from './routes/employees'
 import InventoryRoutes from './routes/inventory'
 import CommissionsRoutes from './routes/commissions'
 import BirthdaysRoutes from './routes/birthdays'
+import CompaniesRoutes from './routes/companies'
 
 import Login from './components/auth/Login.vue'
 
@@ -30,5 +31,6 @@ export const routes = [
 	InventoryRoutes,
 	CommissionsRoutes,
 	BirthdaysRoutes,
+	CompaniesRoutes,
 
 ]

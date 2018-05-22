@@ -47,8 +47,8 @@
                 this.customerBirthdates = response.data.customers.length
             })
             .catch( error => {
-                console.log(error.status);
-                if(error.status != 401)
+                console.log(error);
+                if(error.response.status != 401)
                     alert('Ocurrió un error al obtener los cumpleañeros de la semana');
             })
 
@@ -57,8 +57,8 @@
                 this.employeeBirthdates = response.data.employees.length
             })
             .catch( error => {
-                console.log(error.status);
-                if(error.status != 401)
+                console.log(error);
+                if(error.response.status != 401)
                     alert('Ocurrió un error al obtener los cumpleañeros de la semana');
             })
         }
