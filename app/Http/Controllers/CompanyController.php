@@ -102,7 +102,9 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        //
+        return response()->json([
+            'company' => $company->load(['commune', 'commune.region'])
+        ]);
     }
 
     /**

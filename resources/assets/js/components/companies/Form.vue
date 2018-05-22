@@ -173,9 +173,9 @@
 				if (this.$route.meta.mode == 'edit') {
 					const form = toMultipartedForm(this.form, 'create')
 					form.append('_method', 'PATCH')
-					axios.post(`/api/products/${this.form.id}`, form)
+					axios.post(`/api/companies/${this.form.id}`, form)
 					.then( response => {
-						this.$router.push(`/productos/`)
+						this.$router.push(`/companies/`)
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors

@@ -63818,8 +63818,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (this.$route.meta.mode == 'edit') {
 				var form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, 'create');
 				form.append('_method', 'PATCH');
-				axios.post('/api/products/' + this.form.id, form).then(function (response) {
-					_this.$router.push('/productos/');
+				axios.post('/api/companies/' + this.form.id, form).then(function (response) {
+					_this.$router.push('/companies/');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
 					_this.sending = false;
