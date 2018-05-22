@@ -267,7 +267,7 @@
 
 				})
 				.catch( error => {
-					this.message = 'Ocurrió un error al cargar el producto'
+					this.message = 'Ocurrió un error al cargar la sucursal'
 				})
 			} else {
 				this.loading = true

@@ -63915,7 +63915,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					image: response.data.product.definition.image
 				};
 			}).catch(function (error) {
-				_this2.message = 'Ocurrió un error al cargar el producto';
+				_this2.message = 'Ocurrió un error al cargar la sucursal';
 			});
 		} else {
 			this.loading = true;

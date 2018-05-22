@@ -232,4 +232,84 @@ class CompanyApiTest extends TestCase
 				],
 			]);
     }
+
+    /** @test */
+    public function company_edit_data_can_be_listed()
+    {
+    	//$this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+
+        $region = factory(Region::class)->create();
+
+        $commune = factory(Commune::class)->create([
+        	'region_id' => $region->id
+        ]);
+
+        $otherCommune = factory(Commune::class)->create([
+        	'region_id' => $region->id
+        ]);
+
+        $company = factory(Company::class)->create([
+        	'commune_id' => $commune->id
+        ]);
+
+
+		$this->withHeaders(["Authorization" => 'Bearer '.$token])
+			->json('GET', '/api/companies/'.$company->id.'/edit')
+			->assertStatus(200)
+			->assertExactJson([
+				'company' => [
+					'id' => $company->id,
+					'name' => $company->name,
+					'address' => $company->address,
+					'phone' => $company->phone,
+					'secondary_phone' => $company->secondary_phone,
+					'email' => $company->email,
+					'website' => $company->website,
+					'shortname' => $company->shortname,
+					'color' => $company->color,
+					'image' => $company->image,
+					'boxes' => $company->boxes,
+					'main' => false,
+					'commune_id' => $company->commune_id,
+					'created_at' => (string)$company->created_at,
+					'updated_at' => (string)$company->updated_at,
+					'deleted_at' => NULL,
+					'commune' => [
+						'id' => $company->commune->id, 
+						'name' => $company->commune->name,
+						'region_id' => $company->commune->region_id,
+						'region' => [
+							'id' => $company->commune->region->id,
+							'name' => $company->commune->region->name
+						]
+					]
+				],
+				'regions' => [
+					[
+						'id' => $region->id,
+						'name' => $region->name,
+						'communes' => [
+							[
+								'id' => $commune->id,
+								'name' => $commune->name,
+								'region_id' => $region->id
+							],
+							[
+								'id' => $otherCommune->id,
+								'name' => $otherCommune->name,
+								'region_id' => $region->id
+							],
+						]
+					]
+				]
+			]);
+    }
 }

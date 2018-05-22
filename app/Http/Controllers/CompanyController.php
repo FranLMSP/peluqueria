@@ -115,7 +115,10 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        //
+        return response()->json([
+            'company' => $company->load(['commune', 'commune.region']),
+            'regions' => Region::with(['communes'])->get()
+        ]);
     }
 
     /**
