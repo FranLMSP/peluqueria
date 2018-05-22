@@ -117,4 +117,57 @@ class CompanyApiTest extends TestCase
 				]
 			]);
     }
+
+    /** @test */
+    public function companies_create_data_can_be_listed()
+    {
+    	$this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+
+        $region = factory(Region::class)->create();
+
+        $commune = factory(Commune::class)->create([
+        	'region_id' => $region->id
+        ]);
+
+        $otherCommune = factory(Commune::class)->create([
+        	'region_id' => $region->id
+        ]);
+
+        $company = factory(Company::class)->create([
+        	'commune_id' => $commune->id
+        ]);
+
+
+		$this->withHeaders(["Authorization" => 'Bearer '.$token])
+			->json('GET', '/api/companies/create')
+			->assertStatus(200)
+			->assertExactJson([
+				'regions' => [
+					[
+						'id' => $region->id,
+						'name' => $region->name,
+						'communes' => [
+							[
+								'id' => $commune->id,
+								'name' => $commune->name,
+								'region_id' => $region->id
+							],
+							[
+								'id' => $otherCommune->id,
+								'name' => $otherCommune->name,
+								'region_id' => $region->id
+							],
+						]
+					]
+				]
+			]);
+    }
 }

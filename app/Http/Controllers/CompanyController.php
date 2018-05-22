@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Region;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -31,7 +32,9 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'regions' => Region::with(['communes'])->get()
+        ]);
     }
 
     /**
@@ -51,7 +54,7 @@ class CompanyController extends Controller
             'website' => '',
             'shortname' => '',
             'color' => '',
-            'boxes' => 'required|integer|min:0|max:30',
+            'boxes' => 'required|integer',
             'commune_id' => 'required|exists:communes,id',
             'image' => 'nullable|image'
         ], [
@@ -61,8 +64,6 @@ class CompanyController extends Controller
             'email.required' => 'Debe especificar el email',
             'boxes.required' => 'Debe especificar número de sillones',
             'boxes.integer' => 'El número de sillones no es válido',
-            'boxes.min' => 'El número de sillones no es válido',
-            'boxes.max' => 'El máximo de sillones es de 30',
             'commune_id.required' => 'Debe especificar la comuna',
             'commune_id.integer' => 'La comuna no es válida',
             'commune_id.exists' => 'La comuna no existe',

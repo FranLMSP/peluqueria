@@ -2,7 +2,7 @@
 	<div>
 		<div class="col-md-12">
 			<div class="card card-default">
-				<p class="card-header">Producto</p>
+				<p class="card-header">Sucursal</p>
 				<div class="card-body">
 					
 					<div v-if="loading">
@@ -15,46 +15,80 @@
 									<tr>
 										<th>Nombre</th>
 										<td>
-											<input type="text" class="form-control" v-model="form.name" :placeholder="`Nombre del ${form.type=='P' ? 'producto' : 'servicio'}`">
+											<input type="text" class="form-control" v-model="form.name" placeholder="Peluquería">
 										</td>
 									</tr>
-
 									<tr>
-										<th>Tipo</th>
+										<th>Dirección</th>
+										<td>
+											<input type="text" class="form-control" v-model="form.address" placeholder="Calle">
+										</td>
+									</tr>
+									<tr>
+										<th>Teléfono</th>
+										<td>
+											<input type="text" class="form-control" v-model="form.phone" placeholder="+999999">
+										</td>
+									</tr>
+									<tr>
+										<th>Teléfono secundario</th>
+										<td>
+											<input type="text" class="form-control" v-model="form.secondary_phone" placeholder="+999999">
+										</td>
+									</tr>
+									<tr>
+										<th>Email</th>
+										<td>
+											<input type="email" class="form-control" v-model="form.email" placeholder="test@example.com">
+										</td>
+									</tr>
+									<tr>
+										<th>Sitio web</th>
+										<td>
+											<input type="text" class="form-control" v-model="form.website" placeholder="ejemplo.com">
+										</td>
+									</tr>
+									<tr>
+										<th>Nombre corto</th>
+										<td>
+											<input type="text" class="form-control" v-model="form.shortname" placeholder="Pel">
+										</td>
+									</tr>
+									<tr>
+										<th>Color</th>
+										<td>
+											<input type="color" v-model="form.color">
+										</td>
+									</tr>
+									<tr>
+										<th>Sillones</th>
+										<td>
+											<input type="number" v-model="form.boxes">
+										</td>
+									</tr>
+									<tr>
+										<th>Comuna y región</th>
 										<td>
 											<div class="row">
 												<div class="col-sm-6">
-													<label class="radio-inline" style="cursor:pointer">
-													<input type="radio" value="P" v-model="form.type">Producto
-													</label>
+													<label>Región</label>
+													<select class="form-control" v-model="selectedRegion">
+														<option :value="region.id" v-for="region in regions">{{ region.name }}</option>
+													</select>
 												</div>
-
-												<div class="col-sm-6">												
-													<label class="radio-inline" style="cursor:pointer">
-													<input type="radio" value="S" v-model="form.type">Servicio
-													</label>
+												<div class="col-sm-6">
+													<label>Comuna</label>
+													<select class="form-control" v-model="form.commune_id">
+														<option :value="commune.id" v-for="commune in communes">{{ commune.name }}</option>
+													</select>
 												</div>
 											</div>
-										</td>
-									</tr>
-
-									<tr>
-										<th>Precio</th>
-										<td>
-											<input type="text" class="form-control" v-model="form.price" placeholder="10000.00">
-										</td>
-									</tr>
-
-									<tr>
-										<th>Descripción</th>
-										<td>
-											<textarea class="form-control" v-model="form.description" :placeholder="`Descripción del ${form.type=='P' ? 'producto' : 'servicio'}`"></textarea>
 										</td>
 									</tr>
 									<tr>
 										<th>Imagen</th>
 										<td>
-											<image-upload :folder="'/storage/products/'" v-model="form.image"></image-upload>
+											<image-upload :folder="'/storage/companies/'" v-model="form.image"></image-upload>
 										</td>
 									</tr>
 									<tr>
@@ -102,11 +136,19 @@
 				form: {
 					id: 0,
 					name: '',
-					price: '',
-					description: '',
-					type: 'P',
+					address: '',
+					phone: '',
+					secondary_phone: '',
+					email: '',
+					website: '',
+					shortname: '',
+					color: '#FFFFFF',
+					boxes: '',
+					commune_id: 0,
 					image: null
 				},
+				regions: [],
+				selectedRegion: 0,
 				errors: null,
 				loading: false,
 				message: 'Cargando...',
@@ -142,9 +184,9 @@
 					
 				} else {
 					const form = toMultipartedForm(this.form, 'create')
-					axios.post(`/api/products/`, form)
+					axios.post(`/api/companies/`, form)
 					.then( response => {
-						this.$router.push('/productos')
+						this.$router.push('/sucursales')
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors
@@ -156,31 +198,63 @@
 			getConstraints() {
 				return {
 					name: {
-						presence: true,
-						length: {
-							minimum: 3,
-							message: 'El nombre debe tener al menos 3 caracteres'
+						presence: {
+							message: 'El nombre es requerido'
+						},
+					},
+					address: {
+						presence: {
+							message: 'La dirección es requerida'
 						}
 					},
-					price: {
+					phone: {
 						presence: {
-							message: 'El precio es obligatorio'
-						},
-						numericality: {
-							onlyInteger:false,
-							message: 'El precio debe ser numérico'
+							message: 'El número de teléfono es requerido'
 						}
-
+					},
+					email: {
+						presence: {
+							message: 'El email es requerido'
+						}
+					},
+					boxes: {
+						numericality: {
+							onlyInteger: {
+								message: 'Los sillones deben ser numéricos'
+							}
+						}
+					},
+					commune_id: {
+						numericality: {
+							onlyInteger: {
+								message: 'Comuna no válida'
+							}
+						}
 					}
 				}
 			},
 
 		},
+		computed: {
+			communes() {
+				let communes = []
+
+				for (let i = 0; i<this.regions.length; i++) {
+					if (this.regions[i].id == this.selectedRegion) {
+						communes = this.regions[i].communes
+						this.form.commune_id = communes[0].id
+						break
+					}
+				}
+
+				return communes
+			}
+		},
 		created() {
 			if(this.$route.meta.mode == 'edit') {
 				this.loading = true
 				this.message = 'Cargando...'
-				axios.get(`/api/products/${this.$route.params.id}/edit`)
+				axios.get(`/api/companies/${this.$route.params.id}/edit`)
 				.then( response => {
 					this.form = {
 						id: response.data.product.id,
@@ -191,10 +265,24 @@
 						image: response.data.product.definition.image,
 					}
 
-					this.loading = false
 				})
 				.catch( error => {
 					this.message = 'Ocurrió un error al cargar el producto'
+				})
+			} else {
+				this.loading = true
+				this.message = 'Cargando...'
+				axios.get(`/api/companies/create`)
+				.then( response => {
+					this.regions = response.data.regions
+					this.selectedRegion = response.data.regions[0].id
+
+				})
+				.catch( error => {
+					this.message = 'Ocurrió un error al cargar los datos'
+				})
+				.then( () => {
+					this.loading = false
 				})
 			}
 		}
