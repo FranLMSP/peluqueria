@@ -63830,7 +63830,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				var form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, 'create');
 				form.append('_method', 'PATCH');
 				axios.post('/api/companies/' + this.form.id, form).then(function (response) {
-					_this.$router.push('/companies/');
+					_this.$router.push('/sucursales/');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
 					_this.sending = false;
@@ -63906,16 +63906,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.loading = true;
 			this.message = 'Cargando...';
 			axios.get('/api/companies/' + this.$route.params.id + '/edit').then(function (response) {
-				_this2.form = {
-					id: response.data.product.id,
-					name: response.data.product.definition.name,
-					description: response.data.product.definition.description,
-					price: response.data.product.price,
-					type: response.data.product.definition.type,
-					image: response.data.product.definition.image
-				};
+
+				_this2.form = response.data.company;
+				_this2.regions = response.data.regions;
+
+				_this2.selectedRegion = _this2.form.commune.region.id;
 			}).catch(function (error) {
+				console.log(error);
 				_this2.message = 'Ocurrió un error al cargar la sucursal';
+			}).then(function () {
+				_this2.loading = false;
 			});
 		} else {
 			this.loading = true;

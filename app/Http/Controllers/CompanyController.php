@@ -130,7 +130,79 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        //
+        if(isset($request->image) && $request->image == $company->image) {
+            $validation = [
+                'name' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+                'secondary_phone' => '',
+                'email' => 'required',
+                'website' => '',
+                'shortname' => '',
+                'color' => '',
+                'boxes' => 'required|integer',
+                'commune_id' => 'required|exists:communes,id',
+                'image' => ''
+            ];
+            $imageChange = false;
+        } else {
+            $imageChange = true;
+            $validation = [
+                'name' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+                'secondary_phone' => '',
+                'email' => 'required',
+                'website' => '',
+                'shortname' => '',
+                'color' => '',
+                'boxes' => 'required|integer',
+                'commune_id' => 'required|exists:communes,id',
+                'image' => 'nullable|image'
+            ];
+        }
+
+        $request->validate($validation, [
+            'name.required' => 'El campo nombre es requerido',
+            'address.required' => 'La dirección es requerida',
+            'phone.required' => 'Debe especificar el número de teléfono principal',
+            'email.required' => 'Debe especificar el email',
+            'boxes.required' => 'Debe especificar número de sillones',
+            'boxes.integer' => 'El número de sillones no es válido',
+            'commune_id.required' => 'Debe especificar la comuna',
+            'commune_id.integer' => 'La comuna no es válida',
+            'commune_id.exists' => 'La comuna no existe',
+            'image.image' => 'El formato de la imagen no es válido',
+        ]);
+
+        $req = $request->all();
+
+        unset($req['image']);
+        unset($req['updated_at']);
+        unset($req['created_at']);
+        unset($req['deleted_at']);
+        unset($req['main']);
+        unset($req['commune']);
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+
+            if (file_exists('public/storage/companies/'.$company->image))
+                unlink('public/storage/companies/'.$company->image);
+
+            $filename = $this->getFileName($request->image);
+            $request->image->move( base_path('public/storage/companies'), $filename );
+            $req['image'] = $filename;
+        } else if($imageChange) {
+            $req['image'] = NULL;
+        } else {
+            $req['image'] = $company->image;
+        }
+
+        $company->update($req);
+
+        return response()->json([
+            'company' => $company
+        ]);
     }
 
     /**

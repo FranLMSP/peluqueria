@@ -175,7 +175,7 @@
 					form.append('_method', 'PATCH')
 					axios.post(`/api/companies/${this.form.id}`, form)
 					.then( response => {
-						this.$router.push(`/companies/`)
+						this.$router.push(`/sucursales/`)
 					})
 					.catch( error => {
 						this.errors = error.response.data.errors
@@ -256,18 +256,20 @@
 				this.message = 'Cargando...'
 				axios.get(`/api/companies/${this.$route.params.id}/edit`)
 				.then( response => {
-					this.form = {
-						id: response.data.product.id,
-						name: response.data.product.definition.name,
-						description: response.data.product.definition.description,
-						price: response.data.product.price,
-						type: response.data.product.definition.type,
-						image: response.data.product.definition.image,
-					}
+
+					this.form = response.data.company
+					this.regions = response.data.regions
+
+					this.selectedRegion = this.form.commune.region.id
+
 
 				})
 				.catch( error => {
+					console.log(error)
 					this.message = 'Ocurrió un error al cargar la sucursal'
+				})
+				.then( () => {
+					this.loading = false
 				})
 			} else {
 				this.loading = true

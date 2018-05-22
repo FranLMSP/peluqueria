@@ -312,4 +312,54 @@ class CompanyApiTest extends TestCase
 				]
 			]);
     }
+
+    /** @test */
+    public function company_can_be_updated()
+    {
+    	$this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        $commune = factory(Commune::class)->create([
+        	'region_id' => factory(Region::class)->create()->id
+        ]);
+
+        $otherCommune = factory(Commune::class)->create([
+        	'region_id' => factory(Region::class)->create()->id
+        ]);
+
+        $company = factory(Company::class)->create();
+
+		$this->withHeaders(["Authorization" => 'Bearer '.$token])
+		->json('PUT', '/api/companies/'.$company->id, [
+			'name' => 'aaa',
+			'address' => 'bbb',
+			'commune_id' => $otherCommune->id,
+			'phone' => '+123456',
+			'secondary_phone' => '+123456',
+			'email' => 'a@a.com',
+			'website' => 'a.com',
+			'shortname' => 'portal',
+			'color' => '#FFFFFF',
+			'boxes' => 20
+		])->assertStatus(200);
+
+		$this->assertDatabaseHas('companies', [
+			'name' => 'aaa',
+			'address' => 'bbb',
+			'commune_id' => $otherCommune->id,
+			'phone' => '+123456',
+			'secondary_phone' => '+123456',
+			'email' => 'a@a.com',
+			'website' => 'a.com',
+			'shortname' => 'portal',
+			'color' => '#FFFFFF',
+			'boxes' => 20
+		]);
+    }
 }
