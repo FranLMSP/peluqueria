@@ -17,6 +17,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <ul>
+                                <li><router-link to="/agenda">Agenda</router-link></li>
                                 <li><router-link to="/empleados">Empleados</router-link></li>
                                 <li><router-link to="/clientes">Clientes</router-link></li>
                                 <li><router-link to="/proveedores">Proveedores</router-link></li>
