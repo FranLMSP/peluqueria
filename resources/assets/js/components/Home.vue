@@ -23,6 +23,7 @@
                                 <li><router-link to="/productos">Productos</router-link></li>
                                 <li><router-link to="/inventario">Inventario</router-link></li>
                                 <li><router-link to="/comisiones">Comisiones</router-link></li>
+                                <li><router-link to="/sucursales">Sucursales</router-link></li>
                             </ul>
                         </div>
                     </div>
@@ -47,8 +48,8 @@
                 this.customerBirthdates = response.data.customers.length
             })
             .catch( error => {
-                console.log(error.status);
-                if(error.status != 401)
+                console.log(error);
+                if(error.response.status != 401)
                     alert('Ocurrió un error al obtener los cumpleañeros de la semana');
             })
 
@@ -57,8 +58,8 @@
                 this.employeeBirthdates = response.data.employees.length
             })
             .catch( error => {
-                console.log(error.status);
-                if(error.status != 401)
+                console.log(error);
+                if(error.response.status != 401)
                     alert('Ocurrió un error al obtener los cumpleañeros de la semana');
             })
         }

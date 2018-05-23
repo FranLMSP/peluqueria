@@ -17,7 +17,7 @@ class BirthdayApiTest extends TestCase
     /** @test */
     public function customers_birthdays_of_this_week_can_be_listed()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $user = factory(User::class)->create([
             'email' => 'admin@root.com',
@@ -116,7 +116,7 @@ class BirthdayApiTest extends TestCase
     /** @test */
     public function employees_birthdays_of_this_week_can_be_listed()
     {
-    	$this->withoutExceptionHandling();
+    	//$this->withoutExceptionHandling();
 
         $user = factory(User::class)->create([
             'email' => 'admin@root.com',
