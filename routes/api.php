@@ -47,13 +47,16 @@ Route::group([
     Route::get('/customers/birthdays', 'CustomerController@birthdays');
     Route::get('/employees/birthdays', 'EmployeeController@birthdays');
 
+    Route::get('/calendar/month/{date}', 'CalendarController@month');
+
     Route::resources([
         '/customers' => 'CustomerController',
         '/products' => 'ProductController',
         '/employees' => 'EmployeeController',
         '/providers' => 'ProviderController',
         '/transactions' => 'TransactionController',
-        '/companies' => 'CompanyController'
+        '/companies' => 'CompanyController',
+        '/calendar' => 'CalendarController',
     ]);
 
     Route::get('/inventory', 'TransactionController@inventory');

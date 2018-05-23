@@ -39,11 +39,12 @@ class CustomerController extends Controller
     {
         $request->validate([
             'names' => 'required',
-            'identity_number' => 'integer|required'
+            'identity_number' => 'integer|required|unique:customers,identity_number'
         ], [
             'names' => 'Debe especificar el nombre del cliente',
             'identity_number.integer' => 'El número de identidad debe ser numérico',
-            'identity_number.required' => 'El número de identidad es obligatorio'
+            'identity_number.required' => 'El número de identidad es obligatorio',
+            'identity_number.unique' => 'Ya existe un cliente con ese número de identidad'
         ]);
 
         Customer::create($request->all());
@@ -90,11 +91,12 @@ class CustomerController extends Controller
     {
         $request->validate([
             'names' => 'required',
-            'identity_number' => 'integer|required'
+            'identity_number' => 'integer|required|unique:customers,identity_number,'.$id
         ], [
             'names' => 'Debe especificar el nombre del cliente',
             'identity_number.integer' => 'El número de identidad debe ser numérico',
-            'identity_number.required' => 'El número de identidad es obligatorio'
+            'identity_number.required' => 'El número de identidad es obligatorio',
+            'identity_number.unique' => 'Ya existe un cliente con ese número de identidad'
         ]);
 
         Customer::where('id', $id)->update($request->all());
