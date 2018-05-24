@@ -44,7 +44,7 @@
 						<template v-else>
 							<tr v-for="month in months">
 								<td @click="showDayData(day)" v-for="day in month" :style="`background-color: ${day.bg ? day.bg : 'white'}`" class="text-center">
-									<span :class="`${day.data ? 'cell-data' : 'cell'} ${day.date == selected.date ? 'selected' : ''}`">{{ day.day }}</span>
+									<span :class="`${day.data ? 'cell-data' : 'cell'} ${isDaySelected(day) ? 'selected' : ''}`">{{ day.day }}</span>
 								</td>
 							</tr>
 						</template>
@@ -56,12 +56,11 @@
 		<div class="row">
 			<div class="col-sm-6">
 				
-				<List></List>
+				<ListCalendar :date="selected"></ListCalendar>
 			</div>
-		</div>
 
-		<div class="row">
-			<div class="col-sm-6">
+			<div v-if="createData" class="col-sm-6">
+				<FormCalendar :data="form" :createdata="createData"></FormCalendar>
 			</div>
 		</div>
 
@@ -70,12 +69,13 @@
 
 <script type="text/javascript">
 
-	import List from './List.vue'
+	import ListCalendar from './List.vue'
+	import FormCalendar from './Form.vue'
 
 	export default {
 		name: 'calendar',
 		components: {
-			List
+			ListCalendar, FormCalendar
 		},
 		data() {
 			return {
@@ -86,19 +86,33 @@
 				},
 				loadedDates: [],
 				selected: {
-					date: new Date()
+					date: new Date(),
+					data: []
 				},
 				loading: false,
+				createData: null,
+				form: null
 			}
 		},
 		methods: {
+			isDaySelected(day) {
+				if (day.date.getMonth() == this.selected.date.getMonth() &&
+					day.date.getYear() == this.selected.date.getYear() &&
+					day.date.getDate() == this.selected.date.getDate()) {
+					
+					this.selected = day
+					return true
+				}
+
+				return false
+			},
 			get(){
 				this.loadedDates = []
 				this.loading = true
 
 				axios.get('/api/calendar/month/' + this.date.year + '-' + this.date.month)
 				.then( response => {
-					console.log(response.data)
+
 					this.loadedDates = response.data.calendar
 				}).catch( error => {
 					alert('Ocurrió un error al obtener el calendario')
@@ -167,7 +181,15 @@
 			    return days
 			},
 			logDays() {
-				console.log(this.months)
+				const date = new Date()
+				this.date = {
+					day: date.getDate(),
+					month: date.getMonth() + 1,
+					year: date.getFullYear()
+				}
+
+				this.selected.date = date
+				this.selected.data = []
 			},
 			splitarray(input, spacing) {
 			    let output = [];
@@ -180,10 +202,7 @@
 			    return output;
 			},
 			showDayData(day) {
-				if(day.data) {
-					this.selected = day
-					console.log(day)
-				}
+				this.selected = day
 			},
 		},
 		computed: {
@@ -280,7 +299,29 @@
 				year: date.getFullYear()
 			}
 
-			this.get()
+
+			this.loading = true
+
+			axios.get('/api/calendar/create')
+			.then( response => {
+				this.createData = response.data
+			})
+			.catch( error => {
+				alert('Ocurrió un error al cargar la información necesaria')
+			})
+			.then( () => {
+				this.loading = false
+				this.get()
+			})
+
+			this.$root.$on('CalendarForm', data => {
+				this.form = data
+			})
+
+			this.$root.$on('UpdateCalendar', data => {
+				this.get()
+			})
+
 		}
 	}
 </script>
