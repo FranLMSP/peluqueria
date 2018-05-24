@@ -66044,6 +66044,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			form: {
+				id: 0,
 				customer: {
 					names: '',
 					surnames: '',
@@ -66090,7 +66091,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				}).then(function () {
 					_this.loading = false;
 				});
-			} else if (this.data.context == 'edit') {}
+			} else if (this.data.context == 'edit') {
+				if (this.newCustomer) {
+					form.customer_id = null;
+				} else {
+					form.customer.names = 'a';
+					form.customer.identity_number = '0';
+				}
+
+				this.form.date = this.form.date + ' ' + this.form.time;
+
+				axios.put('/api/calendar/' + this.form.id, this.form).then(function (response) {
+					alert('Actualizado correctamente');
+					_this.errors = null;
+					_this.$root.$emit('UpdateCalendar');
+				}).catch(function (error) {
+					_this.errors = error.response.data.errors;
+				}).then(function () {
+					_this.loading = false;
+				});
+			}
 		},
 		formatDate: function formatDate(date) {
 			var d = new Date(date),
@@ -66164,6 +66184,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				}
 			} else if (data.context == 'edit') {
 				_this2.form = {
+					id: data.id,
 					customer: {
 						names: '',
 						surnames: '',

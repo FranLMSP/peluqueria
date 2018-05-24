@@ -157,6 +157,7 @@
 		data() {
 			return {
 				form: {
+					id: 0,
 					customer: {
 						names: '',
 						surnames: '',
@@ -207,7 +208,27 @@
 
 
 				} else if(this.data.context == 'edit') {
+					if(this.newCustomer) {
+						form.customer_id = null
+					} else {
+						form.customer.names = 'a'
+						form.customer.identity_number = '0'
+					}
 
+					this.form.date = this.form.date + ' ' + this.form.time
+
+					axios.put('/api/calendar/' + this.form.id, this.form)
+					.then( response => {
+						alert('Actualizado correctamente')
+						this.errors = null
+						this.$root.$emit('UpdateCalendar')
+					})
+					.catch( error => {
+						this.errors = error.response.data.errors
+					})
+					.then( () => {
+						this.loading = false
+					})
 				}
 			},
 			formatDate(date) {
@@ -281,6 +302,7 @@
 					}
 				} else if(data.context == 'edit') {
 					this.form = {
+						id: data.id,
 						customer: {
 							names: '',
 							surnames: '',
