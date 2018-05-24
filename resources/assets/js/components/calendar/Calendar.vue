@@ -1,57 +1,82 @@
 <template>
 	<div>
-		<table class="table">
-			<thead>
-				<tr>
-					<td @click="prevMonth">
-						<p style="font-size: 10pt">Mes prev.</p>
-						<i class="fa fa-arrow-left fa-3x"></i>
-					</td>
-					<td @click="prevYear">
-						<p style="font-size: 10pt">Año prev.</p>
-						<i class="fa fa-arrow-circle-left fa-3x"></i>
-					</td>
-					<td colspan="3" @click="logDays">
-						<strong>{{ date.month }}/{{ date.year }}</strong>
-					</td>
-					<td  @click="nextYear">
-						<p style="font-size: 10pt">Año sig.</p>
-						<i class="fa fa-arrow-circle-right fa-3x"></i>
-					</td>
-					<td @click="nextMonth">
-						<p style="font-size: 10pt">Mes sig.</p>
-						<i class="fa fa-arrow-right fa-3x"></i>
-					</td>
-				</tr>
-				<tr>
-					<th>L</th>
-					<th>M</th>
-					<th>M</th>
-					<th>J</th>
-					<th>V</th>
-					<th><span style="color: red;">S</span></th>
-					<th><span style="color: red;">D</span></th>
-				</tr>
-			</thead>
-			<tbody>
-				<template v-if="loading">
-					<tr>
-						<td colspan="7">Cargando...</td>
-					</tr>
-				</template>
-				<template v-else>
-					<tr v-for="month in months">
-						<td @click="showDayData(day)" v-for="day in month" :style="`background-color: ${day.bg ? day.bg : 'white'}`" class="text-center"> <span :class="`${day.data ? 'cell-data' : 'cell'}`">{{ day.day }}</span></td>
-					</tr>
-				</template>
-			</tbody>
-		</table>
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table">
+					<thead>
+						<tr>
+							<td @click="prevMonth">
+								<p style="font-size: 10pt">Mes prev.</p>
+								<i class="fa fa-arrow-left fa-3x"></i>
+							</td>
+							<td @click="prevYear">
+								<p style="font-size: 10pt">Año prev.</p>
+								<i class="fa fa-arrow-circle-left fa-3x"></i>
+							</td>
+							<td colspan="3" @click="logDays">
+								<strong>{{ date.month }}/{{ date.year }}</strong>
+							</td>
+							<td  @click="nextYear">
+								<p style="font-size: 10pt">Año sig.</p>
+								<i class="fa fa-arrow-circle-right fa-3x"></i>
+							</td>
+							<td @click="nextMonth">
+								<p style="font-size: 10pt">Mes sig.</p>
+								<i class="fa fa-arrow-right fa-3x"></i>
+							</td>
+						</tr>
+						<tr>
+							<th>L</th>
+							<th>M</th>
+							<th>M</th>
+							<th>J</th>
+							<th>V</th>
+							<th><span style="color: red;">S</span></th>
+							<th><span style="color: red;">D</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<template v-if="loading">
+							<tr>
+								<td colspan="7">Cargando...</td>
+							</tr>
+						</template>
+						<template v-else>
+							<tr v-for="month in months">
+								<td @click="showDayData(day)" v-for="day in month" :style="`background-color: ${day.bg ? day.bg : 'white'}`" class="text-center">
+									<span :class="`${day.data ? 'cell-data' : 'cell'} ${day.date == selected.date ? 'selected' : ''}`">{{ day.day }}</span>
+								</td>
+							</tr>
+						</template>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				
+				<List></List>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6">
+			</div>
+		</div>
+
 	</div>
 </template>
 
 <script type="text/javascript">
+
+	import List from './List.vue'
+
 	export default {
 		name: 'calendar',
+		components: {
+			List
+		},
 		data() {
 			return {
 				date: {
@@ -60,6 +85,9 @@
 					year: 0,
 				},
 				loadedDates: [],
+				selected: {
+					date: new Date()
+				},
 				loading: false,
 			}
 		},
@@ -152,8 +180,10 @@
 			    return output;
 			},
 			showDayData(day) {
-				if(day.data)
+				if(day.data) {
+					this.selected = day
 					console.log(day)
+				}
 			},
 		},
 		computed: {
@@ -293,5 +323,11 @@
 	.cell-data {
 		color: red;
 		font-weight: bold;
+	}
+
+	.selected {
+		border-color: black;
+		border-style: dashed;
+		border-width: 5px;
 	}
 </style>
