@@ -66053,6 +66053,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 				axios.post('/api/calendar/', this.form).then(function (response) {
 					alert('Creado correctamente');
+					_this.errors = null;
 					_this.$root.$emit('UpdateCalendar');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;

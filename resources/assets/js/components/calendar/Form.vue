@@ -180,6 +180,7 @@
 					axios.post('/api/calendar/', this.form)
 					.then( response => {
 						alert('Creado correctamente')
+						this.errors = null
 						this.$root.$emit('UpdateCalendar')
 					})
 					.catch( error => {

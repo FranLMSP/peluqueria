@@ -104,7 +104,8 @@ class CalendarController extends Controller
             'customer.names' => 'required',
             'customer.surnames' => '',
             'customer.identity_number' => 'required|unique:customers,identity_number',
-            'email' => 'nullable|email'
+            'customer.email' => 'nullable|email',
+            'customer.phone' => ''
         ], [
             'customer_id.exists' => 'El cliente especificado no existe',
             'employee_id.exists' => 'El empleado no existe',
@@ -128,14 +129,14 @@ class CalendarController extends Controller
                 'status_id' => $request->status_id,
                 'notes' => $request->notes,
                 'date' => $request->date,
-                'email' => $request->email,
             ]);
         } else {
             $customer = new Customer([
                 'names' => $request->customer['names'],
                 'surnames' => $request->customer['surnames'],
                 'identity_number' => $request->customer['identity_number'],
-                'email' => $request->customer['email']
+                'email' => $request->customer['email'],
+                'phone' => $request->customer['phone']
             ]);
 
             $customer->save();
