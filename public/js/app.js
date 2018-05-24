@@ -64277,7 +64277,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ntable th {\n\ttext-align: center;\n}\ntable td {\n\ttext-align: center;\n\tfont-size: large;\n}\n", ""]);
+exports.push([module.i, "\ntable th {\n\ttext-align: center;\n}\ntable td {\n\ttext-align: center;\n\tfont-size: large;\n}\ntd > span {\n\tdisplay:block;\n\ttext-align: center;\n\tmargin:0 auto;\n\tpadding: 5px;\n\twidth: 50px;\n\tborder-radius: 10px;\n}\ntd:hover {\n\tcursor: pointer;\n}\ntd > span.cell, td > span.cell-data {\n\tbackground-color: white;\n}\ntd:hover > span.cell, td:hover > span.cell-data  {\n\tbackground-color: lightgray;\n}\n.cell {\n\tcolor: black;\n}\n.cell-data {\n\tcolor: red;\n\tfont-weight: bold;\n}\n", ""]);
 
 // exports
 
@@ -64349,11 +64349,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				month: 0,
 				year: 0
 			},
+			loadedDates: [],
 			loading: false
 		};
 	},
 
 	methods: {
+		get: function get() {
+			var _this = this;
+
+			this.loadedDates = [];
+			this.loading = true;
+
+			axios.get('/api/calendar/month/' + this.date.year + '-' + this.date.month).then(function (response) {
+				console.log(response.data);
+				_this.loadedDates = response.data.calendar;
+			}).catch(function (error) {
+				alert('Ocurrió un error al obtener el calendario');
+			}).then(function () {
+				_this.loading = false;
+			});
+		},
+		findDay: function findDay(months, date) {
+
+			var date2 = new Date(date);
+			for (var i = 0; i < months.length; i++) {
+				for (var j = 0; j < months[i].length; j++) {
+					var date1 = new Date(months[i][j].date);
+					if (date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate()) return [i, j];
+				}
+			}
+			return false;
+		},
 		prevMonth: function prevMonth() {
 			this.date.month--;
 			if (this.date.month <= 0) {
@@ -64363,6 +64390,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					this.date.year = 1;
 				}
 			}
+
+			this.get();
 		},
 		nextMonth: function nextMonth() {
 			this.date.month++;
@@ -64370,15 +64399,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.date.month = 1;
 				this.date.year++;
 			}
+			this.get();
 		},
 		prevYear: function prevYear() {
 			this.date.year--;
 			if (this.date.year <= 0) {
 				this.date.year = 1;
 			}
+			this.get();
 		},
 		nextYear: function nextYear() {
 			this.date.year++;
+			this.get();
 		},
 		getDaysInMonth: function getDaysInMonth(month, year) {
 			month--;
@@ -64407,6 +64439,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 
 			return output;
+		},
+		showDayData: function showDayData(day) {
+			if (day.data) console.log(day);
 		}
 	},
 	computed: {
@@ -64414,6 +64449,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var prevMonth = null;
 			var actualMonth = null;
 			var nextMonth = null;
+
+			var months = [];
 
 			if (this.date.month == 1) {
 				prevMonth = this.getDaysInMonth(12, this.date.year - 1);
@@ -64441,7 +64478,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 							break;
 						}
 					}
-					return this.splitarray(actualMonth.concat(appendDays), 7);
+					months = this.splitarray(actualMonth.concat(appendDays), 7);
 				}
 			} else {
 				var prependDays = [];
@@ -64466,11 +64503,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						}
 					}
 
-					return this.splitarray(prependDays.concat(actualMonth.concat(_appendDays)), 7);
+					months = this.splitarray(prependDays.concat(actualMonth.concat(_appendDays)), 7);
 				} else {
-					return this.splitarray(prependDays.concat(actualMonth), 7);
+					months = this.splitarray(prependDays.concat(actualMonth), 7);
 				}
 			}
+			for (var _i3 = 0; _i3 < this.loadedDates.length; _i3++) {
+				var finded = this.findDay(months, new Date(this.loadedDates[_i3].date));
+
+				if (finded !== false) {
+					if (!months[finded[0]][finded[1]].data) {
+
+						months[finded[0]][finded[1]].data = [this.loadedDates[_i3]];
+					} else {
+						months[finded[0]][finded[1]].data.push(this.loadedDates[_i3]);
+					}
+				}
+			}
+
+			return months;
 		},
 		selectedDate: function selectedDate() {
 			return new Date(this.date.year + '-' + this.date.month + '-' + this.date.day);
@@ -64483,6 +64534,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			month: date.getMonth() + 1,
 			year: date.getFullYear()
 		};
+
+		this.get();
 	}
 });
 
@@ -64498,32 +64551,21 @@ var render = function() {
     _c("table", { staticClass: "table" }, [
       _c("thead", [
         _c("tr", [
-          _c(
-            "td",
-            {
-              staticStyle: { cursor: "pointer" },
-              on: { click: _vm.prevMonth }
-            },
-            [
-              _c("p", { staticStyle: { "font-size": "10pt" } }, [
-                _vm._v("Mes prev.")
-              ]),
-              _vm._v(" "),
-              _c("i", { staticClass: "fa fa-arrow-left fa-3x" })
-            ]
-          ),
+          _c("td", { on: { click: _vm.prevMonth } }, [
+            _c("p", { staticStyle: { "font-size": "10pt" } }, [
+              _vm._v("Mes prev.")
+            ]),
+            _vm._v(" "),
+            _c("i", { staticClass: "fa fa-arrow-left fa-3x" })
+          ]),
           _vm._v(" "),
-          _c(
-            "td",
-            { staticStyle: { cursor: "pointer" }, on: { click: _vm.prevYear } },
-            [
-              _c("p", { staticStyle: { "font-size": "10pt" } }, [
-                _vm._v("Año prev.")
-              ]),
-              _vm._v(" "),
-              _c("i", { staticClass: "fa fa-arrow-circle-left fa-3x" })
-            ]
-          ),
+          _c("td", { on: { click: _vm.prevYear } }, [
+            _c("p", { staticStyle: { "font-size": "10pt" } }, [
+              _vm._v("Año prev.")
+            ]),
+            _vm._v(" "),
+            _c("i", { staticClass: "fa fa-arrow-circle-left fa-3x" })
+          ]),
           _vm._v(" "),
           _c("td", { attrs: { colspan: "3" }, on: { click: _vm.logDays } }, [
             _c("strong", [
@@ -64531,32 +64573,21 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c(
-            "td",
-            { staticStyle: { cursor: "pointer" }, on: { click: _vm.nextYear } },
-            [
-              _c("p", { staticStyle: { "font-size": "10pt" } }, [
-                _vm._v("Año sig.")
-              ]),
-              _vm._v(" "),
-              _c("i", { staticClass: "fa fa-arrow-circle-right fa-3x" })
-            ]
-          ),
+          _c("td", { on: { click: _vm.nextYear } }, [
+            _c("p", { staticStyle: { "font-size": "10pt" } }, [
+              _vm._v("Año sig.")
+            ]),
+            _vm._v(" "),
+            _c("i", { staticClass: "fa fa-arrow-circle-right fa-3x" })
+          ]),
           _vm._v(" "),
-          _c(
-            "td",
-            {
-              staticStyle: { cursor: "pointer" },
-              on: { click: _vm.nextMonth }
-            },
-            [
-              _c("p", { staticStyle: { "font-size": "10pt" } }, [
-                _vm._v("Mes sig.")
-              ]),
-              _vm._v(" "),
-              _c("i", { staticClass: "fa fa-arrow-right fa-3x" })
-            ]
-          )
+          _c("td", { on: { click: _vm.nextMonth } }, [
+            _c("p", { staticStyle: { "font-size": "10pt" } }, [
+              _vm._v("Mes sig.")
+            ]),
+            _vm._v(" "),
+            _c("i", { staticClass: "fa fa-arrow-right fa-3x" })
+          ])
         ]),
         _vm._v(" "),
         _vm._m(0)
@@ -64574,10 +64605,22 @@ var render = function() {
                     return _c(
                       "td",
                       {
+                        staticClass: "text-center",
                         style:
-                          "background-color: " + (day.bg ? day.bg : "white")
+                          "background-color: " + (day.bg ? day.bg : "white"),
+                        on: {
+                          click: function($event) {
+                            _vm.showDayData(day)
+                          }
+                        }
                       },
-                      [_vm._v(_vm._s(day.day))]
+                      [
+                        _c(
+                          "span",
+                          { class: "" + (day.data ? "cell-data" : "cell") },
+                          [_vm._v(_vm._s(day.day))]
+                        )
+                      ]
                     )
                   })
                 )

@@ -3,22 +3,22 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<td style="cursor: pointer;" @click="prevMonth">
+					<td @click="prevMonth">
 						<p style="font-size: 10pt">Mes prev.</p>
 						<i class="fa fa-arrow-left fa-3x"></i>
 					</td>
-					<td style="cursor: pointer;" @click="prevYear">
+					<td @click="prevYear">
 						<p style="font-size: 10pt">Año prev.</p>
 						<i class="fa fa-arrow-circle-left fa-3x"></i>
 					</td>
 					<td colspan="3" @click="logDays">
 						<strong>{{ date.month }}/{{ date.year }}</strong>
 					</td>
-					<td  style="cursor: pointer;" @click="nextYear">
+					<td  @click="nextYear">
 						<p style="font-size: 10pt">Año sig.</p>
 						<i class="fa fa-arrow-circle-right fa-3x"></i>
 					</td>
-					<td style="cursor: pointer;" @click="nextMonth">
+					<td @click="nextMonth">
 						<p style="font-size: 10pt">Mes sig.</p>
 						<i class="fa fa-arrow-right fa-3x"></i>
 					</td>
@@ -41,7 +41,7 @@
 				</template>
 				<template v-else>
 					<tr v-for="month in months">
-						<td v-for="day in month" :style="`background-color: ${day.bg ? day.bg : 'white'}`">{{ day.day }}</td>
+						<td @click="showDayData(day)" v-for="day in month" :style="`background-color: ${day.bg ? day.bg : 'white'}`" class="text-center"> <span :class="`${day.data ? 'cell-data' : 'cell'}`">{{ day.day }}</span></td>
 					</tr>
 				</template>
 			</tbody>
@@ -59,10 +59,38 @@
 					month: 0,
 					year: 0,
 				},
+				loadedDates: [],
 				loading: false,
 			}
 		},
 		methods: {
+			get(){
+				this.loadedDates = []
+				this.loading = true
+
+				axios.get('/api/calendar/month/' + this.date.year + '-' + this.date.month)
+				.then( response => {
+					console.log(response.data)
+					this.loadedDates = response.data.calendar
+				}).catch( error => {
+					alert('Ocurrió un error al obtener el calendario')
+				})
+				.then( () => {
+					this.loading = false
+				})
+			},
+			findDay(months, date) {
+				
+				const date2 = new Date(date)
+				for(let i = 0; i<months.length; i++) {
+					for(let j = 0; j<months[i].length; j++) {
+						let date1 = new Date(months[i][j].date)
+						if(date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate())
+							return [i, j]
+					}
+				}
+				return false
+			},
 			prevMonth() {
 				this.date.month--
 				if(this.date.month <= 0) {
@@ -72,6 +100,8 @@
 						this.date.year = 1
 					}
 				}
+
+				this.get()
 			},
 			nextMonth() {
 				this.date.month++
@@ -79,15 +109,18 @@
 					this.date.month = 1
 					this.date.year++
 				}
+				this.get()
 			},
 			prevYear() {
 				this.date.year--
 				if(this.date.year <= 0) {
 					this.date.year = 1
 				}
+				this.get()
 			},
 			nextYear() {
 				this.date.year++
+				this.get()
 			},
 			getDaysInMonth(month, year) {
 				month--
@@ -117,13 +150,19 @@
 			    }
 
 			    return output;
-			}
+			},
+			showDayData(day) {
+				if(day.data)
+					console.log(day)
+			},
 		},
 		computed: {
 			months() {
 				let prevMonth = null
 				let actualMonth = null
 				let nextMonth = null
+
+				let months = []
 
 				if(this.date.month == 1) {
 					prevMonth = this.getDaysInMonth(12, this.date.year - 1)
@@ -151,7 +190,7 @@
 								break
 							}
 						}
-						return this.splitarray(actualMonth.concat(appendDays),7)
+						months = this.splitarray(actualMonth.concat(appendDays),7)
 					}
 				} else {
 					let prependDays = []
@@ -176,11 +215,28 @@
 							}
 						}
 
-						return this.splitarray(prependDays.concat(actualMonth.concat(appendDays)),7)
+						months = this.splitarray(prependDays.concat(actualMonth.concat(appendDays)),7)
 					} else {
-						return this.splitarray(prependDays.concat(actualMonth),7)
+						months = this.splitarray(prependDays.concat(actualMonth),7)
 					}
+
+
 				}
+				for (let i = 0; i<this.loadedDates.length; i++) {
+					let finded = this.findDay(months, new Date(this.loadedDates[i].date))
+
+					if(finded!==false) {
+						if (!months[finded[0]][finded[1]].data) {
+
+							months[finded[0]][finded[1]].data = [this.loadedDates[i]]
+						} else {
+							months[finded[0]][finded[1]].data.push(this.loadedDates[i])
+						}
+					}
+
+				}
+				
+				return months
 			},
 			selectedDate() {
 				return  new Date(this.date.year + '-' + this.date.month + '-' + this.date.day)
@@ -193,6 +249,8 @@
 				month: date.getMonth() + 1,
 				year: date.getFullYear()
 			}
+
+			this.get()
 		}
 	}
 </script>
@@ -205,5 +263,35 @@
 	table td {
 		text-align: center;
 		font-size: large;
+	}
+
+	td > span {
+		display:block;
+		text-align: center;
+		margin:0 auto;
+		padding: 5px;
+		width: 50px;
+		border-radius: 10px;
+	}
+
+	td:hover {
+		cursor: pointer;
+	}
+
+	td > span.cell, td > span.cell-data {
+		background-color: white;
+	}
+
+	td:hover > span.cell, td:hover > span.cell-data  {
+		background-color: lightgray;
+	}
+
+	.cell {
+		color: black;
+	}
+
+	.cell-data {
+		color: red;
+		font-weight: bold;
 	}
 </style>

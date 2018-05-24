@@ -180,8 +180,8 @@ class CalendarController extends Controller
             ]);
         }
 
-        $pastMonth = date('Y-m-d', strtotime('-1 months', strtotime($date[0].'-'.$date[1].'-1') ));
-        $nextMonth = date('Y-m-d', strtotime('+1 months', strtotime($date[0].'-'.$date[1].'-1') ));
+        $pastMonth = date('Y-m-d', strtotime('-7 days', strtotime($date[0].'-'.$date[1].'-1') ));
+        $nextMonth = date('Y-m-d', strtotime('+1 months', strtotime($date[0].'-'.$date[1].'-7') ));
 
         $calendar = Calendar::with([
             'status',
