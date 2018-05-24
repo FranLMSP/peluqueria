@@ -12,8 +12,9 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<template v-if="date.data && date.data.length > 0">
-					
-					<div @click="emitEditForm(cite)" class="card" v-for="cite in date.data">
+					<div @click="emitEditForm(cite)" v-for="cite in date.data">
+						
+					<div class="card" >
 						<div class="card-body">
 							<p><strong>Hora: </strong>{{ new Date(cite.date).getTime() | formatHour }}</p>
 							<p><strong>Cliente: </strong>{{ cite.customer.names }} {{ cite.customer.surnames }}</p>
@@ -24,6 +25,8 @@
 							<p><strong>Notas adicionales:</strong></p>
 							<p>{{ cite.notes }}</p>
 						</div>
+					</div>
+					<br>
 					</div>
 
 				</template>

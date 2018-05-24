@@ -64699,6 +64699,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['date'],
@@ -64778,7 +64781,6 @@ var render = function() {
                 return _c(
                   "div",
                   {
-                    staticClass: "card",
                     on: {
                       click: function($event) {
                         _vm.emitEditForm(cite)
@@ -64786,68 +64788,75 @@ var render = function() {
                     }
                   },
                   [
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("p", [
-                        _c("strong", [_vm._v("Hora: ")]),
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("formatHour")(new Date(cite.date).getTime())
+                    _c("div", { staticClass: "card" }, [
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("p", [
+                          _c("strong", [_vm._v("Hora: ")]),
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("formatHour")(
+                                new Date(cite.date).getTime()
+                              )
+                            )
                           )
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("p", [
-                        _c("strong", [_vm._v("Cliente: ")]),
-                        _vm._v(
-                          _vm._s(cite.customer.names) +
-                            " " +
-                            _vm._s(cite.customer.surnames)
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("p", [
-                        _c("strong", [_vm._v("Datos de contacto: ")]),
-                        _vm._v(
-                          _vm._s(cite.customer.email) +
-                            " - " +
-                            _vm._s(cite.customer.phone)
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("p", [
-                        _c("strong", [_vm._v("Servicio: ")]),
-                        _vm._v(_vm._s(cite.service.definition.name))
-                      ]),
-                      _vm._v(" "),
-                      _c("p", [
-                        _c("strong", [_vm._v("Profesional: ")]),
-                        _vm._v(
-                          _vm._s(cite.employee.names) +
-                            " " +
-                            _vm._s(cite.employee.surnames) +
-                            " (" +
-                            _vm._s(cite.employee.occupation.name) +
-                            ")"
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("p", [
-                        _c("strong", [_vm._v("Estado: ")]),
+                        ]),
                         _vm._v(" "),
-                        _c(
-                          "span",
-                          {
-                            style:
-                              "color: " + (cite.status.active ? "green" : "red")
-                          },
-                          [_vm._v(_vm._s(cite.status.name))]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _vm._m(0, true),
-                      _vm._v(" "),
-                      _c("p", [_vm._v(_vm._s(cite.notes))])
-                    ])
+                        _c("p", [
+                          _c("strong", [_vm._v("Cliente: ")]),
+                          _vm._v(
+                            _vm._s(cite.customer.names) +
+                              " " +
+                              _vm._s(cite.customer.surnames)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Datos de contacto: ")]),
+                          _vm._v(
+                            _vm._s(cite.customer.email) +
+                              " - " +
+                              _vm._s(cite.customer.phone)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Servicio: ")]),
+                          _vm._v(_vm._s(cite.service.definition.name))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Profesional: ")]),
+                          _vm._v(
+                            _vm._s(cite.employee.names) +
+                              " " +
+                              _vm._s(cite.employee.surnames) +
+                              " (" +
+                              _vm._s(cite.employee.occupation.name) +
+                              ")"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Estado: ")]),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              style:
+                                "color: " +
+                                (cite.status.active ? "green" : "red")
+                            },
+                            [_vm._v(_vm._s(cite.status.name))]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(0, true),
+                        _vm._v(" "),
+                        _c("p", [_vm._v(_vm._s(cite.notes))])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("br")
                   ]
                 )
               })
