@@ -86,6 +86,20 @@
 
 						<div class="row">
 							<div class="col-sm-12">
+								<label>Servicio</label>
+								<select class="form-control" v-model="form.service_id" >
+									<option 
+										v-for="service in createdata.services"
+										:value="service.id"
+									>
+										{{ service.definition.name }}
+									</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12">
 								<label>Status</label>
 								<select class="form-control" v-model="form.status_id" :style="`color: ${selectedStatus.active ? 'green' : 'red'}`" >
 									<option 
@@ -232,7 +246,7 @@
 		created() {
 
 			this.$root.$on('CalendarForm', data => {
-
+				this.newCustomer = false
 				if(data.context == 'create') {
 					this.form = {
 						customer: {

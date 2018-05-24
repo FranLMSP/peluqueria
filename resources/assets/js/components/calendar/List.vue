@@ -14,7 +14,7 @@
 				<template v-if="date.data && date.data.length > 0">
 					<div @click="emitEditForm(cite)" v-for="cite in date.data">
 						
-					<div class="card" >
+					<div class="card" style="cursor: pointer" >
 						<div class="card-body">
 							<p><strong>Hora: </strong>{{ new Date(cite.date).getTime() | formatHour }}</p>
 							<p><strong>Cliente: </strong>{{ cite.customer.names }} {{ cite.customer.surnames }}</p>

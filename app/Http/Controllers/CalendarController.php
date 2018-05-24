@@ -222,7 +222,62 @@ class CalendarController extends Controller
      */
     public function update(Request $request, Calendar $calendar)
     {
-        //
+        $request->validate([
+            'customer_id' => 'nullable|exists:customers,id',
+            'employee_id' => 'required|exists:employees,id',
+            'service_id' => 'required|exists:products,id',
+            'notes' => '',
+            'status_id' => 'required|exists:calendar_statuses,id',
+            'date' => 'date',
+            'customer' => 'nullable|array',
+            'customer.names' => 'required',
+            'customer.surnames' => '',
+            'customer.identity_number' => 'required|unique:customers,identity_number,'.$calendar->customer_id,
+            'customer.email' => 'nullable|email',
+            'customer.phone' => ''
+        ], [
+            'customer_id.exists' => 'El cliente especificado no existe',
+            'employee_id.exists' => 'El empleado no existe',
+            'employee_id.required' => 'Debe especificar el empleado',
+            'service_id.exists' => 'El servicio especificado no existe',
+            'service_id.exists' => 'Debe especificar el servicio',
+            'status_id.required' => 'Debe especificar un status',
+            'date.date' => 'El formato de la fecha no es válido',
+            'customer.array' => 'El formato del cliente nuevo no es válido',
+            'customer.names.required' => 'Debe especificar el nombre del cliente',
+            'customer.identity_number.required' => 'Debe especificar el número de identidad',
+            'customer.identity_number.unique' => 'Ya existe un cliente con ese número de identidad',
+            'customer.email.email' => 'El email no es válido',
+        ]);
+
+        if($request->customer_id) {
+            $req = $request->all();
+            unset($req['customer']);
+            $calendar->update($req);
+        } else {
+            $customer = new Customer([
+                'names' => $request->customer['names'],
+                'surnames' => $request->customer['surnames'],
+                'identity_number' => $request->customer['identity_number'],
+                'email' => $request->customer['email'],
+                'phone' => $request->customer['phone']
+            ]);
+
+            $req = $request->all();
+            unset($req['customer']);
+
+            $customer->save();
+
+            $req['customer_id'] = $customer->id;
+
+            $calendar->update($req);
+        }
+
+        $calendar->save();
+
+        return response()->json([
+            'calendar' => $calendar
+        ], 200);
     }
 
     /**

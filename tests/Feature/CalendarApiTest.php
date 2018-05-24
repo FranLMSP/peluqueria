@@ -53,7 +53,8 @@ class CalendarApiTest extends TestCase
 				'names' => 'Franco',
 				'surnames' => 'Colmenarez',
 				'identity_number' => 25896369,
-				'email' => 'a@a.com'
+				'email' => 'a@a.com',
+				'phone' => ''
 			],
 			'customer_id' => NULL,
 			'service_id' => $service->id,
@@ -71,6 +72,171 @@ class CalendarApiTest extends TestCase
 		]);
 
 		$this->assertDatabaseHas('customers', [
+			'names' => 'Franco',
+			'surnames' => 'Colmenarez',
+			'identity_number' => 25896369,
+			'email' => 'a@a.com'
+		]);
+	}
+
+    /** @test */
+	public function one_appointment_can_be_updated_with_new_customer() 
+	{
+
+		$this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        $employee = factory(Employee::class)->create();
+
+        $customer = factory(Customer::class)->create();
+
+        $newEmployee = factory(Employee::class)->create();
+
+        $service = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'S'
+        	])->id
+        ]);
+
+        $newService = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'S'
+        	])->id
+        ]);
+
+        $notService = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'P'
+        	])->id
+        ]);
+
+        $state = factory(CalendarStatus::class)->create();
+        $newState = factory(CalendarStatus::class)->create();
+
+        $appointment = factory(Calendar::class)->create([
+        	'customer_id' => NULL,
+			'service_id' => $service->id,
+			'employee_id' => $employee->id,
+			'status_id' => $state->id
+        ]);
+
+		$this->withHeaders(["Authorization" => 'Bearer '.$token])
+		->json('PUT', '/api/calendar/'.$appointment->id, [
+			'customer' => [
+				'names' => 'Franco',
+				'surnames' => 'Colmenarez',
+				'identity_number' => 25896369,
+				'email' => 'a@a.com',
+				'phone' => ''
+			],
+			'customer_id' => NULL,
+			'service_id' => $newService->id,
+			'employee_id' => $newEmployee->id,
+			'date' => '2018-05-22 20:00:00',
+			'notes' => 'this is an observation',
+			'status_id' => $newState->id
+		])
+		->assertStatus(200);
+
+		$this->assertDatabaseHas('calendar', [
+			'customer_id' => 2,
+			'service_id' => $newService->id,
+			'employee_id' => $newEmployee->id,
+			'notes' => 'this is an observation',
+			'status_id' => $newState->id
+		]);
+
+		$this->assertDatabaseHas('customers', [
+			'id' => 2,
+			'names' => 'Franco',
+			'surnames' => 'Colmenarez',
+			'identity_number' => 25896369,
+			'email' => 'a@a.com'
+		]);
+	}
+
+    /** @test */
+	public function one_appointment_can_be_updated_with_existent_customer() 
+	{
+
+		$this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create([
+            'email' => 'admin@root.com',
+            'password' => bcrypt('123456')
+        ]);
+
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        $employee = factory(Employee::class)->create();
+
+        $customer = factory(Customer::class)->create();
+        $newCustomer = factory(Customer::class)->create();
+
+        $newEmployee = factory(Employee::class)->create();
+
+        $service = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'S'
+        	])->id
+        ]);
+
+        $newService = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'S'
+        	])->id
+        ]);
+
+        $notService = factory(Product::class)->create([
+        	'product_header_id' => factory(ProductHeader::class)->create([
+        		'type' => 'P'
+        	])->id
+        ]);
+
+        $state = factory(CalendarStatus::class)->create();
+        $newState = factory(CalendarStatus::class)->create();
+
+        $appointment = factory(Calendar::class)->create([
+        	'customer_id' => NULL,
+			'service_id' => $service->id,
+			'employee_id' => $employee->id,
+			'status_id' => $state->id
+        ]);
+
+		$this->withHeaders(["Authorization" => 'Bearer '.$token])
+		->json('PUT', '/api/calendar/'.$appointment->id, [
+			'customer' => [
+				'names' => 'Franco',
+				'surnames' => 'Colmenarez',
+				'identity_number' => 25896369,
+				'email' => 'a@a.com',
+				'phone' => ''
+			],
+			'customer_id' => $newCustomer->id,
+			'service_id' => $newService->id,
+			'employee_id' => $newEmployee->id,
+			'date' => '2018-05-22 20:00:00',
+			'notes' => 'this is an observation',
+			'status_id' => $newState->id
+		])
+		->assertStatus(200);
+
+		$this->assertDatabaseHas('calendar', [
+			'customer_id' => 2,
+			'service_id' => $newService->id,
+			'employee_id' => $newEmployee->id,
+			'notes' => 'this is an observation',
+			'status_id' => $newState->id
+		]);
+
+		$this->assertDatabaseMissing('customers', [
+			'id' => 2,
 			'names' => 'Franco',
 			'surnames' => 'Colmenarez',
 			'identity_number' => 25896369,
@@ -115,7 +281,8 @@ class CalendarApiTest extends TestCase
 				'names' => '1',
 				'surnames' => '1',
 				'identity_number' => '1',
-				'email' => '1'
+				'email' => 'a@a.com',
+				'phone' => '1'
 			],
 			'customer_id' => $customer->id,
 			'service_id' => $service->id,
