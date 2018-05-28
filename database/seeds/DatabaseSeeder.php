@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             RegionsTableSeeder::class,
             CommunesTableSeeder::class,
             CompanyTableSeeder::class,
+            CalendarStatusesTableSeeder::class
         ]);
     }
 

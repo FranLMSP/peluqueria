@@ -12,9 +12,7 @@ class CompanyTableSeeder extends Seeder
      */
     public function run()
     {
-    	DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Company::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         factory(Company::class)->create([
         	'main' => true,
