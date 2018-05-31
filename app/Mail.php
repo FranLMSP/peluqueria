@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\MailStatus;
+use App\Customer;
 
 class Mail extends Model
 {
@@ -27,6 +28,6 @@ class Mail extends Model
 
     public function customer()
     {
-    	return $this->hasOne(MailStatus::class, 'id', 'customer_id');
+    	return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
 }

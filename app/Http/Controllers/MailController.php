@@ -17,7 +17,12 @@ class MailController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'mails' => MailModel::with([
+                'customer',
+                'status'
+            ])->get()
+        ]);
     }
 
     /**
@@ -27,7 +32,9 @@ class MailController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'customers' => Customer::get()
+        ]);
     }
 
     /**
@@ -47,7 +54,7 @@ class MailController extends Controller
             'customer_id.exists' => 'El cliente seleccionado no existe',
             'email.email' => 'El email especificado no es válido',
             'subject.required' => 'Debe especificar el asunto',
-            'message' => 'El mensaje no puede estar vacío'
+            'message.required' => 'El mensaje no puede estar vacío'
         ]);
 
         $email = '';
@@ -104,9 +111,11 @@ class MailController extends Controller
      * @param  \App\Mail  $mail
      * @return \Illuminate\Http\Response
      */
-    public function show(Mail $mail)
+    public function show(MailModel $mail)
     {
-        //
+        return response()->json([
+            'mail' => $mail->load(['customer', 'status'])
+        ]);
     }
 
     /**
@@ -115,7 +124,7 @@ class MailController extends Controller
      * @param  \App\Mail  $mail
      * @return \Illuminate\Http\Response
      */
-    public function edit(Mail $mail)
+    public function edit(MailModel $mail)
     {
         //
     }
