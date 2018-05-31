@@ -22,9 +22,9 @@ class CreateTransactionsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('customer_id')->references('id')->on('customers');
-            $table->foreign('provider_id')->references('id')->on('providers');
-            $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
+            $table->foreign('transaction_type_id')->references('id')->on('transaction_types')->onDelete('cascade');
         });
     }
 
@@ -35,6 +35,11 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
+        Schema::table('transactions', function($table) {
+            $table->dropForeign(['customer_id']);
+            $table->dropForeign(['provider_id']);
+            $table->dropForeign(['transaction_type_id']);
+        });
         Schema::dropIfExists('transactions');
     }
 }

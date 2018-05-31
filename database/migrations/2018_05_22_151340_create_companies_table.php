@@ -32,7 +32,8 @@ class CreateCompaniesTable extends Migration
 
             $table->foreign('commune_id')
                 ->references('id')
-                ->on('communes');
+                ->on('communes')
+                ->onDelete('cascade');
         });
     }
 
@@ -43,6 +44,9 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
+        Schema::table('companies', function($table) {
+            $table->dropForeign(['commune_id']);
+        });
         Schema::dropIfExists('companies');
     }
 }

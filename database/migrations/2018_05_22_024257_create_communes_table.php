@@ -20,7 +20,8 @@ class CreateCommunesTable extends Migration
 
             $table->foreign('region_id')
                 ->references('id')
-                ->on('regions');
+                ->on('regions')
+                ->onDelete('cascade');
         });
     }
 
@@ -31,6 +32,9 @@ class CreateCommunesTable extends Migration
      */
     public function down()
     {
+        Schema::table('communes', function($table) {
+            $table->dropForeign(['region_id']);
+        });
         Schema::dropIfExists('communes');
     }
 }

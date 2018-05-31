@@ -21,8 +21,8 @@ class CreateInventoriesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('transaction_id')->references('id')->on('transactions');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
@@ -33,6 +33,10 @@ class CreateInventoriesTable extends Migration
      */
     public function down()
     {
+        Schema::table('inventories', function($table) {
+            $table->dropForeign(['transaction_id']);
+            $table->dropForeign(['product_id']);
+        });
         Schema::dropIfExists('inventories');
     }
 }

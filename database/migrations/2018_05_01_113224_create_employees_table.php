@@ -26,7 +26,7 @@ class CreateEmployeesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('occupation_id')->references('id')->on('occupations');
+            $table->foreign('occupation_id')->references('id')->on('occupations')->onDelete('cascade');
         });
     }
 
@@ -37,6 +37,9 @@ class CreateEmployeesTable extends Migration
      */
     public function down()
     {
+        Schema::table('employees', function($table) {
+            $table->dropForeign(['occupation_id']);
+        });
         Schema::dropIfExists('employees');
     }
 }

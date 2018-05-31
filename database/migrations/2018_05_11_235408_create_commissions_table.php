@@ -21,8 +21,10 @@ class CreateCommissionsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('service_id')->references('id')->on('product_headers');
-            $table->foreign('employee_id')->references('id')->on('employees');
+            $table->foreign('service_id')->references('id')->on('product_headers')
+                ->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')
+                ->onDelete('cascade');
         });
     }
 
@@ -33,6 +35,10 @@ class CreateCommissionsTable extends Migration
      */
     public function down()
     {
+        Schema::table('commissions', function($table) {
+            $table->dropForeign(['service_id']);
+            $table->dropForeign(['employee_id']);
+        });
         Schema::dropIfExists('commissions');
     }
 }

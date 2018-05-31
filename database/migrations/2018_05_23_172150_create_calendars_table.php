@@ -39,6 +39,7 @@ class CreateCalendarsTable extends Migration
                 ->references('id')
                 ->on('products');
         });
+
     }
 
     /**
@@ -48,6 +49,12 @@ class CreateCalendarsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calendars');
+        Schema::table('calendar', function($table) {
+            $table->dropForeign(['customer_id']);
+            $table->dropForeign(['status_id']);
+            $table->dropForeign(['employee_id']);
+            $table->dropForeign(['service_id']);
+        });
+        Schema::dropIfExists('calendar');
     }
 }
