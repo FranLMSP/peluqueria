@@ -57,6 +57,7 @@ Route::group([
         '/transactions' => 'TransactionController',
         '/companies' => 'CompanyController',
         '/calendar' => 'CalendarController',
+        '/mail' => 'MailController'
     ]);
 
     Route::get('/inventory', 'TransactionController@inventory');
