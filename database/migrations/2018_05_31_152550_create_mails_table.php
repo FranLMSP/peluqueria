@@ -41,7 +41,7 @@ class CreateMailsTable extends Migration
      */
     public function down()
     {
-        Schema::table('customers', function($table) {
+        Schema::table('mails', function($table) {
             $table->dropForeign(['customer_id']);
             $table->dropForeign(['status_id']);
         });
