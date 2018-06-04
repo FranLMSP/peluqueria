@@ -93,7 +93,7 @@
 					})
 					
 				} else {
-					axios.post(`/api/providers/`, this.form)
+					axios.post(`/api/providers`, this.form)
 					.then( response => {
 						this.$router.push('/proveedores')
 					})

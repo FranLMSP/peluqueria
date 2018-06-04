@@ -125,7 +125,7 @@
 					})
 					
 				} else {
-					axios.post(`/api/customers/`, this.form)
+					axios.post(`/api/customers`, this.form)
 					.then( response => {
 						this.$router.push('/clientes')
 					})

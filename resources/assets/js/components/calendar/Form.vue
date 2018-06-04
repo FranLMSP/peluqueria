@@ -192,7 +192,7 @@
 
 					this.form.date = this.form.date + ' ' + this.form.time
 
-					axios.post('/api/calendar/', this.form)
+					axios.post('/api/calendar', this.form)
 					.then( response => {
 						alert('Creado correctamente')
 						this.errors = null

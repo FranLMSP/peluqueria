@@ -108,7 +108,7 @@
 					})
 					
 				} else {
-					axios.post(`/api/mail/`, this.form)
+					axios.post(`/api/mail`, this.form)
 					.then( response => {
 						this.$router.push('/correos')
 					})

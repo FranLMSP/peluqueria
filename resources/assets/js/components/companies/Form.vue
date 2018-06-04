@@ -184,7 +184,7 @@
 					
 				} else {
 					const form = toMultipartedForm(this.form, 'create')
-					axios.post(`/api/companies/`, form)
+					axios.post(`/api/companies`, form)
 					.then( response => {
 						this.$router.push('/sucursales')
 					})

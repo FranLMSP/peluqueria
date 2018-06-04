@@ -97,7 +97,7 @@
 
 				if (this.$route.meta.mode == 'edit') {
 
-					axios.put(`/api/commissions/`, this.formParsed())
+					axios.put(`/api/commissions`, this.formParsed())
 					.then( response => {
 						this.$router.push('/comisiones')
 					})
@@ -107,7 +107,7 @@
 					})
 					
 				} else {
-					axios.post(`/api/commissions/`, this.formParsed())
+					axios.post(`/api/commissions`, this.formParsed())
 					.then( response => {
 						this.$router.push('/comisiones')
 					})

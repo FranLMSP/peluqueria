@@ -53475,7 +53475,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this.sending = false;
 				});
 			} else {
-				axios.post('/api/customers/', this.form).then(function (response) {
+				axios.post('/api/customers', this.form).then(function (response) {
 					_this.$router.push('/clientes');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
@@ -54684,7 +54684,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this.sending = false;
 				});
 			} else {
-				axios.post('/api/providers/', this.form).then(function (response) {
+				axios.post('/api/providers', this.form).then(function (response) {
 					_this.$router.push('/proveedores');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
@@ -55797,7 +55797,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				});
 			} else {
 				var _form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, 'create');
-				axios.post('/api/products/', _form).then(function (response) {
+				axios.post('/api/products', _form).then(function (response) {
 					_this.$router.push('/productos');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
@@ -57172,7 +57172,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				});
 			} else {
 				var _form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, 'create');
-				axios.post('/api/employees/', _form).then(function (response) {
+				axios.post('/api/employees', _form).then(function (response) {
 					_this.$router.push('/empleados');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
@@ -61248,14 +61248,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			if (this.$route.meta.mode == 'edit') {
 
-				axios.put('/api/commissions/', this.formParsed()).then(function (response) {
+				axios.put('/api/commissions', this.formParsed()).then(function (response) {
 					_this.$router.push('/comisiones');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
 					_this.sending = false;
 				});
 			} else {
-				axios.post('/api/commissions/', this.formParsed()).then(function (response) {
+				axios.post('/api/commissions', this.formParsed()).then(function (response) {
 					_this.$router.push('/comisiones');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
@@ -63099,7 +63099,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				});
 			} else {
 				var _form = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_form__["a" /* toMultipartedForm */])(this.form, 'create');
-				axios.post('/api/companies/', _form).then(function (response) {
+				axios.post('/api/companies', _form).then(function (response) {
 					_this.$router.push('/sucursales');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
@@ -65198,7 +65198,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 				this.form.date = this.form.date + ' ' + this.form.time;
 
-				axios.post('/api/calendar/', this.form).then(function (response) {
+				axios.post('/api/calendar', this.form).then(function (response) {
 					alert('Creado correctamente');
 					_this.errors = null;
 					_this.$root.$emit('UpdateCalendar');
@@ -66786,7 +66786,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this.sending = false;
 				});
 			} else {
-				axios.post('/api/mail/', this.form).then(function (response) {
+				axios.post('/api/mail', this.form).then(function (response) {
 					_this.$router.push('/correos');
 				}).catch(function (error) {
 					_this.errors = error.response.data.errors;
