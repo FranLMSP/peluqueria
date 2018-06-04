@@ -22,10 +22,13 @@
 							<input type="submit" value="Login">
 						</div>
 
-						<div class="row form-group" v-if="authError">
+						<div class="row form-group" v-if="error">
 							<p class="error">
-								{{ authError }}
+								Usuario o contraseña inválidos
 							</p>
+						</div>
+						<div class="row form-group" v-if="success">
+							<p>Bienvenido!</p>
 						</div>
 					</form>
 				</div>
@@ -45,7 +48,8 @@
 					email: '',
 					password: ''
 				},
-				error: null
+				error: null,
+				success: false
 			}
 		},
 		methods: {
@@ -54,10 +58,12 @@
 
 				login(this.form)
 					.then( res => {
+						this.error = null
 						this.$store.commit('loginSuccess', res)
 						this.$router.push({path: '/'})
 					})
 					.catch( err => {
+						this.error = err
 						this.$store.commit('loginFailed', {err})
 					})
 			}
